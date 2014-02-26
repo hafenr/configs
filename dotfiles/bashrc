@@ -1,0 +1,29 @@
+alias l='ls -al'
+alias u='cd ..'
+alias uu='cd ../..'
+alias uuu='cd ../../..'
+alias uuuu='cd ../../../..'
+
+# Latex
+alias latexmk_='latexmk -pdf -pvc'
+function pdflatex-watch() { while true; do inotifywait -e modify "$1"; pdflatex "$1"; done;}
+
+export EDITOR=vim
+export WORKON_HOME=~/.virtualenvs
+
+alias tmux="tmux -u"
+stty -ixon
+
+if [ `uname` = "Darwin" ]; then
+    # autostart virtual env
+    export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python
+    source /usr/local/bin/virtualenvwrapper.sh
+
+    alias ipy="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
+
+    alias cdcb='cd ~/Dropbox/CBB/ComputationalBiology'
+    alias cdcsb='cd ~/Dropbox/CBB/ComputationalSystemsBiology'
+    alias cded='cd ~/Dropbox/CBB/EvolutionaryDynamics'
+    alias cdml='cd ~/Dropbox/CBB/MachineLearning'
+fi
+

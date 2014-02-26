@@ -1,0 +1,11 @@
+imap jk <ESC>
+set shiftwidth=2                    " number of spaces to autoindent
+set tabstop=2                       " number of spaces for a tabstop
+set autoindent                      " enable autoindenting
+set nocursorline                    " have a line indicate cursor position
+set showcmd                         " display incomplete commands on lower right
+set hlsearch                        " highlight search results, see mapping for disable highlighting
+set incsearch                       " set incremental search
+set ignorecase                      " ignores case while searching
+set smartcase                       " if a search contains a upper case char, make search case sensitive
+set gvimpath=/usr/bin/mvim

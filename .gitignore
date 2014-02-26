@@ -1,0 +1,9 @@
+*.swp
+*.swo
+vundle_managed/*
+!vundle_managed/.gitkeep
+.DS_Store
+eclim/
+.hg*
+.VimballRecord
+.netrwhist

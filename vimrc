@@ -41,6 +41,7 @@ Bundle 'sjl/gundo.vim'
 Bundle 'jwhitley/vim-matchit'
 Bundle 'wellle/targets.vim'
 Bundle 'ervandew/supertab'
+Bundle 'matschaffer/vim-islime2'
 
 " By language
 " Julia
@@ -57,7 +58,7 @@ Bundle 'tristen/vim-sparkup'
 " Python
 Bundle 'https://github.com/ivanov/vim-ipython'
 " Bundle 'klen/python-mode'
-" Bundle 'davidhalter/jedi-vim'
+Bundle 'davidhalter/jedi-vim'
 " Scala
 Bundle 'spiroid/vim-ultisnip-scala'
 " Clojure
@@ -104,10 +105,12 @@ if has('gui_running')               " gvim options
     endif
     colorscheme corn
 else                                " terminal
-    set t_Co=256                    " set 256 colors for terminal
+    " set t_Co=256                    " set 256 colors for terminal
+    " set term=screen-256color
+    set background=dark
     " runtime! plugin/guicolorscheme.vim
-    " GuiColorScheme obsidian2
-    colorscheme corn
+    colorscheme muon
+    " colorscheme corn
 endif
 
 " Default python imports
@@ -141,8 +144,8 @@ set hidden                          " edit another buffer while another one is u
 set lazyredraw                      " don't update the display while executing macros
 set laststatus=2                    " always show status line
 set autoread                        " automatically read a file that has changed on disk
-set ofu=syntaxcomplete#Complete     " autocompletion so that menu will always appear
-set cfu=youcompleteme#Complete
+" set ofu=syntaxcomplete#Complete     " autocompletion so that menu will always appear
+" set cfu=youcompleteme#Complete
 set wildmenu                        " enable wildmenu
 set wildmode=list:longest,full      " how wild mode should behave
 set guioptions-=T                   " remove toolbar in gVim
@@ -209,9 +212,12 @@ augroup END
 " Python
 "---------------------------------------------------------------------
 augroup aupython
+    autocmd!
     autocmd FileType python setlocal foldmethod=indent foldnestmax=2
     autocmd FileType python setlocal shiftwidth=4 tabstop=4
-    autocmd BufWritePost *.py silent! !ctags -R --exclude=.git --exclude=external --languages=python
+    " autocmd FileType python set omnifunc=pythoncomplete#Complete
+    " autocmd FileType python setlocal ofu=jedi#completions
+    autocmd BufWritePost *.py silent! !ctags -R --exclude=.git --exclude=lib --exclude=external --languages=python
 augroup END
 
 "---------------------------------------------------------------------
@@ -631,8 +637,8 @@ let g:slime_target = "tmux"
 "---------------------------------------------------------------------
 let g:jedi#use_tabs_not_buffers = 0
 " let g:jedi#use_splits_not_buffers = "left"
-" let g:jedi#popup_on_dot = 0
-" let g:jedi#popup_select_first = 0
+let g:jedi#popup_on_dot = 0
+let g:jedi#popup_select_first = 0
 " let g:jedi#goto_assignments_command = "<leader>g"
 " let g:jedi#goto_definitions_command = "<leader>d"
 " let g:jedi#documentation_command = "K"
@@ -717,12 +723,17 @@ let g:sneak#streak = 0
 let g:sneak#use_ic_scs = 1
 
 "---------------------------------------------------------------------
+" PowerLine
+"---------------------------------------------------------------------
+" let g:Powerline_symbols = 'fancy'
+
+"---------------------------------------------------------------------
 " SuperTab
 "---------------------------------------------------------------------
 let g:SuperTabMappingForward = '<C-n>'
 let g:SuperTabMappingBackward = '<C-p>'
-let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabContextDefaultCompletionType = "<C-n>"
+let g:SuperTabDefaultCompletionType = 'context'
+" let g:SuperTabContextDefaultCompletionType = '<C-x><C-o>'
 " }}}
 "=====================================================================
 " Custom functions and commands {{{

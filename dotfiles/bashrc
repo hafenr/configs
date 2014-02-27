@@ -10,8 +10,13 @@ function pdflatex-watch() { while true; do inotifywait -e modify "$1"; pdflatex 
 
 export EDITOR=vim
 export WORKON_HOME=~/.virtualenvs
+# export TERM=screen-256color
 
-alias tmux="tmux -u"
+# .zshrc
+# alias tmux="TERM=screen-256color tmux"
+alias tmux="TERM=screen-256color tmux"
+export LANG=en_US.UTF-8
+
 stty -ixon
 
 if [ `uname` = "Darwin" ]; then

@@ -41,7 +41,6 @@ Bundle 'sjl/gundo.vim'
 Bundle 'jwhitley/vim-matchit'
 Bundle 'wellle/targets.vim'
 Bundle 'ervandew/supertab'
-Bundle 'matschaffer/vim-islime2'
 
 " By language
 " Julia

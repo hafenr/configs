@@ -41,6 +41,7 @@ Bundle 'sjl/gundo.vim'
 Bundle 'jwhitley/vim-matchit'
 Bundle 'wellle/targets.vim'
 Bundle 'ervandew/supertab'
+Bundle 'szw/vim-maximizer'
 
 " By language
 " Julia
@@ -264,6 +265,12 @@ xmap gs   <Plug>VSneakForward
 nmap gS <Plug>SneakBackward
 xmap gS <Plug>VSneakBackward
 let g:EasyMotion_leader_key = '<space>'
+
+nnoremap <silent><C-w>m :MaximizerToggle<CR>
+vnoremap <silent><C-w>m :MaximizerToggle<CR>gv
+" Don't set the default mapping (F3)
+let g:maximizer_set_default_mapping = 0
+" inoremap <silent><C-w>m <C-o>:MaximizerToggle<CR>
 
 nnoremap <F8> :NextColo<CR>
 nnoremap <F9> :PrevColo<CR>

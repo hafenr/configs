@@ -40,8 +40,8 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'sjl/gundo.vim'
 Bundle 'jwhitley/vim-matchit'
 Bundle 'wellle/targets.vim'
-Bundle 'ervandew/supertab'
 Bundle 'szw/vim-maximizer'
+Bundle 'PeterRincker/vim-argumentative'
 
 " By language
 " Julia
@@ -84,12 +84,6 @@ Bundle 'rizzatti/funcoo.vim'
 Bundle 'rizzatti/dash.vim'
 Bundle 'justinmk/vim-sneak'
 Bundle 'Lokaltog/vim-easymotion'
-
-" Experimental
-" Shifting arguments with <, and >,
-" Moving between argument boundaries with [, and ],
-" New text objects a, and i,
-" Bundle 'PeterRincker/vim-argumentative'
 " }}}
 "=====================================================================
 " Startup {{{
@@ -269,8 +263,6 @@ let g:EasyMotion_leader_key = '<space>'
 nnoremap <silent><C-w>m :MaximizerToggle<CR>
 vnoremap <silent><C-w>m :MaximizerToggle<CR>gv
 " Don't set the default mapping (F3)
-let g:maximizer_set_default_mapping = 0
-" inoremap <silent><C-w>m <C-o>:MaximizerToggle<CR>
 
 nnoremap <F8> :NextColo<CR>
 nnoremap <F9> :PrevColo<CR>
@@ -302,8 +294,8 @@ command! Forcesave w !sudo tee % > /dev/null
 nmap <silent> ,cd :lcd %:h<CR>
 
 " Scroll by visual lines
-" nnoremap j gj
-" nnoremap k gk
+nnoremap j gj
+nnoremap k gk
 
 " Y copies to EOL much like D, C etc. yy is still for yanking a whole line
 nmap Y y$
@@ -495,6 +487,18 @@ let g:sparkupExecuteMapping='<c-e>'
 let g:sparkupMappingInsertModeOnly=1
 let g:sparkupNextMapping='<c-j>'
 
+"---------------------------------------------------------------------
+" Argumentative
+"---------------------------------------------------------------------
+" Experimental
+" Shifting arguments with <, and >,
+" Moving between argument boundaries with [, and ],
+" New text objects a, and i,
+"---------------------------------------------------------------------
+
+" Maximizer
+"---------------------------------------------------------------------
+let g:maximizer_set_default_mapping = 0
 
 "---------------------------------------------------------------------
 " Markdown Settings
@@ -736,10 +740,9 @@ let g:sneak#use_ic_scs = 1
 "---------------------------------------------------------------------
 " SuperTab
 "---------------------------------------------------------------------
-let g:SuperTabMappingForward = '<C-n>'
-let g:SuperTabMappingBackward = '<C-p>'
-let g:SuperTabDefaultCompletionType = 'context'
-" let g:SuperTabContextDefaultCompletionType = '<C-x><C-o>'
+" let g:SuperTabMappingForward = '<C-n>'
+" let g:SuperTabMappingBackward = '<C-p>'
+" let g:SuperTabDefaultCompletionType = 'context'
 " }}}
 "=====================================================================
 " Custom functions and commands {{{

@@ -48,3 +48,19 @@ endsnippet
 snippet -> "Arrow"
 $\rightarrow$ $1
 endsnippet
+
+snippet mathjax "Header for mathjax" !b
+HTML header: <script>
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    processEscapes: true
+  },
+  TeX: {
+    extensions: ["AMSmath.js", "AMSsymbols.js"]
+  }
+});
+</script>
+
+$1
+endsnippet

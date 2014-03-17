@@ -11,6 +11,8 @@ function pdflatex-watch() { while true; do inotifywait -e modify "$1"; pdflatex 
 export EDITOR=vim
 export WORKON_HOME=~/.virtualenvs
 # export TERM=screen-256color
+export R_HOME=/Library/Frameworks/R.framework/Resources
+export JAVA_HOME=$(/usr/libexec/java_home)
 
 # .zshrc
 # alias tmux="TERM=screen-256color tmux"

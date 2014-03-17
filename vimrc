@@ -58,7 +58,7 @@ Bundle "lepture/vim-jinja"
 
 " Python
 Bundle 'https://github.com/ivanov/vim-ipython'
-Bundle 'klen/python-mode'
+" Bundle 'klen/python-mode'
 " Bundle 'davidhalter/jedi-vim'
 " Scala
 Bundle 'spiroid/vim-ultisnip-scala'
@@ -212,7 +212,7 @@ augroup aupython
     autocmd FileType python setlocal shiftwidth=4 tabstop=4
     " autocmd FileType python set omnifunc=pythoncomplete#Complete
     " autocmd FileType python setlocal ofu=jedi#completions
-    " autocmd BufWritePost *.py silent! !ctags -R --exclude=.git --exclude=lib --exclude=external --languages=python
+    autocmd BufWritePost *.py silent! !ctags -R --exclude=.git --exclude=lib --exclude=external --languages=python
 augroup END
 
 "---------------------------------------------------------------------
@@ -261,6 +261,10 @@ nnoremap <S-space> :noh<CR>
 nnoremap <leader>g :Gstatus<CR>
 
 " let g:user_emmet_leader_key = '<c-o>'
+
+nnoremap ,ll :lopen<CR>
+nnoremap ]l :lnext<CR>
+nnoremap [l :lp<CR>
 
 nmap gs <Plug>SneakForward
 xmap gs <Plug>VSneakForward
@@ -395,6 +399,7 @@ cnoremap <C-h> <C-f>
 cnoremap jk <C-c>
 
 " Navigate quickfix list
+nnoremap ,qf :cope<CR>
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprevious<CR>
 

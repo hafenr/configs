@@ -13,7 +13,7 @@ export WORKON_HOME=~/.virtualenvs
 # export TERM=screen-256color
 export R_HOME=/Library/Frameworks/R.framework/Resources
 export JAVA_HOME=$(/usr/libexec/java_home)
-
+export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
 # .zshrc
 # alias tmux="TERM=screen-256color tmux"
 alias tmux="TERM=screen-256color tmux"

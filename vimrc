@@ -27,12 +27,12 @@ call pathogen#infect("pathogen_managed/*")
 Bundle 'gmarik/vundle'
 Bundle 'kien/ctrlp.vim'
 Bundle 'SirVer/ultisnips'
+Bundle 'honza/vim-snippets'
 Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-surround'
 Bundle 'Lokaltog/vim-powerline'
 Bundle 'Valloric/YouCompleteMe'
-Bundle 'jiangmiao/auto-pairs'
 Bundle 'jpalardy/vim-slime'
 Bundle 'michaeljsmith/vim-indent-object'
 Bundle 'scrooloose/nerdtree'
@@ -42,6 +42,7 @@ Bundle 'jwhitley/vim-matchit'
 Bundle 'wellle/targets.vim'
 Bundle 'szw/vim-maximizer'
 Bundle 'PeterRincker/vim-argumentative'
+Bundle 'Raimondi/delimitMate'
 
 " By language
 " Julia
@@ -52,13 +53,13 @@ Bundle 'LaTeX-Box-Team/LaTeX-Box'
 Bundle 'ap/vim-css-color'
 Bundle 'ervandew/screen'
 Bundle 'groenewege/vim-less'
-Bundle 'mattn/emmet-vim'
 Bundle 'tristen/vim-sparkup'
+Bundle "lepture/vim-jinja"
 
 " Python
 Bundle 'https://github.com/ivanov/vim-ipython'
-" Bundle 'klen/python-mode'
-Bundle 'davidhalter/jedi-vim'
+Bundle 'klen/python-mode'
+" Bundle 'davidhalter/jedi-vim'
 " Scala
 Bundle 'spiroid/vim-ultisnip-scala'
 " Clojure
@@ -97,7 +98,7 @@ if has('gui_running')               " gvim options
     elseif os == "Linux"
         set guifont=Deja\ Vu\ Sans\ Mono\ 10
     endif
-    colorscheme corn
+    colorscheme obsidian2
 else                                " terminal
     " set t_Co=256                    " set 256 colors for terminal
     " set term=screen-256color
@@ -134,12 +135,12 @@ set showmode                        " show current mode
 set ruler                           " always show cursor position
 set nocursorline                    " have a line indicate cursor position
 set showcmd                         " display incomplete commands on lower right
-set hidden                          " edit another buffer while another one is unsaved IMPORTANT!
+set hidden                          " edit another buffer while another one is unsaved
 set lazyredraw                      " don't update the display while executing macros
 set laststatus=2                    " always show status line
 set autoread                        " automatically read a file that has changed on disk
-" set ofu=syntaxcomplete#Complete     " autocompletion so that menu will always appear
-" set cfu=youcompleteme#Complete
+set ofu=syntaxcomplete#Complete     " autocompletion so that menu will always appear
+set cfu=youcompleteme#Complete
 set wildmenu                        " enable wildmenu
 set wildmode=list:longest,full      " how wild mode should behave
 set guioptions-=T                   " remove toolbar in gVim
@@ -211,7 +212,7 @@ augroup aupython
     autocmd FileType python setlocal shiftwidth=4 tabstop=4
     " autocmd FileType python set omnifunc=pythoncomplete#Complete
     " autocmd FileType python setlocal ofu=jedi#completions
-    autocmd BufWritePost *.py silent! !ctags -R --exclude=.git --exclude=lib --exclude=external --languages=python
+    " autocmd BufWritePost *.py silent! !ctags -R --exclude=.git --exclude=lib --exclude=external --languages=python
 augroup END
 
 "---------------------------------------------------------------------
@@ -219,7 +220,10 @@ augroup END
 "---------------------------------------------------------------------
 augroup autex
     autocmd!
+    " autocmd FileType tex set mps+=$:$
+    au FileType tex let b:delimitMate_matchpairs = "\(:\)"
     autocmd FileType tex setlocal spell
+    " autocmd FileType tex let b:AutoPairs['$'] = '$'
     " autocmd FileType tex nnoremap <buffer> <leader>c <leader>ll
     " autocmd FileType tex nnoremap <buffer> <leader>v <leader>lv
 augroup END
@@ -240,7 +244,7 @@ augroup aumarkdown
     " autocmd FileType markdown inoremap $ $$<Left>
     autocmd FileType markdown setlocal spell spelllang=en_us
     " autocmd FileType markdown inoremap $$ $$<CR>$$<ESC>O
-    autocmd FileType markdown let b:AutoPairs['$'] = '$'
+    " autocmd FileType markdown let b:AutoPairs['$'] = '$'
     " autocmd FileType markdown set foldmethod=marker
     " autocmd FileType markdown set foldmarker=-------------------------------------------------------------------------------,*******************************************************************************
 augroup END
@@ -252,10 +256,14 @@ let mapleader=","
 let maplocalleader = ","
 
 " nnoremap <space> /
-" nnoremap <S-space> :noh<CR>
+nnoremap <S-space> :noh<CR>
 
-nmap gs   <Plug>SneakForward
-xmap gs   <Plug>VSneakForward
+nnoremap <leader>g :Gstatus<CR>
+
+" let g:user_emmet_leader_key = '<c-o>'
+
+nmap gs <Plug>SneakForward
+xmap gs <Plug>VSneakForward
 nmap gS <Plug>SneakBackward
 xmap gS <Plug>VSneakBackward
 let g:EasyMotion_leader_key = '<space>'
@@ -269,6 +277,7 @@ nnoremap <F9> :PrevColo<CR>
 
 inoremap <C-b> <C-o>h
 inoremap <C-f> <C-o>l
+inoremap <C-e> <C-o>$
 
 nnoremap Q @q
 nnoremap <F3> :NumbersToggle<CR>
@@ -419,6 +428,7 @@ let g:ctrlp_root_markers = ['.ctrlp']
 " <c-x> change the global working directory to CtrlP's current local
 nnoremap ,pd :CtrlPDir<CR>
 
+"
 " LateX-Box
 nnoremap ,xv :LatexView<CR>
 nnoremap ,xc :Latexmk<CR>
@@ -432,11 +442,20 @@ nnoremap ,w :NERDTreeClose<CR>
 nnoremap ,to :TagbarToggle<CR>
 nnoremap ,tt :TagbarOpenAutoClose<CR>
 
-" Sneak mappings
-nnoremap f :Sneak!         1<cr>
-nnoremap F :SneakBackward! 1<cr>
-xnoremap f :<c-u>SneakV!         1<cr>
-xnoremap F :<c-u>SneakVBackward! 1<cr>
+nmap f <Plug>Sneak_f
+nmap F <Plug>Sneak_F
+xmap f <Plug>Sneak_f
+xmap F <Plug>Sneak_F
+omap f <Plug>Sneak_f
+omap F <Plug>Sneak_F
+
+nmap t <Plug>Sneak_t
+nmap T <Plug>Sneak_T
+xmap t <Plug>Sneak_t
+xmap T <Plug>Sneak_T
+omap t <Plug>Sneak_t
+omap T <Plug>Sneak_T
+
 
 inoremap  <Up>     <NOP>
 inoremap  <Down>   <NOP>
@@ -483,7 +502,7 @@ hi Conceal guibg=black guifg=white
 "---------------------------------------------------------------------
 " Sparkup
 "---------------------------------------------------------------------
-let g:sparkupExecuteMapping='<c-e>'
+let g:sparkupExecuteMapping='<c-o>'
 let g:sparkupMappingInsertModeOnly=1
 let g:sparkupNextMapping='<c-j>'
 
@@ -519,7 +538,6 @@ if !has('gui_running')
     let vimrplugin_term = "/Applications/iTerm.app/Contents/MacOS/iTerm"
     let vimrplugin_term_cmd =  "/Applications/iTerm.app/Contents/MacOS/iTerm"
     let vimrplugin_applescript = 0
-    let vimrplugin_screenplugin = 0
     let g:ScreenImpl = 'Tmux'
     let vimrplugin_vsplit = 1 " For vertical tmux split"
     let g:ScreenShellInitialFocus = 'shell'
@@ -555,7 +573,7 @@ let g:startify_bookmarks = [ '~/.vimrc', '~/Dev/void' ]
 " Removed TAB form list of select_completion keys since UltiSnips uses that key.
 " Select elemens by <C-n>, <C-p>
 
-let g:ycm_auto_trigger = 0
+let g:ycm_auto_trigger = 1
 let g:ycm_key_list_select_completion = ['<Down>']
 let g:ycm_key_list_previous_completion = ['<Up>']
 let g:ycm_key_invoke_completion = '<C-Space>'
@@ -569,10 +587,11 @@ let g:pymode_rope_complete_on_dot = 0
 " UltiSnips
 "---------------------------------------------------------------------
 " Default Keybindings
-" g:UltiSnipsExpandTrigger               <tab>
 " g:UltiSnipsListSnippets                <c-tab>
 " g:UltiSnipsJumpForwardTrigger          <c-j>
 " g:UltiSnipsJumpBackwardTrigger         <c-k>
+let g:UltiSnipsExpandTrigger='<tab>'
+let g:UltiSnipsEditSplit='vertical'
 
 "---------------------------------------------------------------------
 " Syntastic
@@ -839,3 +858,7 @@ com! WP call WordProcessorMode()
 
 " }}}
 "=====================================================================
+
+
+let delimitMate_expand_cr = 1
+

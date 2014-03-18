@@ -1,4 +1,4 @@
-"=====================================================================
+=====================================================================
 "                   __     _____ __  __ ____   ____
 "                   \ \   / /_ _|  \/  |  _ \ / ___|
 "                    \ \ / / | || |\/| | |_) | |
@@ -461,7 +461,6 @@ xmap T <Plug>Sneak_T
 omap t <Plug>Sneak_t
 omap T <Plug>Sneak_T
 
-
 inoremap  <Up>     <NOP>
 inoremap  <Down>   <NOP>
 inoremap  <Left>   <NOP>
@@ -603,6 +602,14 @@ let g:UltiSnipsEditSplit='vertical'
 "---------------------------------------------------------------------
 let g:syntastic_warning_symbol='⚠'
 let g:syntastic_error_symbol='✗'
+" Remember to actually install all the syntax errors and style checkers"
+" pip install pyflakes pep8 pep257 flake8 pylint etc.
+" npm install -g jslint coffeelint # js, html, and coffee
+" npm install -g csslint
+" npm install -g w3 # also html
+" cabal install hlint
+let g:syntastic_python_checkers = ['pyflakes', 'flake8']
+let g:syntastic_haskell_checkers = ['hlint']
 
 "---------------------------------------------------------------------
 " Python Mode - temp removed

@@ -1,4 +1,4 @@
-=====================================================================
+"=====================================================================
 "                   __     _____ __  __ ____   ____
 "                   \ \   / /_ _|  \/  |  _ \ / ___|
 "                    \ \ / / | || |\/| | |_) | |
@@ -43,6 +43,7 @@ Bundle 'wellle/targets.vim'
 Bundle 'szw/vim-maximizer'
 Bundle 'PeterRincker/vim-argumentative'
 Bundle 'Raimondi/delimitMate'
+Bundle 'jeetsukumaran/vim-markology'
 
 " By language
 " Julia
@@ -185,17 +186,27 @@ autocmd BufEnter .vimrc setlocal foldmethod=marker
 " autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
 autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
-"---------------------------------------------------------------------
+" ---------------------------------------------------------------------
 " HTML, XML
+" ---------------------------------------------------------------------
+ augroup au_HTML_XML
+     autocmd Filetype html,xml,xsl source ~/.vim/plugin/closetag.vim
+ augroup END
+
 "---------------------------------------------------------------------
-" augroup auhtml
-"     autocmd Filetype html,xml,xsl source ~/.vim/plugin/closetag.vim
-" augroup END
+" R
+"---------------------------------------------------------------------
+augroup au_R
+    autocmd!
+    au FileType r RainbowParenthesesActivate
+    au FileType r set iskeyword-=.
+augroup END
+
 
 "---------------------------------------------------------------------
 " Clojure
 "---------------------------------------------------------------------
-augroup auclojure
+augroup au_Clojure
     autocmd!
     au FileType clojure RainbowParenthesesActivate
     au FileType clojure RainbowParenthesesLoadRound
@@ -206,7 +217,7 @@ augroup END
 "---------------------------------------------------------------------
 " Python
 "---------------------------------------------------------------------
-augroup aupython
+augroup au_Python
     autocmd!
     autocmd FileType python setlocal foldmethod=indent foldnestmax=2
     autocmd FileType python setlocal shiftwidth=4 tabstop=4
@@ -228,7 +239,7 @@ augroup autex
     " autocmd FileType tex nnoremap <buffer> <leader>v <leader>lv
 augroup END
 
-augroup audarwin
+augroup au_Darwin
     autocmd!
     autocmd BufRead,BufNewFile *.drw set filetype=darwin
 augroup END
@@ -237,7 +248,7 @@ augroup END
 "---------------------------------------------------------------------
 " Markdown
 "---------------------------------------------------------------------
-augroup aumarkdown
+augroup au_Markdown
     autocmd!
     autocmd FileType markdown iabbr ddx \frac{d}{dx}
     autocmd FileType markdown iabbr ddt \frac{d}{dt}
@@ -258,11 +269,15 @@ let maplocalleader = ","
 " nnoremap <space> /
 nnoremap <S-space> :noh<CR>
 
-nnoremap <leader>g :Gstatus<CR>
+nnoremap <leader>gg :Gstatus<CR>
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gp :Git push<CR>
 
 " let g:user_emmet_leader_key = '<c-o>'
 
+" Navigating the location list (gets populated by e.g. Syntastic)
 nnoremap ,ll :lopen<CR>
+nnoremap ,lw :lopen<CR>
 nnoremap ]l :lnext<CR>
 nnoremap [l :lp<CR>
 
@@ -399,7 +414,8 @@ cnoremap <C-h> <C-f>
 cnoremap jk <C-c>
 
 " Navigate quickfix list
-nnoremap ,qf :cope<CR>
+nnoremap ,qq :cope<CR>
+nnoremap ,qw :cclose<CR>
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprevious<CR>
 
@@ -440,7 +456,7 @@ nnoremap ,xc :Latexmk<CR>
 
 " NERDTree
 " Open NERDTree at the location of the current file
-nnoremap ,q :NERDTreeFind<CR>
+nnoremap ,e :NERDTreeFind<CR>
 nnoremap ,w :NERDTreeClose<CR>
 
 " Tagbar
@@ -767,6 +783,11 @@ let g:sneak#use_ic_scs = 1
 " PowerLine
 "---------------------------------------------------------------------
 " let g:Powerline_symbols = 'fancy'
+
+"---------------------------------------------------------------------
+" Markology
+"---------------------------------------------------------------------
+ let g:markology_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 "---------------------------------------------------------------------
 " SuperTab

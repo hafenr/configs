@@ -44,6 +44,7 @@ Bundle 'szw/vim-maximizer'
 Bundle 'PeterRincker/vim-argumentative'
 Bundle 'Raimondi/delimitMate'
 Bundle 'jeetsukumaran/vim-markology'
+Bundle 'tpope/vim-rsi'
 
 " By language
 " Julia
@@ -60,7 +61,7 @@ Bundle "lepture/vim-jinja"
 " Python
 Bundle 'https://github.com/ivanov/vim-ipython'
 " Bundle 'klen/python-mode'
-" Bundle 'davidhalter/jedi-vim'
+"<localleader> Bundle 'davidhalter/jedi-vim'
 " Scala
 Bundle 'spiroid/vim-ultisnip-scala'
 " Clojure
@@ -85,7 +86,7 @@ Bundle 'flazz/vim-colorschemes'
 Bundle 'rizzatti/funcoo.vim'
 Bundle 'rizzatti/dash.vim'
 Bundle 'justinmk/vim-sneak'
-Bundle 'Lokaltog/vim-easymotion'
+" Bundle 'Lokaltog/vim-easymotion'
 " }}}
 "=====================================================================
 " Startup {{{
@@ -223,7 +224,7 @@ augroup au_Python
     autocmd FileType python setlocal shiftwidth=4 tabstop=4
     " autocmd FileType python set omnifunc=pythoncomplete#Complete
     " autocmd FileType python setlocal ofu=jedi#completions
-    autocmd BufWritePost *.py silent! !ctags -R --exclude=.git --exclude=lib --exclude=external --languages=python
+    " autocmd BufWritePost *.py silent! !ctags -R --exclude=.git --exclude=lib --exclude=external --languages=python
 augroup END
 
 "---------------------------------------------------------------------
@@ -263,15 +264,28 @@ augroup END
 "=====================================================================
 " Mappings {{{
 "=====================================================================
-let mapleader=","
+let mapleader="\<Space>"
 let maplocalleader = ","
 
 " nnoremap <space> /
+inoremap jk <ESC>
+vnoremap jk <C-c>
+nnoremap ,so :source ~/.vimrc<CR>
 nnoremap <S-space> :noh<CR>
+nnoremap <C-space> :w<cr>
 
-nnoremap <leader>gg :Gstatus<CR>
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gp :Git push<CR>
+nnoremap <C-j> }}
+nnoremap <C-k> {{
+
+vnoremap <silent> y y`]
+vnoremap <silent> p p`]
+nnoremap <silent> p p`]
+
+
+nnoremap ,gg :Gstatus<CR>
+nnoremap ,gs :Gstatus<CR>
+nnoremap ,gp :Git push<CR>
+nmap <space><space> V
 
 " let g:user_emmet_leader_key = '<c-o>'
 
@@ -285,7 +299,6 @@ nmap gs <Plug>SneakForward
 xmap gs <Plug>VSneakForward
 nmap gS <Plug>SneakBackward
 xmap gS <Plug>VSneakBackward
-let g:EasyMotion_leader_key = '<space>'
 
 nnoremap <silent><C-w>m :MaximizerToggle<CR>
 vnoremap <silent><C-w>m :MaximizerToggle<CR>gv
@@ -294,118 +307,34 @@ vnoremap <silent><C-w>m :MaximizerToggle<CR>gv
 nnoremap <F8> :NextColo<CR>
 nnoremap <F9> :PrevColo<CR>
 
-inoremap <C-b> <C-o>h
-inoremap <C-f> <C-o>l
-inoremap <C-e> <C-o>$
+" inoremap <C-b> <C-o>h
+" inoremap <C-f> <C-o>l
+" inoremap <C-e> <C-o>$
 
 nnoremap Q @q
-nnoremap <F3> :NumbersToggle<CR>
 
 " Look up word under cursor with Dash
 nnoremap gK :Dash<CR>
 
 " Reload vimrc
-nnoremap <leader>so :so ~/.vimrc<CR>
-
-" Faster scrolling
-nnoremap <C-e> 2<C-e>2j
-nnoremap <C-y> 2<C-y>2k
-
-" Window splitting
-nnoremap <leader>vs :vs<CR>
-nnoremap <leader>sp :sp<CR>
-
-" :Forcesave will save the file as su
-command! Forcesave w !sudo tee % > /dev/null
-
-" Change the working directoty to dir of file in buffer
-nmap <silent> ,cd :lcd %:h<CR>
-
-" Scroll by visual lines
-nnoremap j gj
-nnoremap k gk
-
-" Y copies to EOL much like D, C etc. yy is still for yanking a whole line
-nmap Y y$
-
-" Forward delete in insert mode
-inoremap <C-Del> <C-\><C-O>D
-
-" Scroll another window
-nmap <M-e> <C-w>w<C-e><C-w>w
-nmap <M-y> <C-w>w<C-y><C-w>w
-nmap <M-d> <C-w>w<C-d><C-w>w
-nmap <M-u> <C-w>w<C-u><C-w>w
-
-" Close window ...
-" to the left
-noremap <silent> <A-w>h :wincmd h<CR>:close<CR>
-" below
-noremap <silent> <A-w>j :wincmd j<CR>:close<CR>
-" above
-noremap <silent> <A-w>k :wincmd k<CR>:close<CR>
-" to the right
-noremap <silent> <A-w>l :wincmd l<CR>:close<CR>
-" ... of current window
-
-" Show jump list
-nnoremap <leader>jl :jumps<CR>
-
-" Show changes list
-" navigation: <nr>g;  <nr>g,
-nnoremap <leader>cl :changes<CR>
-
-" Show registers
-nnoremap <leader>re :reg<CR>
-
-" Map jk to escape in insert mode
-imap jk <Esc>
-
-" M-k will create an empty line above the cursor, M-j under the cursor
-nnoremap <M-k> maO<esc>`a
-nnoremap <M-j> mao<esc>`a
-
-" :HardTimeToggle<CR>
-nnoremap <F5> :GundoToggle<CR>
-
-" toggle show vertical and horizontal line at cursor position
-" useful for keeping track of indentation in python files
-" nmap <C-\> :set invcursorcolumn invcursorline<CR>
-
-" Toggle highlighting
-" nnoremap <C-\> :set hlsearch! hlsearch?<CR>
-" Temporarily disable highlighting (until next search)
-nnoremap <C-\> :noh<CR>
-" nnoremap <C-space> :
-nnoremap <C-space> :w<CR>
-" cnoremap <enter> <nop>
-" nnoremap : <nop>
-
-" Especially useful when searching with / or ?.
-" This will also disable highlighting for a easy <space> `search` <C-space> workflow
-cnoremap <C-space> <CR>:noh<CR>
-" Insert space at cursor position without leaving normal mode
-" nnoremap <C-space> i <ESC>
-
-" Copy paste from/to system clipboard
-vnoremap <leader>y "+y
-vnoremap <leader>p "+p
+nnoremap ,y "+y
+vnoremap ,p "+p
 
 " Copy paste from secondary system clipboard
 " (highlighted text, normal paste via mouse3)
-nnoremap <leader><leader>y "*y
-nnoremap <leader><leader>p "*p
+nnoremap ,,y "*y
+nnoremap ,,p "*p
 
-nnoremap <leader>Y "+yy
+nnoremap ,Y "+yy
 
-" Allow command line editing with emacs keybindings
-cnoremap <C-a> <Home>
-cnoremap <C-b> <Left>
-cnoremap <C-e> <End>
-cnoremap <C-f> <Right>
-cnoremap <C-d> <Delete>
-cnoremap <C-n> <Down>
-cnoremap <C-p> <Up>
+" " Allow command line editing with emacs keybindings
+" cnoremap <C-a> <Home>
+" cnoremap <C-b> <Left>
+" cnoremap <C-e> <End>
+" cnoremap <C-f> <Right>
+" cnoremap <C-d> <Delete>
+" cnoremap <C-n> <Down>
+" cnoremap <C-p> <Up>
 
 " c_CTRL-F is remapped to c_CTRL-H for 'history'
 cnoremap <C-h> <C-f>
@@ -414,8 +343,8 @@ cnoremap <C-h> <C-f>
 cnoremap jk <C-c>
 
 " Navigate quickfix list
-nnoremap ,qq :cope<CR>
-nnoremap ,qw :cclose<CR>
+nnoremap <space>q :cope<CR>
+nnoremap <space>w :cclose<CR>
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprevious<CR>
 
@@ -430,16 +359,16 @@ let g:ctrlp_map = '<C-p>'
 " The command executed by the above mapping
 let g:ctrlp_cmd = 'CtrlPMixed'
 " All modes with prefix 'f' for 'fuzzy'
-nnoremap <leader>fm :CtrlPMixed<CR>
-nnoremap <leader>ff :CtrlPMRUFiles<CR>
-nnoremap <leader>fl :CtrlPLine<CR>
-nnoremap <leader>ft :CtrlPTag<CR>
-nnoremap <leader>fd :CtrlPBookmarkDir<CR>
-nnoremap <leader>fb :CtrlPBuffer<CR>
+nnoremap <space>fm :CtrlPMixed<CR>
+nnoremap <space>ff :CtrlPMRUFiles<CR>
+nnoremap <space>ft :CtrlPTag<CR>
+nnoremap <space>fd :CtrlPBookmarkDir<CR>
 
-" AKAs
-nnoremap <leader>ls :CtrlPBuffer<CR>
-nnoremap <leader>ta :CtrlPTag<CR>
+nnoremap <space>o :CtrlPMixed<CR>
+nnoremap <space>d :CtrlPDir<CR>
+nnoremap <space>l :CtrlPLine<CR>
+nnoremap <space>b :CtrlPBuffer<CR>
+nnoremap <space>t :CtrlPTag<CR>
 
 let g:ctrlp_root_markers = ['.ctrlp']
 " While in directory mode:
@@ -447,7 +376,6 @@ let g:ctrlp_root_markers = ['.ctrlp']
 " <c-t> change the global working directory (exit).
 " <c-v> change the local working directory for the current window (exit).
 " <c-x> change the global working directory to CtrlP's current local
-nnoremap ,pd :CtrlPDir<CR>
 
 "
 " LateX-Box
@@ -456,7 +384,7 @@ nnoremap ,xc :Latexmk<CR>
 
 " NERDTree
 " Open NERDTree at the location of the current file
-nnoremap ,e :NERDTreeFind<CR>
+nnoremap ,q :NERDTreeFind<CR>
 nnoremap ,w :NERDTreeClose<CR>
 
 " Tagbar
@@ -476,6 +404,9 @@ xmap t <Plug>Sneak_t
 xmap T <Plug>Sneak_T
 omap t <Plug>Sneak_t
 omap T <Plug>Sneak_T
+
+" select just pasted text
+noremap gV `[v`]
 
 inoremap  <Up>     <NOP>
 inoremap  <Down>   <NOP>
@@ -593,15 +524,16 @@ let g:startify_bookmarks = [ '~/.vimrc', '~/Dev/void' ]
 " Removed TAB form list of select_completion keys since UltiSnips uses that key.
 " Select elemens by <C-n>, <C-p>
 
-let g:ycm_auto_trigger = 1
-let g:ycm_key_list_select_completion = ['<Down>']
-let g:ycm_key_list_previous_completion = ['<Up>']
+let g:ycm_auto_trigger = 0
+let g:ycm_key_list_select_completion = ['<Down>'] " Tab removed
+let g:ycm_key_list_previous_completion = ['<Up>'] " S-Tab removed
 let g:ycm_key_invoke_completion = '<C-Space>'
 let g:ycm_min_num_of_chars_for_completion = 2 " default 2
 let g:ycm_min_num_identifier_candidate_chars = 0 " default 0
 " Can make vim slower if tags file is on a network dir
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:pymode_rope_complete_on_dot = 0
+let g:ycm_seed_identifiers_with_syntax = 1
 
 "---------------------------------------------------------------------
 " UltiSnips
@@ -688,6 +620,7 @@ let g:tagbar_type_coffee = {
 " Vim-slime
 "---------------------------------------------------------------------
 let g:slime_target = "tmux"
+let g:slime_python_ipython = 1
 
 "---------------------------------------------------------------------
 " Jedi
@@ -741,7 +674,6 @@ let g:startify_custom_header = [
 " |g:startify_session_savecmds|
 " |g:startify_disable_at_vimenter|
 
-
 "---------------------------------------------------------------------
 " HardTime
 "---------------------------------------------------------------------
@@ -753,16 +685,24 @@ let g:list_of_normal_keys = ['h', 'j', 'k', 'l', '<UP>', '<DOWN>', '<RIGHT>', '<
 "---------------------------------------------------------------------
 " Check if better than tabularize
 " Start interactive EasyAlign in visual mode
-vmap <Enter> <Plug>(EasyAlign)
-" Start interactive EasyAlign with a Vim movement
-nmap <Leader>a <Plug>(EasyAlign)
+vmap ,a <Plug>(EasyAlign)
 
 "---------------------------------------------------------------------
 " Ctrlp
 "---------------------------------------------------------------------
-let g:ctrlp_working_path_mode = 'ra'
+" r: Try to search for a root directory (containing .git, .ctrlp, etc.)
+" and set that dir as the working dir
+" c: working directory
+let g:ctrlp_working_path_mode = 'c'
 " let g:ctrlp_match_window_reversed = 0
 " let g:ctrlp_max_height = 10
+let g:ctrlp_show_hidden = 1
+
+" Dir mode settings:
+" <cr> change the local working directory for CtrlP and keep it open.
+" <c-t> change the global working directory (exit).
+" <c-v> change the local working directory for the current window (exit).
+" <c-x> change the global working directory to CtrlP's current local wd (exit)
 
 " Default is search by full path. Switch with CTRL-d while in CtrlP prompt.
 let g:ctrlp_by_filename = 0
@@ -889,9 +829,16 @@ func! WordProcessorMode()
 endfu
 com! WP call WordProcessorMode()
 
+" vp doesn't replace paste buffer
+function! RestoreRegister()
+  let @" = s:restore_reg
+  return ''
+endfunction
+function! s:Repl()
+  let s:restore_reg = @"
+  return "p@=RestoreRegister()\<cr>"
+endfunction
+
+vmap <silent> <expr> p <sid>Repl()
 " }}}
 "=====================================================================
-
-
-let delimitMate_expand_cr = 1
-

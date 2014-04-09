@@ -1,12 +1,12 @@
-"=====================================================================
-"                   __     _____ __  __ ____   ____
-"                   \ \   / /_ _|  \/  |  _ \ / ___|
-"                    \ \ / / | || |\/| | |_) | |
-"                     \ V /  | || |  | |  _ <| |___
-"                      \_/  |___|_|  |_|_| \_\\____|
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"                                 QZR
-"=====================================================================
+"=========================================================
+"            __     _____ __  __ ____   ____
+"            \ \   / /_ _|  \/  |  _ \ / ___|
+"             \ \ / / | || |\/| | |_) | |
+"              \ V /  | || |  | |  _ <| |___
+"               \_/  |___|_|  |_|_| \_\\____|
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"                       2014-03-28
+"=========================================================
 " General {{{
 "=====================================================================
 let os = substitute(system('uname'), "\n", "", "")
@@ -45,6 +45,7 @@ Bundle 'PeterRincker/vim-argumentative'
 Bundle 'Raimondi/delimitMate'
 Bundle 'jeetsukumaran/vim-markology'
 Bundle 'tpope/vim-rsi'
+Bundle 'milkypostman/vim-togglelist'
 
 " By language
 " Julia
@@ -73,7 +74,6 @@ Bundle 'nelstrom/vim-markdown-folding'
 Bundle 'tpope/vim-markdown'
 
 " Other
-Bundle 'majutsushi/tagbar'
 Bundle 'mhinz/vim-startify'
 Bundle 'rking/ag.vim'
 Bundle 'scrooloose/syntastic'
@@ -86,6 +86,8 @@ Bundle 'flazz/vim-colorschemes'
 Bundle 'rizzatti/funcoo.vim'
 Bundle 'rizzatti/dash.vim'
 Bundle 'justinmk/vim-sneak'
+Bundle 'majutsushi/tagbar'
+
 " Bundle 'Lokaltog/vim-easymotion'
 " }}}
 "=====================================================================
@@ -95,7 +97,7 @@ filetype plugin indent on           " enable all filetype events
 
 if has('gui_running')               " gvim options
     if os == "Darwin"
-        set guifont=Monaco:h18
+        set guifont=Monaco:h16
         set macmeta                 " Option as Meta
     elseif os == "Linux"
         set guifont=Deja\ Vu\ Sans\ Mono\ 10
@@ -200,7 +202,7 @@ autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 augroup au_R
     autocmd!
     au FileType r RainbowParenthesesActivate
-    au FileType r set iskeyword-=.
+    au FileType r set iskeyword+=.
 augroup END
 
 
@@ -262,69 +264,62 @@ augroup au_Markdown
 augroup END
 " }}}
 "=====================================================================
-" Mappings {{{
+" Mappings {{{1 "
 "=====================================================================
-let mapleader="\<Space>"
+" Basic {{{2 "
+let mapleader=","
 let maplocalleader = ","
 
-" nnoremap <space> /
 inoremap jk <ESC>
-vnoremap jk <C-c>
-nnoremap ,so :source ~/.vimrc<CR>
-nnoremap <S-space> :noh<CR>
-nnoremap <C-space> :w<cr>
 
-nnoremap <C-j> }}
-nnoremap <C-k> {{
+nnoremap ,so :source ~/.vimrc<CR>
+nnoremap <S-space> i <ESC>
+nnoremap <C-space> :w<cr>
+nnoremap <C-\> :noh<CR>
+
+map <C-j> }
+map <C-k> {
 
 vnoremap <silent> y y`]
 vnoremap <silent> p p`]
 nnoremap <silent> p p`]
 
-
-nnoremap ,gg :Gstatus<CR>
-nnoremap ,gs :Gstatus<CR>
-nnoremap ,gp :Git push<CR>
-nmap <space><space> V
-
-" let g:user_emmet_leader_key = '<c-o>'
-
 " Navigating the location list (gets populated by e.g. Syntastic)
-nnoremap ,ll :lopen<CR>
-nnoremap ,lw :lopen<CR>
+nmap <script> <silent> <F4> :call ToggleLocationList()<CR>
 nnoremap ]l :lnext<CR>
 nnoremap [l :lp<CR>
 
-nmap gs <Plug>SneakForward
-xmap gs <Plug>VSneakForward
-nmap gS <Plug>SneakBackward
-xmap gS <Plug>VSneakBackward
+" select just pasted text
+noremap gV `[v`]
 
-nnoremap <silent><C-w>m :MaximizerToggle<CR>
-vnoremap <silent><C-w>m :MaximizerToggle<CR>gv
-" Don't set the default mapping (F3)
-
-nnoremap <F8> :NextColo<CR>
-nnoremap <F9> :PrevColo<CR>
+inoremap  <Up>     <NOP>
+inoremap  <Down>   <NOP>
+inoremap  <Left>   <NOP>
+inoremap  <Right>  <NOP>
+vnoremap  <Up>     <NOP>
+vnoremap  <Down>   <NOP>
+vnoremap  <Left>   <NOP>
+vnoremap  <Right>  <NOP>
+nnoremap  <Up>     <NOP>
+nnoremap  <Down>   <NOP>
+nnoremap  <Left>   <NOP>
+nnoremap  <Right>  <NOP>
+cnoremap  <Up>     <NOP>
+cnoremap  <Down>   <NOP>
+cnoremap  <Left>   <NOP>
+cnoremap  <Right>  <NOP>
 
 " inoremap <C-b> <C-o>h
 " inoremap <C-f> <C-o>l
 " inoremap <C-e> <C-o>$
-
 nnoremap Q @q
-
-" Look up word under cursor with Dash
-nnoremap gK :Dash<CR>
-
 " Reload vimrc
 nnoremap ,y "+y
 vnoremap ,p "+p
-
 " Copy paste from secondary system clipboard
 " (highlighted text, normal paste via mouse3)
 nnoremap ,,y "*y
 nnoremap ,,p "*p
-
 nnoremap ,Y "+yy
 
 " " Allow command line editing with emacs keybindings
@@ -340,13 +335,42 @@ nnoremap ,Y "+yy
 cnoremap <C-h> <C-f>
 
 " jk exits command mode
-cnoremap jk <C-c>
+" cnoremap jk <C-c>
+
+" Insert line above/below curser
+nnoremap <space>j o<ESC>k
+nnoremap <space>k O<ESC>j
+
+nnoremap <M-j> zj
+nnoremap <M-k> zk
 
 " Navigate quickfix list
-nnoremap <space>q :cope<CR>
-nnoremap <space>w :cclose<CR>
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprevious<CR>
+" 2}}} "
+" Plugin mapings {{{2 "
+nnoremap ,gg :Gstatus<CR>
+nnoremap ,gs :Gstatus<CR>
+nnoremap ,gp :Git push<CR>
+" nmap <space><space> V
+
+" let g:user_emmet_leader_key = '<c-o>'
+
+nmap gs <Plug>SneakForward
+xmap gs <Plug>VSneakForward
+nmap gS <Plug>SneakBackward
+xmap gS <Plug>VSneakBackward
+
+nmap <script> <silent> ,q :call ToggleQuickfixList()<CR>
+
+nnoremap <silent><space>wo :MaximizerToggle<CR>
+vnoremap <silent><space>wo :MaximizerToggle<CR>gv
+
+nnoremap <F8> :NextColo<CR>
+nnoremap <F9> :PrevColo<CR>
+
+" Look up word under cursor with Dash
+nnoremap gK :Dash<CR>
 
 " CtrlP
 " While in prompt: C-b and C-f switch search modes
@@ -377,19 +401,18 @@ let g:ctrlp_root_markers = ['.ctrlp']
 " <c-v> change the local working directory for the current window (exit).
 " <c-x> change the global working directory to CtrlP's current local
 
-"
 " LateX-Box
 nnoremap ,xv :LatexView<CR>
 nnoremap ,xc :Latexmk<CR>
 
 " NERDTree
 " Open NERDTree at the location of the current file
-nnoremap ,q :NERDTreeFind<CR>
+nnoremap ,e :NERDTreeFind<CR>
 nnoremap ,w :NERDTreeClose<CR>
 
-" Tagbar
-nnoremap ,to :TagbarToggle<CR>
-nnoremap ,tt :TagbarOpenAutoClose<CR>
+" " Tagbar
+" nnoremap ,to :TagbarToggle<CR>
+" nnoremap ,tt :TagbarOpenAutoClose<CR>
 
 nmap f <Plug>Sneak_f
 nmap F <Plug>Sneak_F
@@ -404,27 +427,8 @@ xmap t <Plug>Sneak_t
 xmap T <Plug>Sneak_T
 omap t <Plug>Sneak_t
 omap T <Plug>Sneak_T
-
-" select just pasted text
-noremap gV `[v`]
-
-inoremap  <Up>     <NOP>
-inoremap  <Down>   <NOP>
-inoremap  <Left>   <NOP>
-inoremap  <Right>  <NOP>
-vnoremap  <Up>     <NOP>
-vnoremap  <Down>   <NOP>
-vnoremap  <Left>   <NOP>
-vnoremap  <Right>  <NOP>
-nnoremap  <Up>     <NOP>
-nnoremap  <Down>   <NOP>
-nnoremap  <Left>   <NOP>
-nnoremap  <Right>  <NOP>
-cnoremap  <Up>     <NOP>
-cnoremap  <Down>   <NOP>
-cnoremap  <Left>   <NOP>
-cnoremap  <Right>  <NOP>
-" }}}
+" 2}}}
+" 1}}}
 "=====================================================================
 " Abbreviations {{{
 "=====================================================================
@@ -434,10 +438,10 @@ cnoremap  <Right>  <NOP>
 " iabbrev over <esc>BdWi\frac{<esc>pxi}{
 " }}}
 "=====================================================================
-" Plugin settings {{{
+" Plugin settings {{{1
 "=====================================================================
-"---------------------------------------------------------------------
-" LaTeX-Box
+
+" {{{2 LaTeX-Box
 "---------------------------------------------------------------------
 let g:LatexBox_viewer = 'open -a Skim'
 " 0: Don't open quickfix, 2: Open but don't make it the active window
@@ -449,39 +453,39 @@ let g:tex_flavor = "latex"
 " let g:LatexBox_latexmk_options = "-pvc -pdfps"
 set cole=2
 hi Conceal guibg=black guifg=white
+" 2}}}
 
-"---------------------------------------------------------------------
-" Sparkup
+" {{{2 Sparkup
 "---------------------------------------------------------------------
 let g:sparkupExecuteMapping='<c-o>'
 let g:sparkupMappingInsertModeOnly=1
 let g:sparkupNextMapping='<c-j>'
+" 2}}}
 
-"---------------------------------------------------------------------
-" Argumentative
+" {{{2 Argumentative
 "---------------------------------------------------------------------
 " Experimental
 " Shifting arguments with <, and >,
 " Moving between argument boundaries with [, and ],
 " New text objects a, and i,
-"---------------------------------------------------------------------
+" 2}}}
 
-" Maximizer
+" {{{2 Maximizer
 "---------------------------------------------------------------------
 let g:maximizer_set_default_mapping = 0
+" 2}}}
 
-"---------------------------------------------------------------------
-" Markdown Settings
+" {{{2 Markdown Settings
 "---------------------------------------------------------------------
 let g:vim_markdown_folding_disabled=1
+" 2}}}
 
-"---------------------------------------------------------------------
-" EasyMotion
+" {{{2 EasyMotion
 "---------------------------------------------------------------------
 " Default leader <leader><leader>
+" 2}}}
 
-"---------------------------------------------------------------------
-" R Plugin
+" {{{2 R Plugin
 "---------------------------------------------------------------------
 let g:vimrplugin_assign='<'
 
@@ -501,25 +505,25 @@ if !has('gui_running')
     " see R documentation in a Vim buffer
     let vimrplugin_vimpager = "no""
 endif
+" 2}}}
 
-"---------------------------------------------------------------------
-" Py-Mode settings
+" {{{2 Py-Mode settings
 "---------------------------------------------------------------------
 let g:pymode_rope = 0 " Disable Rope due to buggy behavior
+" 2}}}
 
-"---------------------------------------------------------------------
-" Eclim
+" {{{2 Eclim
 "---------------------------------------------------------------------
 " To make it play nicely with YCM
 " let g:EclimCompletionMethod = 'omnifunc'
+" 2}}}
 
-"---------------------------------------------------------------------
-" Startify
+" {{{2 Startify
 "---------------------------------------------------------------------
 let g:startify_bookmarks = [ '~/.vimrc', '~/Dev/void' ]
+" 2}}}
 
-"---------------------------------------------------------------------
-" YouCompleteMe
+" {{{2 YouCompleteMe
 "---------------------------------------------------------------------
 " Removed TAB form list of select_completion keys since UltiSnips uses that key.
 " Select elemens by <C-n>, <C-p>
@@ -534,9 +538,9 @@ let g:ycm_min_num_identifier_candidate_chars = 0 " default 0
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:pymode_rope_complete_on_dot = 0
 let g:ycm_seed_identifiers_with_syntax = 1
+" 2}}}
 
-"---------------------------------------------------------------------
-" UltiSnips
+" {{{2 UltiSnips
 "---------------------------------------------------------------------
 " Default Keybindings
 " g:UltiSnipsListSnippets                <c-tab>
@@ -544,9 +548,10 @@ let g:ycm_seed_identifiers_with_syntax = 1
 " g:UltiSnipsJumpBackwardTrigger         <c-k>
 let g:UltiSnipsExpandTrigger='<tab>'
 let g:UltiSnipsEditSplit='vertical'
+nnoremap ,u :UltiSnipsEdit<CR>
+" 2}}}
 
-"---------------------------------------------------------------------
-" Syntastic
+" {{{2 Syntastic
 "---------------------------------------------------------------------
 let g:syntastic_warning_symbol='⚠'
 let g:syntastic_error_symbol='✗'
@@ -558,72 +563,71 @@ let g:syntastic_error_symbol='✗'
 " cabal install hlint
 let g:syntastic_python_checkers = ['pyflakes', 'flake8']
 let g:syntastic_haskell_checkers = ['hlint']
+" 2}}}
 
-"---------------------------------------------------------------------
-" Python Mode - temp removed
+" {{{2 Python Mode - temp removed
 "---------------------------------------------------------------------
 " See all default settings at: https://github.com/klen/python-mode
 " Enable with :PyLintCheckerToggle
 " let g:pymode_lint = 0
 " let g:pymode_lint_ignore = "E501"
+" 2}}}
 
-"---------------------------------------------------------------------
-" Tagbar
-"---------------------------------------------------------------------
-let g:tagbar_type_r = {
-    \ 'ctagstype' : 'r',
-    \ 'kinds'     : [
-        \ 'f:Functions',
-        \ 'g:GlobalVariables',
-        \ 'v:FunctionVariables',
-    \ ]
-\ }
+" " {{{2 Tagbar
+" "---------------------------------------------------------------------
+" let g:tagbar_type_r = {
+"     \ 'ctagstype' : 'r',
+"     \ 'kinds'     : [
+"         \ 'f:Functions',
+"         \ 'g:GlobalVariables',
+"         \ 'v:FunctionVariables',
+"     \ ]
+" \ }
 
-let g:tagbar_type_scala = {
-    \ 'ctagstype' : 'Scala',
-    \ 'kinds'     : [
-        \ 'p:packages:1',
-        \ 'V:values',
-        \ 'v:variables',
-        \ 'T:types',
-        \ 't:traits',
-        \ 'o:objects',
-        \ 'a:aclasses',
-        \ 'c:classes',
-        \ 'r:cclasses',
-        \ 'm:methods'
-    \ ]
-\ }
+" let g:tagbar_type_scala = {
+"     \ 'ctagstype' : 'Scala',
+"     \ 'kinds'     : [
+"         \ 'p:packages:1',
+"         \ 'V:values',
+"         \ 'v:variables',
+"         \ 'T:types',
+"         \ 't:traits',
+"         \ 'o:objects',
+"         \ 'a:aclasses',
+"         \ 'c:classes',
+"         \ 'r:cclasses',
+"         \ 'm:methods'
+"     \ ]
+" \ }
 
+" let g:tagbar_type_markdown = {
+" 	\ 'ctagstype' : 'markdown',
+" 	\ 'kinds' : [
+" 		\ 'h:Heading_L1',
+" 		\ 'i:Heading_L2',
+" 		\ 'k:Heading_L3'
+" 	\ ]
+" \ }
 
-let g:tagbar_type_markdown = {
-	\ 'ctagstype' : 'markdown',
-	\ 'kinds' : [
-		\ 'h:Heading_L1',
-		\ 'i:Heading_L2',
-		\ 'k:Heading_L3'
-	\ ]
-\ }
+" let g:tagbar_type_coffee = {
+"     \ 'ctagstype' : 'coffee',
+"     \ 'kinds'     : [
+"         \ 'c:classes',
+"         \ 'm:methods',
+"         \ 'f:functions',
+"         \ 'v:variables',
+"         \ 'f:fields',
+"     \ ]
+" \ }
+" " 2}}}
 
-let g:tagbar_type_coffee = {
-    \ 'ctagstype' : 'coffee',
-    \ 'kinds'     : [
-        \ 'c:classes',
-        \ 'm:methods',
-        \ 'f:functions',
-        \ 'v:variables',
-        \ 'f:fields',
-    \ ]
-\ }
-
-"---------------------------------------------------------------------
-" Vim-slime
+" {{{2 Vim-slime
 "---------------------------------------------------------------------
 let g:slime_target = "tmux"
 let g:slime_python_ipython = 1
+" 2}}}
 
-"---------------------------------------------------------------------
-" Jedi
+" {{{2 Jedi
 "---------------------------------------------------------------------
 let g:jedi#use_tabs_not_buffers = 0
 " let g:jedi#use_splits_not_buffers = "left"
@@ -636,9 +640,9 @@ let g:jedi#popup_select_first = 0
 " let g:jedi#completions_command = "<C-Space>"
 " let g:jedi#rename_command = "<leader>r"
 " let g:jedi#show_call_signatures = "1"
+" 2}}}
 
-"---------------------------------------------------------------------
-" Startify
+" {{{2 Startify
 "---------------------------------------------------------------------
 " |g:startify_session_dir|
 " |g:startify_list_order|
@@ -673,23 +677,23 @@ let g:startify_custom_header = [
 " |g:startify_session_savevars|
 " |g:startify_session_savecmds|
 " |g:startify_disable_at_vimenter|
+" 2}}}
 
-"---------------------------------------------------------------------
-" HardTime
+" {{{2 HardTime
 "---------------------------------------------------------------------
 let g:hardtime_default_on = 0
 let g:list_of_normal_keys = ['h', 'j', 'k', 'l', '<UP>', '<DOWN>', '<RIGHT>', '<LEFT>']
+" 2}}}
 
-"---------------------------------------------------------------------
-" EasyAlign
+" {{{2 EasyAlign
 "---------------------------------------------------------------------
 " Check if better than tabularize
 " Start interactive EasyAlign in visual mode
 vmap ,a <Plug>(EasyAlign)
+" 2}}}
 
-"---------------------------------------------------------------------
-" Ctrlp
-"---------------------------------------------------------------------
+" {{{2 Ctrlp
+
 " r: Try to search for a root directory (containing .git, .ctrlp, etc.)
 " and set that dir as the working dir
 " c: working directory
@@ -712,30 +716,29 @@ let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v\.git$\|\.hg$\|\.svn$\|\.yardoc\|public\/images\|public\/system\|data\|log\|tmp$',
   \ 'file': '\v\.(o|m4a|pdf|swp|pyc|wav|mp3|ogg|blend|dvi|fls|aux|blg|bbl|log|loa|lof|toc|fdb_latexmk|lot|)$|\~$'
   \ }
+" 2}}}
 
-"---------------------------------------------------------------------
-" Sneak
+" {{{2 Sneak
 "---------------------------------------------------------------------
 let g:sneak#streak = 0
 let g:sneak#use_ic_scs = 1
+" 2}}}
 
-"---------------------------------------------------------------------
-" PowerLine
-"---------------------------------------------------------------------
+" {{{2 PowerLine
+
 " let g:Powerline_symbols = 'fancy'
+" 2}}}
 
-"---------------------------------------------------------------------
-" Markology
-"---------------------------------------------------------------------
+" {{{2 Markology
  let g:markology_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+" 2}}}
 
-"---------------------------------------------------------------------
-" SuperTab
-"---------------------------------------------------------------------
+" SuperTab {{{2 "
 " let g:SuperTabMappingForward = '<C-n>'
 " let g:SuperTabMappingBackward = '<C-p>'
 " let g:SuperTabDefaultCompletionType = 'context'
-" }}}
+" 2}}}
+" 1}}}
 "=====================================================================
 " Custom functions and commands {{{
 "=====================================================================

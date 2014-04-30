@@ -1,1 +1,69 @@
-/Users/robin/.emacs.d/emacs
+;;
+;; Initialize ELPA
+;;
+(require 'package)
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+(package-initialize)
+
+;;
+;; Initialize el-get
+;;
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
+
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+(el-get 'sync)
+
+(require 'evil)
+(evil-mode 1)
+
+;;
+;; Color-theme plugin, has to be installed by M-x el-get-install RET color-theme RET
+;;
+(require 'color-theme)
+(color-theme-initialize)
+(color-theme-molokai)
+
+;;
+;; Install clojure-mode from ELPA if it isn't installed already
+;;
+(unless (package-installed-p 'clojure-mode)
+  (package-refresh-contents)
+  (package-install 'clojure-mode))
+
+;;
+;; Font size, height is /100
+;;
+(set-face-attribute 'default nil :height 140)
+
+;;
+;; ESS
+;;
+(require 'ess-site)
+
+;;
+;; Load and configure SLIME
+;;
+(add-to-list 'load-path "~/.emacsplugins/slime")
+(require 'slime)
+(eval-after-load 'slime '(setq slime-protocol-version 'ignore))
+(slime-setup '(slime-repl))
+ 
+;;
+;; Load a major mode for editing Clojure code.
+;;
+(require 'clojure-mode)
+
+;;
+;; Activate flexible file matching
+;;
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(ido-mode 1) 

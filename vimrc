@@ -35,7 +35,6 @@ Bundle 'Lokaltog/vim-powerline'
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'jpalardy/vim-slime'
 Bundle 'michaeljsmith/vim-indent-object'
-Bundle 'scrooloose/nerdtree'
 Bundle 'tpope/vim-fugitive'
 Bundle 'sjl/gundo.vim'
 Bundle 'jwhitley/vim-matchit'
@@ -46,6 +45,8 @@ Bundle 'Raimondi/delimitMate'
 Bundle 'jeetsukumaran/vim-markology'
 Bundle 'tpope/vim-rsi'
 Bundle 'milkypostman/vim-togglelist'
+Bundle 'Xuyuanp/git-nerdtree'
+Bundle 'terryma/vim-expand-region'
 
 " By language
 " Julia
@@ -203,6 +204,7 @@ augroup au_R
     autocmd!
     au FileType r RainbowParenthesesActivate
     au FileType r set iskeyword+=.
+    iabbrev _ <-
 augroup END
 
 
@@ -271,6 +273,8 @@ let mapleader=","
 let maplocalleader = ","
 
 inoremap jk <ESC>
+
+imap <S-CR> <CR><CR>end<Esc>-cc
 
 nnoremap ,so :source ~/.vimrc<CR>
 nnoremap <S-space> i <ESC>
@@ -363,14 +367,17 @@ xmap gS <Plug>VSneakBackward
 
 nmap <script> <silent> ,q :call ToggleQuickfixList()<CR>
 
-nnoremap <silent><space>wo :MaximizerToggle<CR>
-vnoremap <silent><space>wo :MaximizerToggle<CR>gv
+nnoremap <silent><space>m :MaximizerToggle<CR>
+vnoremap <silent><space>m :MaximizerToggle<CR>gv
 
 nnoremap <F8> :NextColo<CR>
 nnoremap <F9> :PrevColo<CR>
 
 " Look up word under cursor with Dash
 nnoremap gK :Dash<CR>
+
+nnoremap ,lcd :cd %:p:h<CR>
+nnoremap ,cd :lcd %:p:h<CR>
 
 " CtrlP
 " While in prompt: C-b and C-f switch search modes
@@ -407,10 +414,11 @@ nnoremap ,xc :Latexmk<CR>
 
 " NERDTree
 " Open NERDTree at the location of the current file
-nnoremap ,e :NERDTreeFind<CR>
-nnoremap ,w :NERDTreeClose<CR>
+nnoremap <F2> :NERDTreeFind<CR>
+nnoremap <space>w :NERDTreeToggle<CR>
 
 " " Tagbar
+nnoremap <F3> :TagbarToggle<CR>
 " nnoremap ,to :TagbarToggle<CR>
 " nnoremap ,tt :TagbarOpenAutoClose<CR>
 

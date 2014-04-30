@@ -70,6 +70,8 @@ Bundle 'spiroid/vim-ultisnip-scala'
 Bundle 'guns/vim-clojure-static'
 Bundle 'kien/rainbow_parentheses.vim'
 Bundle 'tpope/vim-fireplace'
+Bundle 'tpope/vim-leiningen'
+
 " Markdown
 Bundle 'nelstrom/vim-markdown-folding'
 Bundle 'tpope/vim-markdown'

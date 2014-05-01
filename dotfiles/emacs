@@ -1,3 +1,9 @@
+;       ____   __  ___   ___   _____   ____        ___   _____ 
+;     / __/  /  |/  /  / _ | / ___/  / __/       / _ \ / ___/
+;   / _/   / /|_/ /  / __ |/ /__   _\ \        / , _// /__  
+; /___/  /_/  /_/  /_/ |_|\___/  /___/       /_/|_| \___/ 
+                                             
+
 ;;
 ;; Disable icon bar
 ;;
@@ -202,11 +208,17 @@
 
 
 ;; Git plugin
-;; http://daemianmack.com/magit-cheatsheet.html
+;; Cheathseet with basic commands: http://daemianmack.com/magit-cheatsheet.html
 (require 'magit)
 
 
-;; Starter-kit (I think) overrides this
+;; Starter-kit (I think) overrides this => enable again
 (menu-bar-mode 1)
 
 
+;; Make org-mode available
+(require 'org)
+
+
+;; Enable window numbering mode, all windows are accessible by M-1, M-2, ...
+(window-numbering-mode)

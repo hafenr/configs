@@ -2,6 +2,7 @@
 ;; Disable icon bar
 ;;
 (tool-bar-mode -1)
+;; (setq initial-frame-alist '((top . 0) (left . 0) (width . 600) (height . 480)))
 
 ;;
 ;; Initialize ELPA
@@ -9,8 +10,11 @@
 (require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+                         ("melpa" . "http://melpa.milkbox.net/packages/")
+			 ("tromey" . "http://tromey.com/elpa/")))
 (package-initialize)
+(when (not package-archive-contents)
+  (package-refresh-contents))
 
 ;;
 ;; Initialize el-get
@@ -34,7 +38,10 @@
 ;;
 (require 'color-theme)
 (color-theme-initialize)
-(color-theme-molokai)
+;; (color-theme-molokai)
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+(add-to-list 'load-path "~/.emacs.d/themes")
+(load-theme 'tomorrow-night-bright t)
 ;; (load-theme 'obsidian t)
 
 ;;
@@ -70,9 +77,12 @@
 ;;
 ;; Activate flexible file matching
 ;;
-(setq ido-enable-flex-matching t)
-(setq ido-everywhere t)
+(require 'flx-ido)
 (ido-mode 1)
+(ido-everywhere 1)
+(flx-ido-mode 1)
+;; disable ido faces to see flx highlights.
+(setq ido-use-faces nil)
 
 
 ;; Set directory to home dir
@@ -88,8 +98,8 @@
 ;;
 ;; Other plugins
 ;;
-;; (require 'auto-complete)
-;; (auto-complete-mode 1)
+(require 'auto-complete)
+(auto-complete-mode 1)
 
 
 (require 'yasnippet)
@@ -103,20 +113,49 @@
 			     yas-ido-prompt
                              yas-completing-prompt))
 
-;; (custom-set-variables
-;;  ;; custom-set-variables was added by Custom.
-;;  ;; If you edit it by hand, you could mess it up, so be careful.
-;;  ;; Your init file should contain only one such instance.
-;;  ;; If there is more than one, they won't work right.
-;;   '(yas-prompt-functions (quote (yas-ido-prompt))))
-
-
-
 (custom-set-variables
-  '(ac-trigger-key "TAB")
-  '(ac-auto-start 1)
-  '(ac-use-menu-map t)
-  '(ac-delay 0.0))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ac-auto-start 1)
+ '(ac-delay 0.0)
+ '(ac-trigger-key "TAB")
+ '(ac-use-menu-map t))
 
+
+;; Navigate in auto-complete list
 (define-key ac-menu-map (kbd "C-n") 'ac-next)
 (define-key ac-menu-map (kbd "C-p") 'ac-previous)
+
+;; Save here instead of littering current directory with emacs backup files
+(setq backup-directory-alist `(("." . "~/.saves")))
+
+
+;;
+;; CLOJURE
+;;
+(add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
+
+;; cider
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+(setq cider-repl-pop-to-buffer-on-connect t)
+(setq cider-popup-stacktraces t)
+(setq cider-repl-popup-stacktraces t)
+(setq cider-auto-select-error-buffer t)
+(setq cider-repl-history-file "~/.emacs.d/cider-history")
+(setq cider-repl-wrap-history t)
+
+(add-hook 'cider-repl-mode-hook 'subword-mode)
+(add-hook 'cider-repl-mode-hook 'paredit-mode)
+(add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+(projectile-global-mode 1)
+;; If you want Projectile to be usable in every directory (even without the presence of project file):
+(setq projectile-require-project-root nil)

@@ -4,6 +4,7 @@
 (tool-bar-mode -1)
 ;; (setq initial-frame-alist '((top . 0) (left . 0) (width . 600) (height . 480)))
 
+
 ;;
 ;; Initialize ELPA
 ;;
@@ -15,6 +16,7 @@
 (package-initialize)
 (when (not package-archive-contents)
   (package-refresh-contents))
+
 
 ;;
 ;; Initialize el-get
@@ -30,8 +32,13 @@
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
 (el-get 'sync)
 
+
+;;
+;; Vim emulation
+;;
 (require 'evil)
 (evil-mode 1)
+
 
 ;;
 ;; Color-theme plugin, has to be installed by M-x el-get-install RET color-theme RET
@@ -56,10 +63,12 @@
 ;;
 (set-face-attribute 'default nil :height 140)
 
+
 ;;
 ;; ESS
 ;;
 (require 'ess-site)
+
 
 ;;
 ;; Load and configure SLIME
@@ -88,12 +97,14 @@
 ;; Set directory to home dir
 (setq default-directory "~/")
 
+
 ;;
 ;; Surround
 ;;
 (add-to-list 'load-path "~/.emacs.d/evil-surround")
 (require 'surround)
 (global-surround-mode 1)
+
 
 ;;
 ;; Other plugins
@@ -137,7 +148,7 @@
 ;;
 (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
 
-;; cider
+;; Cider
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 (setq cider-repl-pop-to-buffer-on-connect t)
 (setq cider-popup-stacktraces t)
@@ -156,6 +167,46 @@
  ;; If there is more than one, they won't work right.
  )
 
+;; Load the paredit-menu after loading paredit
+(eval-after-load "paredit.el"
+  '(require 'paredit-menu))
+
+
+;; Projectile is like Vim's CTRLP for emacs
 (projectile-global-mode 1)
 ;; If you want Projectile to be usable in every directory (even without the presence of project file):
 (setq projectile-require-project-root nil)
+
+
+;; Enable ido mode for M-x
+(smex-initialize)
+
+
+;; Load default config for smartparens
+(require 'smartparens-config)
+
+
+;; Install Mu4te
+;; http://www.djcbsoftware.nl/code/mu/mu4e.html
+
+
+(require 'powerline)
+(powerline-default-theme)
+;; (powerline-center-theme)
+
+
+;; Press C-= to expand the region
+(require 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
+(delete-selection-mode 1)
+
+
+;; Git plugin
+;; http://daemianmack.com/magit-cheatsheet.html
+(require 'magit)
+
+
+;; Starter-kit (I think) overrides this
+(menu-bar-mode 1)
+
+

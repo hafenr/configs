@@ -256,3 +256,36 @@
 (require 'helm-config)
 (global-set-key (kbd "C-c h") 'helm-mini)
 (global-set-key (kbd "C-c o") 'helm-projectile)
+
+
+;;
+;; Evil leader
+;;
+(global-evil-leader-mode)
+(evil-leader/set-leader "<SPC>")
+
+
+;; Evil nerd commenter
+(setq evilnc-hotkey-comment-operator "gc")
+(require 'evil-nerd-commenter)
+
+
+;; ;; Evil keybindings
+;; (eval-after-load 'evil
+;;   (define-key evil-normal-state-map ",ci" 'evilnc-comment-or-uncomment-lines)
+;;   (define-key evil-normal-state-map ",cl" 'evilnc-comment-or-uncomment-to-the-line)
+;;   (define-key evil-normal-state-map ",cc" 'evilnc-copy-and-comment-lines)
+;;   (define-key evil-normal-state-map ",cp" 'evilnc-comment-or-uncomment-paragraphs)
+;;   (define-key evil-normal-state-map ",cr" 'comment-or-uncomment-region))
+
+
+;; Set keys like this:
+(evil-leader/set-key
+  "cc" 'evilnc-comment-or-uncomment-lines
+  "cp" 'evilnc-comment-or-uncomment-paragraphs
+  "cl" 'evilnc-comment-or-uncomment-to-the-line)
+
+
+;; Line numbers
+(require 'linum)
+(global-linum-mode)                     ; Enable line numbers everywhere

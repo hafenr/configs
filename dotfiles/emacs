@@ -1,3 +1,4 @@
+
 ;       ____   __  ___   ___   _____   ____        ___   _____ 
 ;     / __/  /  |/  /  / _ | / ___/  / __/       / _ \ / ___/
 ;   / _/   / /|_/ /  / __ |/ /__   _\ \        / , _// /__  
@@ -5,11 +6,17 @@
                                              
 
 ;;
-;; Disable icon bar
+;; General
 ;;
+
+;; Disable icon bar
 (tool-bar-mode -1)
+
+;; Change window size
 ;; (setq initial-frame-alist '((top . 0) (left . 0) (width . 600) (height . 480)))
 
+;; Font size, height is /100
+(set-face-attribute 'default nil :height 160)
 
 ;; Many binaries are under /usr/local/bin under OSX (brew stuff)
 (setq exec-path (append exec-path '("/usr/local/bin")))
@@ -61,17 +68,14 @@
 (load-theme 'tomorrow-night-bright t)
 ;; (load-theme 'obsidian t)
 
+
 ;;
 ;; Install clojure-mode from ELPA if it isn't installed already
 ;;
+;TODO: Do this with all plugins!
 (unless (package-installed-p 'clojure-mode)
   (package-refresh-contents)
   (package-install 'clojure-mode))
-
-;;
-;; Font size, height is /100
-;;
-(set-face-attribute 'default nil :height 140)
 
 
 ;;
@@ -121,6 +125,17 @@
 ;;
 (require 'auto-complete)
 (auto-complete-mode 1)
+(setq 
+      ;; ac-auto-show-menu 1
+      ;; ac-candidate-limit nil
+      ;; ac-delay 0.1
+      ;; ac-disable-faces (quote (font-lock-comment-face font-lock-doc-face))
+      ;; ac-ignore-case 'smart
+      ;; ac-menu-height 10
+      ;; ac-quick-help-delay 1.5
+      ;; ac-quick-help-prefer-pos-tip t
+      ac-use-quick-help t
+)
 
 
 ;;
@@ -256,6 +271,7 @@
 (require 'helm-config)
 (global-set-key (kbd "C-c h") 'helm-mini)
 (global-set-key (kbd "C-c o") 'helm-projectile)
+(global-set-key (kbd "C-c C-/") 'helm-complete-file-name-at-point)
 
 
 ;;
@@ -289,3 +305,26 @@
 ;; Line numbers
 (require 'linum)
 (global-linum-mode)                     ; Enable line numbers everywhere
+
+
+
+;; From: http://wikemacs.org/index.php/Evil#Enter_an_emacs_mode_in_a_given_state
+(loop for (mode . state) in '((inferior-emacs-lisp-mode . emacs)
+                              (inferior-ess-mode . emacs)
+                              (nrepl-mode . insert)
+                              (undo-tree-visualizer-mode . emacs)
+                              (pylookup-mode . emacs)
+                              (comint-mode . normal)
+                              (shell-mode . insert)
+                              (git-commit-mode . insert)
+                              (git-rebase-mode . emacs)
+                              (term-mode . emacs)
+                              (help-mode . emacs)
+                              (helm-grep-mode . emacs)
+                              (grep-mode . emacs)
+                              (bc-menu-mode . emacs)
+                              (magit-branch-manager-mode . emacs)
+                              (rdictcc-buffer-mode . emacs)
+                              (dired-mode . emacs)
+                              (wdired-mode . normal))
+      do (evil-set-initial-state mode state))

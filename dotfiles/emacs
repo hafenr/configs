@@ -219,8 +219,9 @@
 ;; http://www.djcbsoftware.nl/code/mu/mu4e.html
 
 
-(require 'powerline)
-(powerline-default-theme)
+;; (add-to-list 'load-path "~/.emacs.d/powerline")
+;; (require 'powerline)
+;; (powerline-default-theme)
 ;; (powerline-center-theme)
 
 
@@ -309,6 +310,7 @@
 
 
 ;; From: http://wikemacs.org/index.php/Evil#Enter_an_emacs_mode_in_a_given_state
+;; C-h m shows the current minor and major mode
 (loop for (mode . state) in '((inferior-emacs-lisp-mode . emacs)
                               (inferior-ess-mode . emacs)
                               (nrepl-mode . insert)
@@ -328,3 +330,24 @@
                               (dired-mode . emacs)
                               (wdired-mode . normal))
       do (evil-set-initial-state mode state))
+
+
+;;
+;; smart-mode-line
+;;
+;; M-x package-install RET smart-mode-line RET
+(setq sml/theme 'dark)
+(sml/setup)
+
+;; More clear highlighting of active window
+(set-face-attribute  'mode-line         ; active
+                 nil 
+                 :foreground "gray100"
+                 :background "gray15" 
+                 :box '(:line-width 1 :style released-button))
+(set-face-attribute  'mode-line-inactive
+                 nil 
+                 :foreground "gray25"
+                 :background "black"
+                 :box '(:line-width 1 :style released-button))
+

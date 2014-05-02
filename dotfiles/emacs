@@ -57,17 +57,6 @@
 (evil-mode 1)
 
 
-;;
-;; Color-theme plugin, has to be installed by M-x el-get-install RET color-theme RET
-;;
-(require 'color-theme)
-(color-theme-initialize)
-;; (color-theme-molokai)
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(add-to-list 'load-path "~/.emacs.d/themes")
-(load-theme 'tomorrow-night-bright t)
-;; (load-theme 'obsidian t)
-
 
 ;;
 ;; Install clojure-mode from ELPA if it isn't installed already
@@ -161,7 +150,8 @@
  '(ac-auto-start 1)
  '(ac-delay 0.0)
  '(ac-trigger-key "TAB")
- '(ac-use-menu-map t))
+ '(ac-use-menu-map t)
+ '(custom-safe-themes (quote ("3b7e62b9884f1533f8eac5d21b252e5b8098274d7d9096521db84e4f10797ae3" "c000b4df55334750116b9b937582cf4ed56ffe1dd6182a03a8aac92bcbc15ed0" "cf08ae4c26cacce2eebff39d129ea0a21c9d7bf70ea9b945588c1c66392578d1" default))))
 
 
 ;; Navigate in auto-complete list
@@ -219,10 +209,10 @@
 ;; http://www.djcbsoftware.nl/code/mu/mu4e.html
 
 
-;; (add-to-list 'load-path "~/.emacs.d/powerline")
-;; (require 'powerline)
-;; (powerline-default-theme)
-;; (powerline-center-theme)
+(add-to-list 'load-path "~/.emacs.d/powerline")
+(require 'powerline)
+(powerline-default-theme)
+(powerline-center-theme)
 
 
 ;; Press C-= to expand the region
@@ -304,7 +294,9 @@
 
 
 ;; Line numbers
-(require 'linum)
+;; Disable linum on starred buffers 
+;; Install lin-off per elpa
+(require 'linum-off)
 (global-linum-mode)                     ; Enable line numbers everywhere
 
 
@@ -312,7 +304,7 @@
 ;; From: http://wikemacs.org/index.php/Evil#Enter_an_emacs_mode_in_a_given_state
 ;; C-h m shows the current minor and major mode
 (loop for (mode . state) in '((inferior-emacs-lisp-mode . emacs)
-                              (inferior-ess-mode . emacs)
+                              (inferior-ess-mode . insert)
                               (nrepl-mode . insert)
                               (undo-tree-visualizer-mode . emacs)
                               (pylookup-mode . emacs)
@@ -336,18 +328,38 @@
 ;; smart-mode-line
 ;;
 ;; M-x package-install RET smart-mode-line RET
-(setq sml/theme 'dark)
-(sml/setup)
+;; (setq sml/theme 'respectable)
+;; (sml/setup)
+
 
 ;; More clear highlighting of active window
-(set-face-attribute  'mode-line         ; active
-                 nil 
-                 :foreground "gray100"
-                 :background "gray15" 
-                 :box '(:line-width 1 :style released-button))
-(set-face-attribute  'mode-line-inactive
-                 nil 
-                 :foreground "gray25"
-                 :background "black"
-                 :box '(:line-width 1 :style released-button))
+;; (set-face-attribute  'mode-line         ; active
+;;                  nil 
+;;                  :foreground "gray50"
+;;                  :background "gray20" 
+;;                  :box '(:line-width 1 :style released-button))
+;; (set-face-attribute  'mode-line-inactive
+;;                      nil 
+;;                      :foreground "gray20"
+;;                      ;; :background "black"
+;;                      :box '(:line-width 1 :style released-button))
 
+
+
+;;
+;; Color-theme
+;;
+
+;; ;; ;; Color-theme plugin, has to be installed by M-x el-get-install RET color-theme RET
+(require 'color-theme)
+(color-theme-initialize)
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+(add-to-list 'load-path "~/.emacs.d/themes")
+;; ;; (color-theme-molokai)
+;; ;; (load-theme 'tomorrow-night-bright t)
+;; (load-theme 'obsidian t)
+
+(require 'moe-theme)
+(moe-dark)
+(setq moe-theme-mode-line-color 'green)
+(powerline-moe-theme)

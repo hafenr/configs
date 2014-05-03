@@ -59,6 +59,7 @@
 ; All non-built-in packages
 (defvar my-packages '(starter-kit
                       clojure-mode
+                      clojure-test-mode
                       clojure-snippets
 		      cider
                       paredit
@@ -69,6 +70,7 @@
                       window-numbering
                       ess
                       r-autoyas
+                      auctex
                       dropdown-list
                       projectile
                       linum-off
@@ -92,6 +94,7 @@
                       magit
                       auto-complete
                       ac-nrepl
+                      ace-jump-mode
                       flycheck
                       helm-flycheck
                       helm-R
@@ -139,7 +142,8 @@
 ;--------------------------------------------------------------------------------
 (auto-complete-mode 1)
 (setq 
-      ;; ac-auto-show-menu 1
+      ac-auto-show-menu 1
+      ac-show-menu-immediately-on-auto-complete t
       ;; ac-candidate-limit nil
       ;; ac-delay 0.1
       ;; ac-disable-faces (quote (font-lock-comment-face font-lock-doc-face))
@@ -151,8 +155,7 @@
       ac-delay 0.0
       ac-trigger-key "TAB"
       ac-use-menu-map t
-      ac-use-quick-help t
-)
+      ac-use-quick-help t)
 
 ; Navigate in auto-complete list
 (define-key ac-menu-map (kbd "C-n") 'ac-next)
@@ -351,14 +354,6 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; Helm
-;--------------------------------------------------------------------------------
-(global-set-key (kbd "C-c h") 'helm-mini)
-(global-set-key (kbd "C-c o") 'helm-projectile)
-(global-set-key (kbd "C-c C-/") 'helm-complete-file-name-at-point)
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Evil
 ;--------------------------------------------------------------------------------
 (evil-mode 1)
@@ -424,6 +419,25 @@
 ; https://github.com/tarao/evil-plugins
 (add-to-list 'load-path "~/.emacs.d/evil-plugins")
 (define-key evil-ex-completion-map (kbd "C-r") #'evil-ex-paste-from-register)
+
+(global-set-key (kbd "SPC") #'ace-jump-char-mode)
+(global-set-key (kbd "C-SPC") #'ace-jump-line-mode)
+(global-set-key (kbd "M-SPC") #'ace-jump-word-mode)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Helm
+;--------------------------------------------------------------------------------
+(helm-mode t)
+(recentf-mode t)
+
+(evil-define-key 'normal global-map
+  "\C-p" 'helm-mini
+  "q:" 'helm-complex-command-history)
+
+(global-set-key (kbd "C-c h") 'helm-mini)
+(global-set-key (kbd "C-c o") 'helm-projectile)
+(global-set-key (kbd "C-c C-/") 'helm-complete-file-name-at-point)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

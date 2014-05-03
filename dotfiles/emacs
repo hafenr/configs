@@ -34,6 +34,16 @@
 (global-set-key "\C-x2" (lambda () (interactive)(split-window-vertically) (other-window 1)))
 (global-set-key "\C-x3" (lambda () (interactive)(split-window-horizontally) (other-window 1)))
 
+; Save session on exit
+(desktop-save-mode 1)
+
+; Close old buffers automatically
+(require 'midnight)
+(setq midnight-mode 't)
+
+; Make buffer names unique even if the files have the same names
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
 
 ;================================================================================
 ; Package management

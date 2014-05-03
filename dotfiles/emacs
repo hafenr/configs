@@ -57,65 +57,69 @@
   (package-refresh-contents))
 
 ; All non-built-in packages
-(defvar my-packages '(starter-kit
-                      clojure-mode
-                      clojure-test-mode
-                      clojure-snippets
-		      cider
-                      paredit
-                      paredit-menu
-                      rainbow-delimiters
-                      yasnippet
-                      undo-tree
-                      window-numbering
-                      ess
-                      r-autoyas
-                      auctex
-                      dropdown-list
-                      projectile
-                      linum-off
-                      helm
-                      smex
-                      flx-ido
-                      expand-region
-                      evil
-                      surround
-                      evil-numbers
-                      evil-nerd-commenter
-                      evil-leader
-                      ido-ubiquitous
-                      org
-                      org-ac
-                      moe-theme
-                      obsidian-theme
-                      color-theme
-                      color-theme-molokai
-                      color-theme-solarized
-                      magit
-                      auto-complete
-                      ac-nrepl
-                      ace-jump-mode
-                      flycheck
-                      helm-flycheck
-                      helm-R
-                      helm-emmet
-                      helm-projectile))
+(defvar my-elpa-packages '(starter-kit
+                           clojure-mode
+                           clojure-test-mode
+                           clojure-snippets
+		           cider
+                           paredit
+                           paredit-menu
+                           rainbow-delimiters
+                           yasnippet
+                           undo-tree
+                           window-numbering
+                           auctex
+                           dropdown-list
+                           projectile
+                           linum-off
+                           helm
+                           smex
+                           flx-ido
+                           expand-region
+                           evil
+                           surround
+                           evil-numbers
+                           evil-nerd-commenter
+                           evil-leader
+                           ido-ubiquitous
+                           org
+                           org-ac
+                           moe-theme
+                           obsidian-theme
+                           color-theme
+                           color-theme-molokai
+                           color-theme-solarized
+                           magit
+                           auto-complete
+                           ac-nrepl
+                           ace-jump-mode
+                           flycheck
+                           helm-flycheck
+                           helm-emmet
+                           helm-projectile))
 
-(dolist (p my-packages)
+(dolist (p my-elpa-packages)
   (when (not (package-installed-p p))
     (package-install p)))
 
 ; Initialize el-get
-;; (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-;; (unless (require 'el-get nil 'noerror)
-;;   (with-current-buffer
-;;       (url-retrieve-synchronously
-;;        "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-;;     (goto-char (point-max))
-;;     (eval-print-last-sexp)))
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
 
-;; (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
-;; (el-get 'sync)
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+(el-get 'sync)
+
+(setq my:el-get-packages
+      '(ess
+        r-autoyas
+        ))
+
+(el-get 'sync my:el-get-packages)
 
 
 ;================================================================================
@@ -125,6 +129,7 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; ESS - R plugin
 ;--------------------------------------------------------------------------------
+(require 'ess-site)
 (add-hook 'ess-mode-hook 'r-autoyas-ess-activate)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -368,6 +373,7 @@
 
 ; Evil nerd commenter
 (setq evilnc-hotkey-comment-operator "gc")
+(require 'evil-nerd-commenter) ; Has to be required here
 
 ; Evil keybindings
 (eval-after-load "evil"

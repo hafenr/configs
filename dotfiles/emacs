@@ -5,26 +5,34 @@
 ; /___/  /_/  /_/  /_/ |_|\___/  /___/       /_/|_| \___/ 
                                              
 
-;;
-;; General
-;;
+;================================================================================
+; General
+;================================================================================
 
-;; Disable icon bar
+; Disable icon bar
 (tool-bar-mode -1)
 
-;; Change window size
-;; (setq initial-frame-alist '((top . 0) (left . 0) (width . 600) (height . 480)))
+; Change window size
+; (setq initial-frame-alist '((top . 0) (left . 0) (width . 600) (height . 480)))
 
-;; Font size, height is /100
+; Font size, height is /100
 (set-face-attribute 'default nil :height 160)
 
-;; Many binaries are under /usr/local/bin under OSX (brew stuff)
+; Many binaries are under /usr/local/bin under OSX (brew stuff)
 (setq exec-path (append exec-path '("/usr/local/bin")))
 
+; Default dir
+(setq default-directory "~/")
 
-;;
-;; Initialize ELPA
-;;
+; Save here instead of littering current directory with emacs backup files
+(setq backup-directory-alist `(("." . "~/.saves")))
+
+
+;================================================================================
+; Package management
+;================================================================================
+
+; Initialize ELPA
 (require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")
@@ -35,9 +43,7 @@
   (package-refresh-contents))
 
 
-;;
-;; Initialize el-get
-;;
+; Initialize el-get
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 (unless (require 'el-get nil 'noerror)
   (with-current-buffer
@@ -50,68 +56,28 @@
 (el-get 'sync)
 
 
-;;
-;; Vim emulation
-;;
-(require 'evil)
-(evil-mode 1)
+;================================================================================
+; Sections
+;================================================================================
 
-
-
-;;
-;; Install clojure-mode from ELPA if it isn't installed already
-;;
-;TODO: Do this with all plugins!
-(unless (package-installed-p 'clojure-mode)
-  (package-refresh-contents)
-  (package-install 'clojure-mode))
-
-
-;;
-;; ESS
-;;
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; ESS - R plugin
+;--------------------------------------------------------------------------------
 (require 'ess-site)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; SLIME
+;--------------------------------------------------------------------------------
+; (add-to-list 'load-path "~/.emacsplugins/slime")
+; (require 'slime)
+; (eval-after-load 'slime '(setq slime-protocol-version 'ignore))
+; (slime-setup '(slime-repl))
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-;;
-;; Load and configure SLIME
-;;
-;; (add-to-list 'load-path "~/.emacsplugins/slime")
-;; (require 'slime)
-;; (eval-after-load 'slime '(setq slime-protocol-version 'ignore))
-;; (slime-setup '(slime-repl))
-
-;;
-;; Load a major mode for editing Clojure code.
-;;
-(require 'clojure-mode)
-
-;;
-;; Activate flexible file matching
-;;
-(require 'flx-ido)
-(ido-mode 1)
-(ido-everywhere 1)
-(flx-ido-mode 1)
-;; disable ido faces to see flx highlights.
-(setq ido-use-faces nil)
-
-
-;; Set directory to home dir
-(setq default-directory "~/")
-
-
-;;
-;; Surround
-;;
-(add-to-list 'load-path "~/.emacs.d/evil-surround")
-(require 'surround)
-(global-surround-mode 1)
-
-
-;;
-;; Other plugins
-;;
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Auto Complete
+;--------------------------------------------------------------------------------
 (require 'auto-complete)
 (auto-complete-mode 1)
 (setq 
@@ -123,51 +89,58 @@
       ;; ac-menu-height 10
       ;; ac-quick-help-delay 1.5
       ;; ac-quick-help-prefer-pos-tip t
+      ac-auto-start 1
+      ac-delay 0.0
+      ac-trigger-key "TAB"
+      ac-use-menu-map t
       ac-use-quick-help t
 )
 
+; Navigate in auto-complete list
+(define-key ac-menu-map (kbd "C-n") 'ac-next)
+(define-key ac-menu-map (kbd "C-p") 'ac-previous)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-;;
-;; Yasnippet
-;;
-;; Expand with TAB and Navigate with TAB and S-TAB
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Yasnippet
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Expand with TAB and Navigate with TAB and S-TAB
 (require 'yasnippet)
-;; (yas-minor-mode 1)
+; (yas-minor-mode 1)
 (yas-global-mode 1)
-
 
 ;; Need to M-x package-install RET dropdown-list RET
 (require 'dropdown-list)
 (setq yas-prompt-functions '(yas-dropdown-prompt
 			     yas-ido-prompt
                              yas-completing-prompt))
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ac-auto-start 1)
- '(ac-delay 0.0)
- '(ac-trigger-key "TAB")
- '(ac-use-menu-map t)
- '(custom-safe-themes (quote ("3b7e62b9884f1533f8eac5d21b252e5b8098274d7d9096521db84e4f10797ae3" "c000b4df55334750116b9b937582cf4ed56ffe1dd6182a03a8aac92bcbc15ed0" "cf08ae4c26cacce2eebff39d129ea0a21c9d7bf70ea9b945588c1c66392578d1" default))))
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Clojure, Elisp, etc.
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Clojure mode
+(unless (package-installed-p 'clojure-mode)
+  (package-refresh-contents)
+  (package-install 'clojure-mode))
+(require 'clojure-mode)
 
-
-;; Navigate in auto-complete list
-(define-key ac-menu-map (kbd "C-n") 'ac-next)
-(define-key ac-menu-map (kbd "C-p") 'ac-previous)
-
-;; Save here instead of littering current directory with emacs backup files
-(setq backup-directory-alist `(("." . "~/.saves")))
-
-
-;;
-;; CLOJURE
-;;
 (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
 
-;; Cider
+; Cider
+(unless (package-installed-p 'cider)
+  (package-refresh-contents)
+  (package-install 'cider))
+(require 'cider)
+
+(unless (package-installed-p 'rainbow-delimiters)
+  (package-refresh-contents)
+  (package-install 'rainbow-delimiters))
+(require 'rainbow-delimiters)
+
+(add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
+
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 (setq cider-repl-pop-to-buffer-on-connect t)
 (setq cider-popup-stacktraces t)
@@ -179,66 +152,133 @@
 (add-hook 'cider-repl-mode-hook 'subword-mode)
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
 (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
-;; Load the paredit-menu after loading paredit
+; Load the paredit-menu after loading paredit
 (eval-after-load "paredit.el"
   '(require 'paredit-menu))
 
+; Paredit, enable for all lisps
+(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+(add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+(add-hook 'clojure-mode-hook          #'enable-paredit-mode)
 
-;; Projectile is like Vim's CTRLP for emacs
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Projectile (Vim's CTRLP for emacs)
+;--------------------------------------------------------------------------------
 (projectile-global-mode 1)
-;; If you want Projectile to be usable in every directory (even without the presence of project file):
+; If you want Projectile to be usable in every directory (even without the presence of project file):
 (setq projectile-require-project-root nil)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-;; Enable ido mode for M-x
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Fuzzy matching
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Activate flexible file matching
+(require 'flx-ido)
+(ido-mode 1)
+(ido-everywhere 1)
+(flx-ido-mode 1)
+(setq ido-use-faces nil) ; Disable ido faces to see flx highlights
+; Enable improved ido mode for M-x
 (smex-initialize)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Mu4te
+;--------------------------------------------------------------------------------
+; http://www.djcbsoftware.nl/code/mu/mu4e.html
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-;; Load default config for smartparens
-(require 'smartparens-config)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Smartparents
+;--------------------------------------------------------------------------------
+(require 'smartparens-config) ; Default config
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-;; Install Mu4te
-;; http://www.djcbsoftware.nl/code/mu/mu4e.html
-
-
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Status bar
+;--------------------------------------------------------------------------------
+; Power line
 (add-to-list 'load-path "~/.emacs.d/powerline")
 (require 'powerline)
 (powerline-default-theme)
-(powerline-center-theme)
+; (powerline-center-theme)
 
+; Smart-mode-line
+; M-x package-install RET smart-mode-line RET
+; (setq sml/theme 'respectable)
+; (sml/setup)
 
-;; Press C-= to expand the region
+; More clear highlighting of active window
+; (set-face-attribute  'mode-line         ; active
+;                  nil 
+;                  :foreground "gray50"
+;                  :background "gray20" 
+;                  :box '(:line-width 1 :style released-button))
+; (set-face-attribute  'mode-line-inactive
+;                      nil 
+;                      :foreground "gray20"
+;                      ;; :background "black"
+;                      :box '(:line-width 1 :style released-button))
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Expand-region ; press C-= to expand selection
+;--------------------------------------------------------------------------------
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
 (delete-selection-mode 1)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-;; Git plugin
-;; Cheathseet with basic commands: http://daemianmack.com/magit-cheatsheet.html
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Magit - Git plugin 
+;--------------------------------------------------------------------------------
 (require 'magit)
+;; Cheathseet with basic commands: http://daemianmack.com/magit-cheatsheet.html
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Starter-kit overrides
+;--------------------------------------------------------------------------------
 ;; Starter-kit (I think) overrides this => enable again
 (menu-bar-mode 1)
+;; Another override of starter-kit
+(remove-hook 'prog-mode-hook 'idle-highlight-mode)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-;; Make org-mode available
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Org
+;--------------------------------------------------------------------------------
+; Make org-mode available
 (require 'org)
 
+; For using beamer in org-mode
+(require 'ox-latex)
+(add-to-list 'org-latex-classes
+             '("beamer"
+               "\\documentclass\[presentation\]\{beamer\}"
+               ("\\section\{%s\}" . "\\section*\{%s\}")
+               ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
+               ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-;; Enable window numbering mode, all windows are accessible by M-1, M-2, ...
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Window numbering
+;--------------------------------------------------------------------------------
+; Enable window numbering mode, all windows are accessible by M-1, M-2, ...
 (window-numbering-mode)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-;; Some tweaks for Python
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Python
+;--------------------------------------------------------------------------------
 (setq
   python-shell-interpreter "ipython"
   python-shell-interpreter-args ""
@@ -250,66 +290,72 @@
     "';'.join(module_completion('''%s'''))\n"
   python-shell-completion-string-code
     "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-
-;; Enable flycheck
-;; Use C-c ! n and C-c ! p to navigate between error locations.
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Flycheck
+;--------------------------------------------------------------------------------
+; Use C-c ! n and C-c ! p to navigate between error locations.
 (add-hook 'after-init-hook #'global-flycheck-mode)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Helm
+;--------------------------------------------------------------------------------
 (require 'helm-config)
 (global-set-key (kbd "C-c h") 'helm-mini)
 (global-set-key (kbd "C-c o") 'helm-projectile)
 (global-set-key (kbd "C-c C-/") 'helm-complete-file-name-at-point)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Evil
+;--------------------------------------------------------------------------------
+(require 'evil)
+(evil-mode 1)
 
-;;
-;; Evil leader
-;;
+; Evil Surround
+(add-to-list 'load-path "~/.emacs.d/evil-surround")
+(require 'surround)
+(global-surround-mode 1)
+
+; Evil leader
 (global-evil-leader-mode)
 (evil-leader/set-leader "<SPC>")
 
-
-;; Evil nerd commenter
+; Evil nerd commenter
 (setq evilnc-hotkey-comment-operator "gc")
 (require 'evil-nerd-commenter)
 
+; Evil keybindings
+(eval-after-load "evil"
+  ;; (define-key evil-normal-state-map ",ci" 'evilnc-comment-or-uncomment-lines)
+  ;; (define-key evil-normal-state-map ",cl" 'evilnc-comment-or-uncomment-to-the-line)
+  ;; (define-key evil-normal-state-map ",cc" 'evilnc-copy-and-comment-lines)
+  ;; (define-key evil-normal-state-map ",cp" 'evilnc-comment-or-uncomment-paragraphs)
+  ;; (define-key evil-normal-state-map ",cr"
+  ;; 'comment-or-uncomment-region)
+  '(progn
+    ;; Emacs-like editing while in insert mode
+    (define-key evil-insert-state-map "\C-e" 'evil-append-line)
+    (define-key evil-insert-state-map "\C-a" 'evil-insert-line)))
 
-;; ;; Evil keybindings
-;; (eval-after-load 'evil
-;;   (define-key evil-normal-state-map ",ci" 'evilnc-comment-or-uncomment-lines)
-;;   (define-key evil-normal-state-map ",cl" 'evilnc-comment-or-uncomment-to-the-line)
-;;   (define-key evil-normal-state-map ",cc" 'evilnc-copy-and-comment-lines)
-;;   (define-key evil-normal-state-map ",cp" 'evilnc-comment-or-uncomment-paragraphs)
-;;   (define-key evil-normal-state-map ",cr" 'comment-or-uncomment-region))
-
-
-;; Set keys like this:
+; Set keys like this:
 (evil-leader/set-key
   "cc" 'evilnc-comment-or-uncomment-lines
   "cp" 'evilnc-comment-or-uncomment-paragraphs
   "cl" 'evilnc-comment-or-uncomment-to-the-line)
 
-
-;; Line numbers
-;; Disable linum on starred buffers 
-;; Install lin-off per elpa
-(require 'linum-off)
-(global-linum-mode)                     ; Enable line numbers everywhere
-
-
-
-;; From: http://wikemacs.org/index.php/Evil#Enter_an_emacs_mode_in_a_given_state
-;; C-h m shows the current minor and major mode
+; From: http://wikemacs.org/index.php/Evil#Enter_an_emacs_mode_in_a_given_state
+; C-h m shows the current minor and major mode
 (loop for (mode . state) in '((inferior-emacs-lisp-mode . emacs)
-                              (inferior-ess-mode . insert)
-                              (nrepl-mode . insert)
+                              (inferior-ess-mode . emacs)
+                              (nrepl-mode . emacs)
+                              (cider-repl-mode . emacs)
                               (undo-tree-visualizer-mode . emacs)
                               (pylookup-mode . emacs)
                               (comint-mode . normal)
-                              (shell-mode . insert)
+                              (shell-mode . emacs)
                               (git-commit-mode . insert)
                               (git-rebase-mode . emacs)
                               (term-mode . emacs)
@@ -322,44 +368,30 @@
                               (dired-mode . emacs)
                               (wdired-mode . normal))
       do (evil-set-initial-state mode state))
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Better line numbers
+;--------------------------------------------------------------------------------
+; Disable linum on starred buffers 
+(require 'linum-off)
+(global-linum-mode)                     ; Enable line numbers everywhere
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-;;
-;; smart-mode-line
-;;
-;; M-x package-install RET smart-mode-line RET
-;; (setq sml/theme 'respectable)
-;; (sml/setup)
-
-
-;; More clear highlighting of active window
-;; (set-face-attribute  'mode-line         ; active
-;;                  nil 
-;;                  :foreground "gray50"
-;;                  :background "gray20" 
-;;                  :box '(:line-width 1 :style released-button))
-;; (set-face-attribute  'mode-line-inactive
-;;                      nil 
-;;                      :foreground "gray20"
-;;                      ;; :background "black"
-;;                      :box '(:line-width 1 :style released-button))
-
-
-
-;;
-;; Color-theme
-;;
-
-;; ;; ;; Color-theme plugin, has to be installed by M-x el-get-install RET color-theme RET
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Color-theme
+;--------------------------------------------------------------------------------
+; Color-theme plugin, has to be installed by M-x el-get-install RET color-theme RET
 (require 'color-theme)
 (color-theme-initialize)
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (add-to-list 'load-path "~/.emacs.d/themes")
-;; ;; (color-theme-molokai)
-;; ;; (load-theme 'tomorrow-night-bright t)
-;; (load-theme 'obsidian t)
+; (color-theme-molokai)
+; (load-theme 'tomorrow-night-bright t)
+; (load-theme 'obsidian t)
 
 (require 'moe-theme)
 (moe-dark)
 (setq moe-theme-mode-line-color 'green)
 (powerline-moe-theme)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

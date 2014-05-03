@@ -1,8 +1,11 @@
+;////////////////////////////////////////////////////////////////////////////////
 
-;       ____   __  ___   ___   _____   ____        ___   _____ 
-;     / __/  /  |/  /  / _ | / ___/  / __/       / _ \ / ___/
-;   / _/   / /|_/ /  / __ |/ /__   _\ \        / , _// /__  
-; /___/  /_/  /_/  /_/ |_|\___/  /___/       /_/|_| \___/ 
+;                ____   __  ___   ___   _____   ____        ___   _____ 
+;              / __/  /  |/  /  / _ | / ___/  / __/       / _ \ / ___/
+;            / _/   / /|_/ /  / __ |/ /__   _\ \        / , _// /__  
+;          /___/  /_/  /_/  /_/ |_|\___/  /___/       /_/|_| \___/ 
+
+;////////////////////////////////////////////////////////////////////////////////
                                              
 
 ;================================================================================
@@ -26,6 +29,10 @@
 
 ; Save here instead of littering current directory with emacs backup files
 (setq backup-directory-alist `(("." . "~/.saves")))
+
+; Change to other window when splitting
+(global-set-key "\C-x2" (lambda () (interactive)(split-window-vertically) (other-window 1)))
+(global-set-key "\C-x3" (lambda () (interactive)(split-window-horizontally) (other-window 1)))
 
 
 ;================================================================================
@@ -337,8 +344,13 @@
   ;; 'comment-or-uncomment-region)
   '(progn
     ;; Emacs-like editing while in insert mode
-    (define-key evil-insert-state-map "\C-e" 'evil-append-line)
-    (define-key evil-insert-state-map "\C-a" 'evil-insert-line)))
+    (define-key evil-insert-state-map "\C-e" 'end-of-line)
+    (define-key evil-insert-state-map "\C-f" 'evil-forward-char)
+    (define-key evil-insert-state-map "\C-b" 'evil-backward-char)
+    (define-key evil-insert-state-map "\C-d" 'evil-delete-char)
+    (define-key evil-insert-state-map "\C-n" 'evil-next-line)
+    (define-key evil-insert-state-map "\C-p" 'evil-previous-line)
+    (define-key evil-insert-state-map "\C-k" 'kill-line)))
 
 ; Set keys like this:
 (evil-leader/set-key
@@ -368,6 +380,11 @@
                               (dired-mode . emacs)
                               (wdired-mode . normal))
       do (evil-set-initial-state mode state))
+
+; https://github.com/tarao/evil-plugins
+(add-to-list 'load-path "~/.emacs.d/evil-plugins")
+(require 'evil-ex-registers)
+(define-key evil-ex-completion-map (kbd "C-r") #'evil-ex-paste-from-register)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

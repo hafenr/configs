@@ -38,11 +38,9 @@
 (desktop-save-mode 1)
 
 ; Close old buffers automatically
-(require 'midnight)
 (setq midnight-mode 't)
 
 ; Make buffer names unique even if the files have the same names
-(require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
 ;================================================================================
@@ -50,7 +48,6 @@
 ;================================================================================
 
 ; Initialize ELPA
-(require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")
@@ -59,18 +56,63 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
+; All non-built-in packages
+(defvar my-packages '(starter-kit
+                      clojure-mode
+                      clojure-snippets
+		      cider
+                      paredit
+                      paredit-menu
+                      rainbow-delimiters
+                      yasnippet
+                      undo-tree
+                      window-numbering
+                      ess
+                      r-autoyas
+                      dropdown-list
+                      projectile
+                      linum-off
+                      helm
+                      smex
+                      flx-ido
+                      expand-region
+                      evil
+                      surround
+                      evil-numbers
+                      evil-nerd-commenter
+                      evil-leader
+                      ido-ubiquitous
+                      org
+                      org-ac
+                      moe-theme
+                      obsidian-theme
+                      color-theme
+                      color-theme-molokai
+                      color-theme-solarized
+                      magit
+                      auto-complete
+                      ac-nrepl
+                      flycheck
+                      helm-flycheck
+                      helm-R
+                      helm-emmet
+                      helm-projectile))
+
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
 
 ; Initialize el-get
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-    (goto-char (point-max))
-    (eval-print-last-sexp)))
+;; (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+;; (unless (require 'el-get nil 'noerror)
+;;   (with-current-buffer
+;;       (url-retrieve-synchronously
+;;        "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+;;     (goto-char (point-max))
+;;     (eval-print-last-sexp)))
 
-(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
-(el-get 'sync)
+;; (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+;; (el-get 'sync)
 
 
 ;================================================================================
@@ -80,15 +122,6 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; ESS - R plugin
 ;--------------------------------------------------------------------------------
-(unless (package-installed-p 'ess)
-  (package-refresh-contents)
-  (package-install 'ess))
-(require 'ess-site)
-
-(unless (package-installed-p 'r-autoyas)
-  (package-refresh-contents)
-  (package-install 'r-autoyas))
-(require 'r-autoyas)
 (add-hook 'ess-mode-hook 'r-autoyas-ess-activate)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -104,7 +137,6 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Auto Complete
 ;--------------------------------------------------------------------------------
-(require 'auto-complete)
 (auto-complete-mode 1)
 (setq 
       ;; ac-auto-show-menu 1
@@ -131,12 +163,9 @@
 ; Yasnippet
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Expand with TAB and Navigate with TAB and S-TAB
-(require 'yasnippet)
 ; (yas-minor-mode 1)
 (yas-global-mode 1)
 
-;; Need to M-x package-install RET dropdown-list RET
-(require 'dropdown-list)
 (setq yas-prompt-functions '(yas-dropdown-prompt
 			     yas-ido-prompt
                              yas-completing-prompt))
@@ -149,39 +178,40 @@
 (unless (package-installed-p 'clojure-mode)
   (package-refresh-contents)
   (package-install 'clojure-mode))
-(require 'clojure-mode)
 
 (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
 
 ; Cider
+; Put this into yout leiningen project.clj:
+; plugins [[cider/cider-nrepl "0.6.0"]]
+;
+; or add it globally to ~/.lein/profiles.clj
+; Something like this:
+; {:user {:plugins [[lein-exec "0.3.3"] [cider/cider-nrepl "0.6.0"]]}}
+
 (unless (package-installed-p 'cider)
   (package-refresh-contents)
   (package-install 'cider))
-(require 'cider)
 
-(unless (package-installed-p 'rainbow-delimiters)
-  (package-refresh-contents)
-  (package-install 'rainbow-delimiters))
-(require 'rainbow-delimiters)
+; When using switch-to-buffer, pressing SPC after the command will
+; make the hidden buffers visible.
+; They'll always be visible in list-buffers (C-x C-b).
+(setq nrepl-hide-special-buffers t)
+(setq cider-auto-select-error-buffer t)
 
-(add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
-(add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
-
-(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 (setq cider-repl-pop-to-buffer-on-connect t)
 (setq cider-popup-stacktraces t)
-(setq cider-repl-popup-stacktraces t)
+(setq cider-repl-popup-stacktraces nil)
 (setq cider-auto-select-error-buffer t)
 (setq cider-repl-history-file "~/.emacs.d/cider-history")
 (setq cider-repl-wrap-history t)
 
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+(add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
+
 (add-hook 'cider-repl-mode-hook 'subword-mode)
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
 (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
-
-; Load the paredit-menu after loading paredit
-(eval-after-load "paredit.el"
-  '(require 'paredit-menu))
 
 ; Paredit, enable for all lisps
 (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
@@ -207,7 +237,6 @@
 ; Fuzzy matching
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Activate flexible file matching
-(require 'flx-ido)
 (ido-mode 1)
 (ido-everywhere 1)
 (flx-ido-mode 1)
@@ -225,7 +254,6 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Smartparents
 ;--------------------------------------------------------------------------------
-(require 'smartparens-config) ; Default config
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -235,7 +263,7 @@
 (add-to-list 'load-path "~/.emacs.d/powerline")
 (require 'powerline)
 (powerline-default-theme)
-; (powerline-center-theme)
+; (powerline-default-theme)
 
 ; Smart-mode-line
 ; M-x package-install RET smart-mode-line RET
@@ -258,7 +286,6 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Expand-region ; press C-= to expand selection
 ;--------------------------------------------------------------------------------
-(require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
 (delete-selection-mode 1)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -266,7 +293,6 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Magit - Git plugin 
 ;--------------------------------------------------------------------------------
-(require 'magit)
 ;; Cheathseet with basic commands: http://daemianmack.com/magit-cheatsheet.html
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -283,7 +309,6 @@
 ; Org
 ;--------------------------------------------------------------------------------
 ; Make org-mode available
-(require 'org)
 
 ; For using beamer in org-mode
 (require 'ox-latex)
@@ -328,7 +353,6 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Helm
 ;--------------------------------------------------------------------------------
-(require 'helm-config)
 (global-set-key (kbd "C-c h") 'helm-mini)
 (global-set-key (kbd "C-c o") 'helm-projectile)
 (global-set-key (kbd "C-c C-/") 'helm-complete-file-name-at-point)
@@ -337,12 +361,10 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Evil
 ;--------------------------------------------------------------------------------
-(require 'evil)
 (evil-mode 1)
 
 ; Evil Surround
 (add-to-list 'load-path "~/.emacs.d/evil-surround")
-(require 'surround)
 (global-surround-mode 1)
 
 ; Evil leader
@@ -351,7 +373,6 @@
 
 ; Evil nerd commenter
 (setq evilnc-hotkey-comment-operator "gc")
-(require 'evil-nerd-commenter)
 
 ; Evil keybindings
 (eval-after-load "evil"
@@ -402,7 +423,6 @@
 
 ; https://github.com/tarao/evil-plugins
 (add-to-list 'load-path "~/.emacs.d/evil-plugins")
-(require 'evil-ex-registers)
 (define-key evil-ex-completion-map (kbd "C-r") #'evil-ex-paste-from-register)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -410,7 +430,7 @@
 ; Better line numbers
 ;--------------------------------------------------------------------------------
 ; Disable linum on starred buffers 
-(require 'linum-off)
+(require 'linum-off)                    ; Needs to be imported here
 (global-linum-mode)                     ; Enable line numbers everywhere
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -418,7 +438,6 @@
 ; Color-theme
 ;--------------------------------------------------------------------------------
 ; Color-theme plugin, has to be installed by M-x el-get-install RET color-theme RET
-(require 'color-theme)
 (color-theme-initialize)
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (add-to-list 'load-path "~/.emacs.d/themes")
@@ -426,8 +445,20 @@
 ; (load-theme 'tomorrow-night-bright t)
 ; (load-theme 'obsidian t)
 
-(require 'moe-theme)
+(require 'moe-theme) ; autoload doesn't work with this somehow
 (moe-dark)
 (setq moe-theme-mode-line-color 'green)
 (powerline-moe-theme)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes (quote ("fc55a921b2c1d24233b678d133b9899e03144877d558cf6807ed51f83459d2d9" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

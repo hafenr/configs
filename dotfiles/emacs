@@ -70,7 +70,16 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; ESS - R plugin
 ;--------------------------------------------------------------------------------
+(unless (package-installed-p 'ess)
+  (package-refresh-contents)
+  (package-install 'ess))
 (require 'ess-site)
+
+(unless (package-installed-p 'r-autoyas)
+  (package-refresh-contents)
+  (package-install 'r-autoyas))
+(require 'r-autoyas)
+(add-hook 'ess-mode-hook 'r-autoyas-ess-activate)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

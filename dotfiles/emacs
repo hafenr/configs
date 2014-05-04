@@ -35,7 +35,7 @@
 (global-set-key "\C-x3" (lambda () (interactive)(split-window-horizontally) (other-window 1)))
 
 ; Save session on exit
-(desktop-save-mode 1)
+;; (desktop-save-mode 1)
 
 ; Close old buffers automatically
 (setq midnight-mode 't)
@@ -43,6 +43,21 @@
 ; Make buffer names unique even if the files have the same names
 (setq uniquify-buffer-name-style 'forward)
 
+; Alias for C-g
+; (global-set-key (kbd "C-[") 'keyboard-quit)
+
+; Enable easy window movement everywhere (evil and emacs)
+(windmove-default-keybindings)
+(global-set-key (kbd "M-h") 'windmove-left)
+(global-set-key (kbd "M-j") 'windmove-down)
+(global-set-key (kbd "M-k") 'windmove-up)
+(global-set-key (kbd "M-l") 'windmove-right)
+
+; Alias for C-g
+(global-set-key (kbd "C-[") 'keyboard-quit)
+
+;; (global-set-key [(control ?,)] (lambda () (interactive) (other-window -1)))
+;; (global-set-key [(control ?.)] (lambda () (interactive) (other-window 1)))
 ;================================================================================
 ; Package management
 ;================================================================================
@@ -179,6 +194,9 @@
 ; Navigate in auto-complete list
 (define-key ac-menu-map (kbd "C-n") 'ac-next)
 (define-key ac-menu-map (kbd "C-p") 'ac-previous)
+; Disable ENTER
+(define-key ac-completing-map [return] nil)
+(define-key ac-completing-map "\r" nil)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -333,6 +351,30 @@
                ("\\section\{%s\}" . "\\section*\{%s\}")
                ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
                ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
+
+; brew install imagemagick
+(setq org-latex-create-formula-image-program 'imagemagick)
+
+;; (add-to-list 'org-export-latex-packages-alist '("" "listings"))
+;; org-latex-packages-alist
+;; \usepackage[usenames]{color}
+;; \usepackage{amsmath}
+;; \usepackage[mathscr]{eucal}
+;; \usepackage[utf8]{inputenc}
+;; \usepackage[T1]{fontenc}
+;; % Package fixltx2e omitted
+;; \usepackage{graphicx}
+;; % Package longtable omitted
+;; % Package float omitted
+;; % Package wrapfig omitted
+;; \usepackage[normalem]{ulem}
+;; \usepackage{textcomp}
+;; \usepackage{marvosym}
+;; \usepackage{wasysym}
+;; \usepackage{latexsym}
+;; \usepackage{amssymb}
+;; % Package amstext omitted
+;; % Package hyperref omitted
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -399,14 +441,16 @@
     (define-key evil-insert-state-map "\C-n" 'evil-next-line)
     (define-key evil-insert-state-map "\C-p" 'evil-previous-line)
     (define-key evil-insert-state-map "\C-k" 'kill-line)
-    (define-key evil-normal-state-map ";" 'smex)
     )
   )
 
 ; Set keys like this:
 (evil-leader/set-key
+  "b" 'ido-switch-buffer
   "cc" 'evilnc-comment-or-uncomment-lines
   "cp" 'evilnc-comment-or-uncomment-paragraphs
+  "p" 'helm-mini
+  ";" 'smex
   "cl" 'evilnc-comment-or-uncomment-to-the-line)
 
 ; From: http://wikemacs.org/index.php/Evil#Enter_an_emacs_mode_in_a_given_state

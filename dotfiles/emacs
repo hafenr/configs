@@ -46,18 +46,22 @@
 ;================================================================================
 ; Package management
 ;================================================================================
-
 ; Initialize ELPA
+(require 'package)
+
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")
 			 ("tromey" . "http://tromey.com/elpa/")))
+
 (package-initialize)
+
 (when (not package-archive-contents)
   (package-refresh-contents))
 
 ; All non-built-in packages
 (defvar my-elpa-packages '(starter-kit
+                           auto-complete
                            clojure-mode
                            clojure-test-mode
                            clojure-snippets
@@ -90,7 +94,6 @@
                            color-theme-molokai
                            color-theme-solarized
                            magit
-                           auto-complete
                            ac-nrepl
                            ace-jump-mode
                            flycheck
@@ -115,8 +118,8 @@
 (el-get 'sync)
 
 (setq my:el-get-packages
-      '(ess
-        r-autoyas
+      '(
+        ess
         ))
 
 (el-get 'sync my:el-get-packages)
@@ -146,6 +149,17 @@
 ; Auto Complete
 ;--------------------------------------------------------------------------------
 (auto-complete-mode 1)
+(require 'auto-complete-config)
+(ac-config-default)
+
+; Otherwise ac will not work with yasnippet someshow
+(setq-default ac-sources '(
+                           ac-source-yasnippet
+                           ac-source-abbrev
+                           ac-source-dictionary
+                           ac-source-words-in-same-mode-buffers
+                           ))
+
 (setq 
       ac-auto-show-menu 1
       ac-show-menu-immediately-on-auto-complete t
@@ -172,21 +186,18 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Expand with TAB and Navigate with TAB and S-TAB
 ; (yas-minor-mode 1)
-(yas-global-mode 1)
-
-(setq yas-prompt-functions '(yas-dropdown-prompt
-			     yas-ido-prompt
-                             yas-completing-prompt))
+(eval-after-load "auto-complete"
+  '(progn
+     (yas-global-mode 1)
+     (setq yas-prompt-functions '(yas-dropdown-prompt
+                                  yas-ido-prompt
+                                  yas-completing-prompt))))
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Clojure, Elisp, etc.
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Clojure mode
-(unless (package-installed-p 'clojure-mode)
-  (package-refresh-contents)
-  (package-install 'clojure-mode))
-
 (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
 
 ; Cider
@@ -196,10 +207,6 @@
 ; or add it globally to ~/.lein/profiles.clj
 ; Something like this:
 ; {:user {:plugins [[lein-exec "0.3.3"] [cider/cider-nrepl "0.6.0"]]}}
-
-(unless (package-installed-p 'cider)
-  (package-refresh-contents)
-  (package-install 'cider))
 
 ; When using switch-to-buffer, pressing SPC after the command will
 ; make the hidden buffers visible.
@@ -267,7 +274,7 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Status bar
 ;--------------------------------------------------------------------------------
-; Power line
+; Power line, (a custom version frm git)
 (add-to-list 'load-path "~/.emacs.d/powerline")
 (require 'powerline)
 (powerline-default-theme)

@@ -133,13 +133,6 @@
 ;================================================================================
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; ESS - R plugin
-;--------------------------------------------------------------------------------
-(require 'ess-site)
-(add-hook 'ess-mode-hook 'r-autoyas-ess-activate)
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; SLIME
 ;--------------------------------------------------------------------------------
 ; (add-to-list 'load-path "~/.emacsplugins/slime")
@@ -405,6 +398,10 @@
 
 (evil-mode 1)
 
+(setq evil-emacs-state-cursor '("red" box))
+(setq evil-normal-state-cursor '("green" box))
+(setq evil-insert-state-cursor '("yellow" box))
+
 ; Evil Surround
 (add-to-list 'load-path "~/.emacs.d/evil-surround")
 (global-surround-mode 1)
@@ -447,6 +444,10 @@
   ";" 'smex
   "cl" 'evilnc-comment-or-uncomment-to-the-line)
 
+(add-to-list 'load-path "~/.emacs.d/evil-paredit")
+(require 'evil-paredit)
+(add-hook 'emacs-lisp-mode-hook 'evil-paredit-mode)
+(add-hook 'clojure-mode-hook 'evil-paredit-mode)
 ; From: http://wikemacs.org/index.php/Evil#Enter_an_emacs_mode_in_a_given_state
 ; C-h m shows the current minor and major mode
 (loop for (mode . state) in '((inferior-emacs-lisp-mode . emacs)
@@ -484,7 +485,7 @@
 (global-set-key (kbd "M-k") 'windmove-up)
 (global-set-key (kbd "M-l") 'windmove-right)
 
-; Change to split window 
+; Change to split window
 (global-set-key [(control ?,)] (lambda () (interactive) (other-window -1)))
 (global-set-key [(control ?.)] (lambda () (interactive) (other-window 1)))
 
@@ -512,6 +513,43 @@
         (kbd "M-K") 'org-shiftmetaup
         (kbd "M-J") 'org-shiftmetadown))
     '(normal insert)))
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; ESS - R plugin
+;--------------------------------------------------------------------------------
+(require 'ess-site)
+(add-hook 'ess-mode-hook 'r-autoyas-ess-activate)
+
+(evil-define-key 'normal ess-mode-map
+  ",d" 'ess-eval-line-and-step
+  ",l" 'ess-eval-line
+  ",p" 'ess-eval-paragraph
+  ",D" 'ess-eval-paragraph-and-step
+  ",s" 'ess-eval-region
+  )
+
+; Some stuff from: http://permalink.gmane.org/gmane.emacs.vim-emulation/1135
+
+(eval-after-load 'ess-help
+  '(progn
+     (add-hook 'ess-help-mode-hook 'evil-change-to-initial-state)
+     ))
+
+;; jump to the prompt and go to insert mode
+;; (evil-define-key 'normal inferior-ess-mode-map "i" 'my-R-insert)
+;; (evil-define-key 'normal inferior-ess-mode-map "I" 'my-R-insert)
+;; (evil-define-key 'normal inferior-ess-mode-map "A" 'my-R-insert)
+;; (defun my-R-insert ()
+;;   (interactive)
+;;   (end-of-buffer)
+;;   (comint-show-maximum-output)
+;;   (evil-insert 0)
+;;   )
+;; (evil-define-key 'normal inferior-ess-mode-map (kbd "C-j")
+;; 'comint-next-matching-input-from-input)
+;; (evil-define-key 'normal inferior-ess-mode-map (kbd "C-k")
+;; 'comint-previous-matching-input-from-input)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -558,7 +596,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("fc55a921b2c1d24233b678d133b9899e03144877d558cf6807ed51f83459d2d9" default))))
+ '(custom-safe-themes (quote ("fc55a921b2c1d24233b678d133b9899e03144877d558cf6807ed51f83459d2d9" default)))
+ )
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -43,6 +43,19 @@
 ; Make buffer names unique even if the files have the same names
 (setq uniquify-buffer-name-style 'forward)
 
+;; http://stackoverflow.com/questions/11403862/how-to-have-emacs-helm-list-offer-files-in-current-directory-as-options
+
+; Pressing c in dired mode will copy the file name to the clipboard
+(defun dired-copy-filename ()
+  "push the path and filename of the file under the point to the kill ring"
+  (interactive)
+  (message "added %s to kill ring" (kill-new (dired-get-filename))))
+
+; And this will bind it to 'c' on entering dired
+(add-hook 'dired-mode-hook
+  (lambda ()
+    (define-key dired-mode-map "c" 'dired-copy-filename)))
+
 
 ;================================================================================
 ; Package management
@@ -435,9 +448,9 @@
 
 
 ; Set keys like this:
-
 (evil-leader/set-key
   "b" 'ido-switch-buffer
+  "d" 'dired
   "cc" 'evilnc-comment-or-uncomment-lines
   "cp" 'evilnc-comment-or-uncomment-paragraphs
   "p" 'helm-mini
@@ -524,10 +537,17 @@
 (evil-define-key 'normal ess-mode-map
   ",d" 'ess-eval-line-and-step
   ",l" 'ess-eval-line
+  ",f" 'ess-eval-function
+  ",F" 'ess-eval-function-or-paragraph-and-step
   ",p" 'ess-eval-paragraph
+  ",P" 'ess-eval-paragraph-and-step
   ",D" 'ess-eval-paragraph-and-step
-  ",s" 'ess-eval-region
-  )
+  ",a" 'ess-eval-buffer
+  ) 
+
+(evil-define-key 'visual ess-mode-map
+  ",s" 'ess-eval-region)
+
 
 ; Some stuff from: http://permalink.gmane.org/gmane.emacs.vim-emulation/1135
 
@@ -572,6 +592,7 @@
 ;--------------------------------------------------------------------------------
 ; Disable linum on starred buffers
 (require 'linum-off)                    ; Needs to be imported here
+(add-to-list 'linum-disabled-modes-list 'doc-view-mode)
 (global-linum-mode)                     ; Enable line numbers everywhere
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -604,3 +625,23 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Image mode
+;--------------------------------------------------------------------------------
+(iimage-mode)
+(defun refresh-iimages ()
+  "Only way I've found to refresh iimages (without also recentering)"
+  (interactive)
+  (clear-image-cache nil)
+  (iimage-mode nil)
+  (iimage-mode t))
+
+(add-to-list 'compilation-finish-functions 
+             (lambda (buffer msg)
+               (save-excursion
+                 (set-buffer buffer)
+                 (refresh-iimages))))
+;--------------------------------------------------------------------------------
+

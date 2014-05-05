@@ -1,19 +1,19 @@
 ;////////////////////////////////////////////////////////////////////////////////
 
-;                ____   __  ___   ___   _____   ____        ___   _____ 
+;                ____   __  ___   ___   _____   ____        ___   _____
 ;              / __/  /  |/  /  / _ | / ___/  / __/       / _ \ / ___/
-;            / _/   / /|_/ /  / __ |/ /__   _\ \        / , _// /__  
-;          /___/  /_/  /_/  /_/ |_|\___/  /___/       /_/|_| \___/ 
+;            / _/   / /|_/ /  / __ |/ /__   _\ \        / , _// /__
+;          /___/  /_/  /_/  /_/ |_|\___/  /___/       /_/|_| \___/
 
 ;////////////////////////////////////////////////////////////////////////////////
-                                             
+
 
 ;================================================================================
 ; General
 ;================================================================================
 
 ; Disable icon bar
-(tool-bar-mode -1)
+; (tool-bar-mode -1)
 
 ; Change window size
 ; (setq initial-frame-alist '((top . 0) (left . 0) (width . 600) (height . 480)))
@@ -43,21 +43,7 @@
 ; Make buffer names unique even if the files have the same names
 (setq uniquify-buffer-name-style 'forward)
 
-; Alias for C-g
-; (global-set-key (kbd "C-[") 'keyboard-quit)
 
-; Enable easy window movement everywhere (evil and emacs)
-(windmove-default-keybindings)
-(global-set-key (kbd "M-h") 'windmove-left)
-(global-set-key (kbd "M-j") 'windmove-down)
-(global-set-key (kbd "M-k") 'windmove-up)
-(global-set-key (kbd "M-l") 'windmove-right)
-
-; Alias for C-g
-(global-set-key (kbd "C-[") 'keyboard-quit)
-
-;; (global-set-key [(control ?,)] (lambda () (interactive) (other-window -1)))
-;; (global-set-key [(control ?.)] (lambda () (interactive) (other-window 1)))
 ;================================================================================
 ; Package management
 ;================================================================================
@@ -97,6 +83,8 @@
                            expand-region
                            evil
                            surround
+                           evil-matchit
+                           evil-indent-textobject
                            evil-numbers
                            evil-nerd-commenter
                            evil-leader
@@ -175,7 +163,7 @@
                            ac-source-words-in-same-mode-buffers
                            ))
 
-(setq 
+(setq
       ac-auto-show-menu 1
       ac-show-menu-immediately-on-auto-complete t
       ;; ac-candidate-limit nil
@@ -305,12 +293,12 @@
 
 ; More clear highlighting of active window
 ; (set-face-attribute  'mode-line         ; active
-;                  nil 
+;                  nil
 ;                  :foreground "gray50"
-;                  :background "gray20" 
+;                  :background "gray20"
 ;                  :box '(:line-width 1 :style released-button))
 ; (set-face-attribute  'mode-line-inactive
-;                      nil 
+;                      nil
 ;                      :foreground "gray20"
 ;                      ;; :background "black"
 ;                      :box '(:line-width 1 :style released-button))
@@ -324,7 +312,7 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; Magit - Git plugin 
+; Magit - Git plugin
 ;--------------------------------------------------------------------------------
 ;; Cheathseet with basic commands: http://daemianmack.com/magit-cheatsheet.html
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -410,6 +398,11 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Evil
 ;--------------------------------------------------------------------------------
+; https://github.com/tarleb/evil-rebellion
+;; (add-to-list 'load-path "~/.emacs.d/evil-scout")
+;; (add-to-list 'load-path "~/.emacs.d/evil-rebellion")
+;; (require 'evil-rebellion)
+
 (evil-mode 1)
 
 ; Evil Surround
@@ -439,12 +432,13 @@
     (define-key evil-insert-state-map "\C-b" 'evil-backward-char)
     (define-key evil-insert-state-map "\C-d" 'evil-delete-char)
     (define-key evil-insert-state-map "\C-n" 'evil-next-line)
-    (define-key evil-insert-state-map "\C-p" 'evil-previous-line)
     (define-key evil-insert-state-map "\C-k" 'kill-line)
     )
   )
 
+
 ; Set keys like this:
+
 (evil-leader/set-key
   "b" 'ido-switch-buffer
   "cc" 'evilnc-comment-or-uncomment-lines
@@ -480,8 +474,44 @@
 (add-to-list 'load-path "~/.emacs.d/evil-plugins")
 (define-key evil-ex-completion-map (kbd "C-r") #'evil-ex-paste-from-register)
 
-(global-set-key (kbd "C-SPC") #'ace-jump-line-mode)
-(global-set-key (kbd "M-SPC") #'ace-jump-word-mode)
+
+; KEY BINDINGS
+
+; Enable easy window movement everywhere (evil and emacs)
+(windmove-default-keybindings)
+(global-set-key (kbd "M-h") 'windmove-left)
+(global-set-key (kbd "M-j") 'windmove-down)
+(global-set-key (kbd "M-k") 'windmove-up)
+(global-set-key (kbd "M-l") 'windmove-right)
+
+; Change to split window 
+(global-set-key [(control ?,)] (lambda () (interactive) (other-window -1)))
+(global-set-key [(control ?.)] (lambda () (interactive) (other-window 1)))
+
+; Save buffer
+(global-set-key (kbd "C-SPC") 'save-buffer)
+
+; Escape should escape everything, just like in VIM
+(define-key evil-normal-state-map [escape] 'keyboard-quit)
+(define-key evil-visual-state-map [escape] 'keyboard-quit)
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+
+(eval-after-load 'org
+  '(mapcar (lambda (state)
+      (evil-declare-key state org-mode-map
+        (kbd "M-l") 'org-metaright
+        (kbd "M-h") 'org-metaleft
+        (kbd "M-k") 'org-metaup
+        (kbd "M-j") 'org-metadown
+        (kbd "M-L") 'org-shiftmetaright
+        (kbd "M-H") 'org-shiftmetaleft
+        (kbd "M-K") 'org-shiftmetaup
+        (kbd "M-J") 'org-shiftmetadown))
+    '(normal insert)))
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -502,7 +532,7 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Better line numbers
 ;--------------------------------------------------------------------------------
-; Disable linum on starred buffers 
+; Disable linum on starred buffers
 (require 'linum-off)                    ; Needs to be imported here
 (global-linum-mode)                     ; Enable line numbers everywhere
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

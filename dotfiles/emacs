@@ -8,6 +8,9 @@
 ;////////////////////////////////////////////////////////////////////////////////
 
 
+; Install KeyRemap4Macbook and set Command_L and Command_R both to Control_L
+; (either emacs only or global)
+
 ;================================================================================
 ; General
 ;================================================================================
@@ -26,6 +29,9 @@
 
 ; Default dir
 (setq default-directory "~/")
+
+; Auto-reload buffer
+(global-auto-revert-mode t)
 
 ; Save here instead of littering current directory with emacs backup files
 (setq backup-directory-alist `(("." . "~/.saves")))
@@ -80,6 +86,7 @@
                            clojure-test-mode
                            clojure-snippets
 		           cider
+                           eimp
                            paredit
                            paredit-menu
                            rainbow-delimiters
@@ -257,7 +264,7 @@
 ;--------------------------------------------------------------------------------
 (projectile-global-mode 1)
 ; If you want Projectile to be usable in every directory (even without the presence of project file):
-(setq projectile-require-project-root nil)
+;; (setq projectile-require-project-root nil)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -265,9 +272,15 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Activate flexible file matching
 (ido-mode 1)
+
 (ido-everywhere 1)
 (flx-ido-mode 1)
 (setq ido-use-faces nil) ; Disable ido faces to see flx highlights
+
+; Use M-h and M-l to move between words in the minibuffer
+(define-key minibuffer-local-map (kbd "M-h") 'ido-prev-match)
+(define-key minibuffer-local-map (kbd "M-l") 'ido-next-match)
+
 ; Enable improved ido mode for M-x
 (smex-initialize)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -346,29 +359,55 @@
                ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
                ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
 
+;
+(global-set-key (kbd "C-c l") 'org-store-link)
 ; brew install imagemagick
 (setq org-latex-create-formula-image-program 'imagemagick)
 
-;; (add-to-list 'org-export-latex-packages-alist '("" "listings"))
-;; org-latex-packages-alist
-;; \usepackage[usenames]{color}
-;; \usepackage{amsmath}
-;; \usepackage[mathscr]{eucal}
-;; \usepackage[utf8]{inputenc}
-;; \usepackage[T1]{fontenc}
-;; % Package fixltx2e omitted
-;; \usepackage{graphicx}
-;; % Package longtable omitted
-;; % Package float omitted
-;; % Package wrapfig omitted
-;; \usepackage[normalem]{ulem}
-;; \usepackage{textcomp}
-;; \usepackage{marvosym}
-;; \usepackage{wasysym}
-;; \usepackage{latexsym}
-;; \usepackage{amssymb}
-;; % Package amstext omitted
-;; % Package hyperref omitted
+(autoload 'eimp-mode "eimp" "Emacs Image Manipulation Package." t)
+  (add-hook 'image-mode-hook 'eimp-mode)
+
+; Image mode
+(iimage-mode)
+
+(defun refresh-iimages ()
+  "Only way I've found to refresh iimages (without also recentering)"
+  (interactive)
+  (clear-image-cache nil)
+  (iimage-mode nil)
+  (iimage-mode t))
+
+(add-to-list 'compilation-finish-functions 
+             (lambda (buffer msg)
+               (save-excursion
+                 (set-buffer buffer)
+                 (refresh-iimages))))
+
+(add-to-list 'iimage-mode-image-regex-alist
+             (cons (concat "\\[\\[file:\\(~?" iimage-mode-image-filename-regex
+                           "\\)\\]")  1))
+
+(defun org-toggle-iimage-in-org ()
+  "display images in your org file"
+  (interactive)
+  (if (face-underline-p 'org-link)
+      (set-face-underline-p 'org-link nil)
+      (set-face-underline-p 'org-link t))
+  (iimage-mode ‘toggle))
+
+(add-hook 'org-mode-hook 
+          (lambda ()
+            (local-set-key "\M-I" 'org-toggle-iimage-in-org)))
+
+; Babel stuff
+(setq org-confirm-babel-evaluate nil)
+(org-babel-do-load-languages
+  'org-babel-load-languages
+  '((R . t)
+    (latex . t)))
+
+(add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
+(add-hook 'org-mode-hook 'org-display-inline-images)  
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -411,9 +450,9 @@
 
 (evil-mode 1)
 
-(setq evil-emacs-state-cursor '("red" box))
-(setq evil-normal-state-cursor '("green" box))
-(setq evil-insert-state-cursor '("yellow" box))
+(setq evil-emacs-state-cursor '("red" box)
+      evil-normal-state-cursor '("green" box)
+      evil-insert-state-cursor '("yellow" box))
 
 ; Evil Surround
 (add-to-list 'load-path "~/.emacs.d/evil-surround")
@@ -446,6 +485,9 @@
     )
   )
 
+; Restore default keybinding (gets overridden
+; by evil-nerc-commenter
+(global-set-key (kbd "M-;") 'comment-dwim)
 
 ; Set keys like this:
 (evil-leader/set-key
@@ -457,10 +499,10 @@
   ";" 'smex
   "cl" 'evilnc-comment-or-uncomment-to-the-line)
 
-(add-to-list 'load-path "~/.emacs.d/evil-paredit")
-(require 'evil-paredit)
-(add-hook 'emacs-lisp-mode-hook 'evil-paredit-mode)
-(add-hook 'clojure-mode-hook 'evil-paredit-mode)
+;; (add-to-list 'load-path "~/.emacs.d/evil-paredit")
+;; (require 'evil-paredit)
+;; (add-hook 'emacs-lisp-mode-hook 'evil-paredit-mode)
+;; (add-hook 'clojure-mode-hook 'evil-paredit-mode)
 ; From: http://wikemacs.org/index.php/Evil#Enter_an_emacs_mode_in_a_given_state
 ; C-h m shows the current minor and major mode
 (loop for (mode . state) in '((inferior-emacs-lisp-mode . emacs)
@@ -492,11 +534,11 @@
 ; KEY BINDINGS
 
 ; Enable easy window movement everywhere (evil and emacs)
-(windmove-default-keybindings)
-(global-set-key (kbd "M-h") 'windmove-left)
-(global-set-key (kbd "M-j") 'windmove-down)
-(global-set-key (kbd "M-k") 'windmove-up)
-(global-set-key (kbd "M-l") 'windmove-right)
+;; (windmove-default-keybindings)
+;; (global-set-key (kbd "M-h") 'windmove-left)
+;; (global-set-key (kbd "M-j") 'windmove-down)
+;; (global-set-key (kbd "M-k") 'windmove-up)
+;; (global-set-key (kbd "M-l") 'windmove-right)
 
 ; Change to split window
 (global-set-key [(control ?,)] (lambda () (interactive) (other-window -1)))
@@ -514,18 +556,33 @@
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
-(eval-after-load 'org
-  '(mapcar (lambda (state)
-      (evil-declare-key state org-mode-map
-        (kbd "M-l") 'org-metaright
-        (kbd "M-h") 'org-metaleft
-        (kbd "M-k") 'org-metaup
-        (kbd "M-j") 'org-metadown
-        (kbd "M-L") 'org-shiftmetaright
-        (kbd "M-H") 'org-shiftmetaleft
-        (kbd "M-K") 'org-shiftmetaup
-        (kbd "M-J") 'org-shiftmetadown))
-    '(normal insert)))
+; Provide some evil mappings for org mode
+(evil-define-key 'normal org-mode-map
+  (kbd "RET") 'org-open-at-point
+  "za"        'org-cycle
+  "zA"        'org-shifttab
+  "zm"        'hide-body
+  "zr"        'show-all
+  "zo"        'show-subtree
+  "zO"        'show-all
+  "zc"        'hide-subtree
+  "zC"        'hide-all
+
+  "gs" 'org-shiftright
+  "gS" 'org-shiftleft
+
+  (kbd "M-h") 'org-metaleft
+  (kbd "M-l") 'org-metaright
+  (kbd "M-j") 'org-metadown
+  (kbd "M-k") 'org-metaup
+  
+  (kbd "M-H") 'org-shiftmetaleft
+  (kbd "M-J") 'org-shiftmetadown
+  (kbd "M-K") 'org-shiftmetaup
+  (kbd "M-L") 'org-shiftmetaright)
+
+
+
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -555,21 +612,6 @@
   '(progn
      (add-hook 'ess-help-mode-hook 'evil-change-to-initial-state)
      ))
-
-;; jump to the prompt and go to insert mode
-;; (evil-define-key 'normal inferior-ess-mode-map "i" 'my-R-insert)
-;; (evil-define-key 'normal inferior-ess-mode-map "I" 'my-R-insert)
-;; (evil-define-key 'normal inferior-ess-mode-map "A" 'my-R-insert)
-;; (defun my-R-insert ()
-;;   (interactive)
-;;   (end-of-buffer)
-;;   (comint-show-maximum-output)
-;;   (evil-insert 0)
-;;   )
-;; (evil-define-key 'normal inferior-ess-mode-map (kbd "C-j")
-;; 'comint-next-matching-input-from-input)
-;; (evil-define-key 'normal inferior-ess-mode-map (kbd "C-k")
-;; 'comint-previous-matching-input-from-input)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -585,6 +627,111 @@
 (global-set-key (kbd "C-c h") 'helm-mini)
 (global-set-key (kbd "C-c o") 'helm-projectile)
 (global-set-key (kbd "C-c C-/") 'helm-complete-file-name-at-point)
+
+;; '(helm-source-buffers-list
+;;   helm-source-recentf
+;;   helm-source-bookmarks
+;;   helm-source-file-cache
+;;   helm-source-files-in-current-dir
+;;   helm-source-locate)
+
+;; (global-set-key (kbd "M-x")                     'helm-M-x)
+(global-set-key (kbd "M-y")                     'helm-show-kill-ring)
+(global-set-key (kbd "C-c f")                   'helm-recentf)
+(global-set-key (kbd "C-x C-f")                 'helm-find-files)
+;; (global-set-key (kbd "C-x b")                 'helm-buffers-list)
+;; (global-set-key (kbd "C-c <SPC>")               'helm-all-mark-rings)
+;; (global-set-key (kbd "C-x r b")                 'helm-filtered-bookmarks)
+;; (global-set-key (kbd "C-h r")                   'helm-info-emacs)
+;; (global-set-key (kbd "C-:")                     'helm-eval-expression-with-eldoc)
+;; (global-set-key (kbd "C-,")                     'helm-calcul-expression)
+;; (global-set-key (kbd "C-h d")                   'helm-info-at-point)
+;; (global-set-key (kbd "C-c g")                   'helm-google-suggest)
+;; (global-set-key (kbd "M-g s")                   'helm-do-grep)
+;; (global-set-key (kbd "C-x C-d")                 'helm-browse-project)
+;; (global-set-key (kbd "<f1>")                    'helm-resume)
+(global-set-key (kbd "C-h C-f")                 'helm-apropos)
+;; (global-set-key (kbd "<f5> s")                  'helm-find)
+(define-key global-map [remap jump-to-register] 'helm-register)
+(define-key global-map [remap list-buffers]     'helm-buffers-list)
+(define-key global-map [remap dabbrev-expand]   'helm-dabbrev)
+(define-key global-map [remap find-tag]         'helm-etags-select)
+(define-key shell-mode-map (kbd "M-h")          'helm-comint-input-ring) ; shell history.
+
+;; (define-key helm-find-files-map (kbd "C-d") 'helm-ff-persistent-delete)
+;; (define-key helm-buffer-map (kbd "C-d")     'helm-buffer-run-kill-persistent)
+
+;; (setq helm-google-suggest-use-curl-p             t
+;;       ;helm-kill-ring-threshold                   1
+
+;;       helm-scroll-amount                         4
+;;       helm-quick-update                          t
+;;       helm-idle-delay                            0.01
+;;       helm-input-idle-delay                      0.01
+
+;;       ;helm-completion-window-scroll-margin       0
+;;       ;helm-display-source-at-screen-top          nil
+;;       helm-ff-search-library-in-sexp             t
+;;       ;helm-kill-ring-max-lines-number            5
+;;       ;; helm-default-external-file-browser         "thunar"
+;;       ;; helm-pdfgrep-default-read-command          "evince --page-label=%p '%f'"
+;;       ;helm-ff-transformer-show-only-basename     t
+
+;;       helm-ff-auto-update-initial-value          t
+;;       ;; helm-grep-default-command                  "ack-grep -Hn --smart-case --no-group --no-color %e %p %f"
+;;       ;; helm-grep-default-recurse-command          "ack-grep -H --smart-case --no-group --no-color %e %p %f"
+
+;;       helm-reuse-last-window-split-state         nil
+;;       helm-split-window-default-side             'right
+
+;;       ;helm-split-window-in-side-p                nil
+;;       helm-always-two-windows                    t
+;;       ;helm-persistent-action-use-special-display t
+;;       helm-buffers-favorite-modes                (append helm-buffers-favorite-modes
+;;                                                          '(picture-mode artist-mode))
+;;       helm-ls-git-status-command                 'magit-status
+
+;;       ;helm-never-delay-on-input                  nil
+;;       helm-candidate-number-limit                200
+;;       helm-M-x-requires-pattern                  0
+;;       helm-dabbrev-cycle-thresold                5
+;;       helm-surfraw-duckduckgo-url                "https://duckduckgo.com/?q=%s&ke=-1&kf=fw&kl=fr-fr&kr=b&k1=-1&k4=-1"
+;;       helm-boring-file-regexp-list               '("\\.git$" "\\.hg$" "\\.svn$" "\\.CVS$" "\\._darcs$" "\\.la$" "\\.o$" "\\.i$")
+;;       ;helm-mode-handle-completion-in-region      t
+;;       ;helm-moccur-always-search-in-current        t
+;;       ;helm-tramp-verbose                         6
+;;       ;helm-ff-file-name-history-use-recentf      t
+;;       ;helm-follow-mode-persistent                t
+;;       helm-move-to-line-cycle-in-source           t
+;;       ido-use-virtual-buffers                     t             ; Needed in helm-buffers-list
+;;       helm-tramp-verbose                          6
+;;       helm-buffers-fuzzy-matching                 t
+;;       )
+
+(setq helm-split-window-default-side             'right
+      helm-reuse-last-window-split-state         nil
+      helm-quick-update                          t
+      helm-idle-delay                            0.01
+      helm-input-idle-delay                      0.01
+      helm-buffers-fuzzy-matching                 t)
+      
+
+(defun helm-everything () 
+  (interactive) 
+  (require 'helm-files) 
+  (let ((helm-ff-transformer-show-only-basename nil)) 
+    (helm-other-buffer '(helm-source-buffers-list 
+                         helm-source-recentf 
+                         helm-source-projectile-files-list
+                         helm-source-findutils
+                         helm-source-bookmarks
+                         helm-source-files-in-current-dir
+                         helm-source-locate
+                         helm-source-file-name-history 
+                         helm-source-buffer-not-found) 
+                       "*helm everything*"))) 
+
+(add-to-list 'helm-projectile-sources-list 'helm-source-buffers-list)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -626,22 +773,4 @@
  ;; If there is more than one, they won't work right.
  )
 
-
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; Image mode
-;--------------------------------------------------------------------------------
-(iimage-mode)
-(defun refresh-iimages ()
-  "Only way I've found to refresh iimages (without also recentering)"
-  (interactive)
-  (clear-image-cache nil)
-  (iimage-mode nil)
-  (iimage-mode t))
-
-(add-to-list 'compilation-finish-functions 
-             (lambda (buffer msg)
-               (save-excursion
-                 (set-buffer buffer)
-                 (refresh-iimages))))
-;--------------------------------------------------------------------------------
 

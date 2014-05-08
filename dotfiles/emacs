@@ -8,9 +8,6 @@
 ;////////////////////////////////////////////////////////////////////////////////
 
 
-; Install KeyRemap4Macbook and set Command_L and Command_R both to Control_L
-; (either emacs only or global)
-
 ;================================================================================
 ; General
 ;================================================================================
@@ -44,13 +41,14 @@
 ;; (desktop-save-mode 1)
 
 ; Close old buffers automatically
-(setq midnight-mode 't)
+; (setq midnight-mode 't)
 
 ; Make buffer names unique even if the files have the same names
 (setq uniquify-buffer-name-style 'forward)
 
 ;; http://stackoverflow.com/questions/11403862/how-to-have-emacs-helm-list-offer-files-in-current-directory-as-options
 
+;; Dired
 ; Pressing c in dired mode will copy the file name to the clipboard
 (defun dired-copy-filename ()
   "push the path and filename of the file under the point to the kill ring"
@@ -120,6 +118,7 @@
                            ac-nrepl
                            ace-jump-mode
                            flycheck
+                           markdown-mode
                            helm-flycheck
                            helm-emmet
                            helm-projectile))
@@ -142,7 +141,7 @@
 
 (setq my:el-get-packages
       '(
-        ess
+        ess ; ESS from elpa is outdated! => Install with el-get
         ))
 
 (el-get 'sync my:el-get-packages)
@@ -180,11 +179,11 @@
       ac-auto-show-menu 1
       ac-show-menu-immediately-on-auto-complete t
       ;; ac-candidate-limit nil
-      ;; ac-delay 0.1
+      ac-delay 0.1
       ;; ac-disable-faces (quote (font-lock-comment-face font-lock-doc-face))
       ;; ac-ignore-case 'smart
       ;; ac-menu-height 10
-      ;; ac-quick-help-delay 1.5
+      ac-quick-help-delay 0.5
       ;; ac-quick-help-prefer-pos-tip t
       ac-auto-start 1
       ac-delay 0.0
@@ -302,7 +301,7 @@
 ; Power line, (a custom version frm git)
 (add-to-list 'load-path "~/.emacs.d/powerline")
 (require 'powerline)
-(powerline-default-theme)
+;; (powerline-default-theme)
 ; (powerline-default-theme)
 
 ; Smart-mode-line
@@ -377,7 +376,7 @@
   (iimage-mode nil)
   (iimage-mode t))
 
-(add-to-list 'compilation-finish-functions 
+(add-to-list 'compilation-finish-functions
              (lambda (buffer msg)
                (save-excursion
                  (set-buffer buffer)
@@ -395,7 +394,7 @@
       (set-face-underline-p 'org-link t))
   (iimage-mode ‘toggle))
 
-(add-hook 'org-mode-hook 
+(add-hook 'org-mode-hook
           (lambda ()
             (local-set-key "\M-I" 'org-toggle-iimage-in-org)))
 
@@ -407,7 +406,7 @@
     (latex . t)))
 
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
-(add-hook 'org-mode-hook 'org-display-inline-images)  
+(add-hook 'org-mode-hook 'org-display-inline-images)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -420,17 +419,16 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Python
 ;--------------------------------------------------------------------------------
-(setq
-  python-shell-interpreter "ipython"
-  python-shell-interpreter-args ""
-  python-shell-prompt-regexp "In \\[[0-9]+\\]: "
-  python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
-  python-shell-completion-setup-code
-    "from IPython.core.completerlib import module_completion"
-  python-shell-completion-module-string-code
-    "';'.join(module_completion('''%s'''))\n"
-  python-shell-completion-string-code
-    "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
+(setq python-shell-interpreter "ipython"
+      python-shell-interpreter-args ""
+      python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+      python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+      python-shell-completion-setup-code
+        "from IPython.core.completerlib import module_completion"
+      python-shell-completion-module-string-code
+        "';'.join(module_completion('''%s'''))\n"
+      python-shell-completion-string-code
+        "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -443,11 +441,6 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Evil
 ;--------------------------------------------------------------------------------
-; https://github.com/tarleb/evil-rebellion
-;; (add-to-list 'load-path "~/.emacs.d/evil-scout")
-;; (add-to-list 'load-path "~/.emacs.d/evil-rebellion")
-;; (require 'evil-rebellion)
-
 (evil-mode 1)
 
 (setq evil-emacs-state-cursor '("red" box)
@@ -480,7 +473,6 @@
     (define-key evil-insert-state-map "\C-f" 'evil-forward-char)
     (define-key evil-insert-state-map "\C-b" 'evil-backward-char)
     (define-key evil-insert-state-map "\C-d" 'evil-delete-char)
-    (define-key evil-insert-state-map "\C-n" 'evil-next-line)
     (define-key evil-insert-state-map "\C-k" 'kill-line)
     )
   )
@@ -492,19 +484,19 @@
 ; Set keys like this:
 (evil-leader/set-key
   "b" 'ido-switch-buffer
+  "o" 'helm-everything
   "d" 'dired
-  "cc" 'evilnc-comment-or-uncomment-lines
-  "cp" 'evilnc-comment-or-uncomment-paragraphs
   "p" 'helm-mini
-  ";" 'smex
-  "cl" 'evilnc-comment-or-uncomment-to-the-line)
+  ";" 'smex)
 
+; Evil paredit
 ;; (add-to-list 'load-path "~/.emacs.d/evil-paredit")
 ;; (require 'evil-paredit)
 ;; (add-hook 'emacs-lisp-mode-hook 'evil-paredit-mode)
 ;; (add-hook 'clojure-mode-hook 'evil-paredit-mode)
 ; From: http://wikemacs.org/index.php/Evil#Enter_an_emacs_mode_in_a_given_state
-; C-h m shows the current minor and major mode
+
+; Set default modes depending on modes
 (loop for (mode . state) in '((inferior-emacs-lisp-mode . emacs)
                               (inferior-ess-mode . emacs)
                               (nrepl-mode . emacs)
@@ -522,7 +514,7 @@
                               (bc-menu-mode . emacs)
                               (magit-branch-manager-mode . emacs)
                               (rdictcc-buffer-mode . emacs)
-                              (dired-mode . emacs)
+                              (dired-mode . normal)
                               (wdired-mode . normal))
       do (evil-set-initial-state mode state))
 
@@ -531,14 +523,20 @@
 (define-key evil-ex-completion-map (kbd "C-r") #'evil-ex-paste-from-register)
 
 
-; KEY BINDINGS
-
 ; Enable easy window movement everywhere (evil and emacs)
 ;; (windmove-default-keybindings)
 ;; (global-set-key (kbd "M-h") 'windmove-left)
 ;; (global-set-key (kbd "M-j") 'windmove-down)
 ;; (global-set-key (kbd "M-k") 'windmove-up)
 ;; (global-set-key (kbd "M-l") 'windmove-right)
+
+;; (windmove-default-keybindings)
+;; (define-prefix-command 'vim-window-map)
+;; (global-set-key (kbd "C-w") 'vim-window-map)
+;; (define-key vim-window-map (kbd "h") 'windmode-left)
+;; (define-key vim-window-map (kbd "j") 'windmode-down)
+;; (define-key vim-window-map (kbd "k") 'windmode-up)
+;; (define-key vim-window-map (kbd "l") 'windmode-right)
 
 ; Change to split window
 (global-set-key [(control ?,)] (lambda () (interactive) (other-window -1)))
@@ -556,6 +554,18 @@
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
+; Enable vim-window switching in emacs!
+(define-key evil-emacs-state-map (kbd "C-w h") 'windmove-left)
+(define-key evil-emacs-state-map (kbd "C-w j") 'windmove-down)
+(define-key evil-emacs-state-map (kbd "C-w k") 'windmove-up)
+(define-key evil-emacs-state-map (kbd "C-w l") 'windmove-right)
+
+(define-key evil-emacs-state-map (kbd "C-w H") 'buffer-move-left)
+(define-key evil-emacs-state-map (kbd "C-w J") 'buffer-move-down)
+(define-key evil-emacs-state-map (kbd "C-w K") 'buffer-move-up)
+(define-key evil-emacs-state-map (kbd "C-w L") 'buffer-move-right)
+
+
 ; Provide some evil mappings for org mode
 (evil-define-key 'normal org-mode-map
   (kbd "RET") 'org-open-at-point
@@ -567,6 +577,8 @@
   "zO"        'show-all
   "zc"        'hide-subtree
   "zC"        'hide-all
+  "zj"        'outline-next-visible-heading
+  "zk"        'outline-previous-visible-heading
 
   "gs" 'org-shiftright
   "gS" 'org-shiftleft
@@ -575,14 +587,11 @@
   (kbd "M-l") 'org-metaright
   (kbd "M-j") 'org-metadown
   (kbd "M-k") 'org-metaup
-  
+
   (kbd "M-H") 'org-shiftmetaleft
   (kbd "M-J") 'org-shiftmetadown
   (kbd "M-K") 'org-shiftmetaup
   (kbd "M-L") 'org-shiftmetaright)
-
-
-
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -599,15 +608,13 @@
   ",p" 'ess-eval-paragraph
   ",P" 'ess-eval-paragraph-and-step
   ",D" 'ess-eval-paragraph-and-step
-  ",a" 'ess-eval-buffer
-  ) 
+  ",aa" 'ess-eval-buffer
+  )
 
 (evil-define-key 'visual ess-mode-map
   ",s" 'ess-eval-region)
 
-
 ; Some stuff from: http://permalink.gmane.org/gmane.emacs.vim-emulation/1135
-
 (eval-after-load 'ess-help
   '(progn
      (add-hook 'ess-help-mode-hook 'evil-change-to-initial-state)
@@ -620,25 +627,10 @@
 (helm-mode t)
 (recentf-mode t)
 
-(evil-define-key 'normal global-map
-  "\C-p" 'helm-mini
-  "q:" 'helm-complex-command-history)
-
-(global-set-key (kbd "C-c h") 'helm-mini)
-(global-set-key (kbd "C-c o") 'helm-projectile)
-(global-set-key (kbd "C-c C-/") 'helm-complete-file-name-at-point)
-
-;; '(helm-source-buffers-list
-;;   helm-source-recentf
-;;   helm-source-bookmarks
-;;   helm-source-file-cache
-;;   helm-source-files-in-current-dir
-;;   helm-source-locate)
-
 ;; (global-set-key (kbd "M-x")                     'helm-M-x)
 (global-set-key (kbd "M-y")                     'helm-show-kill-ring)
 (global-set-key (kbd "C-c f")                   'helm-recentf)
-(global-set-key (kbd "C-x C-f")                 'helm-find-files)
+;; (global-set-key (kbd "C-x C-f")                 'helm-find-files)
 ;; (global-set-key (kbd "C-x b")                 'helm-buffers-list)
 ;; (global-set-key (kbd "C-c <SPC>")               'helm-all-mark-rings)
 ;; (global-set-key (kbd "C-x r b")                 'helm-filtered-bookmarks)
@@ -656,7 +648,8 @@
 (define-key global-map [remap list-buffers]     'helm-buffers-list)
 (define-key global-map [remap dabbrev-expand]   'helm-dabbrev)
 (define-key global-map [remap find-tag]         'helm-etags-select)
-(define-key shell-mode-map (kbd "M-h")          'helm-comint-input-ring) ; shell history.
+ ; shell history.
+(define-key shell-mode-map (kbd "M-P")          'helm-comint-input-ring)
 
 ;; (define-key helm-find-files-map (kbd "C-d") 'helm-ff-persistent-delete)
 ;; (define-key helm-buffer-map (kbd "C-d")     'helm-buffer-run-kill-persistent)
@@ -714,24 +707,35 @@
       helm-idle-delay                            0.01
       helm-input-idle-delay                      0.01
       helm-buffers-fuzzy-matching                 t)
-      
 
-(defun helm-everything () 
-  (interactive) 
-  (require 'helm-files) 
-  (let ((helm-ff-transformer-show-only-basename nil)) 
-    (helm-other-buffer '(helm-source-buffers-list 
-                         helm-source-recentf 
+
+(defun helm-everything ()
+  (interactive)
+  (require 'helm-files)
+  (let ((helm-ff-transformer-show-only-basename nil))
+    (helm-other-buffer '(helm-source-buffers-list
+                         helm-source-recentf
                          helm-source-projectile-files-list
-                         helm-source-findutils
-                         helm-source-bookmarks
                          helm-source-files-in-current-dir
-                         helm-source-locate
-                         helm-source-file-name-history 
-                         helm-source-buffer-not-found) 
-                       "*helm everything*"))) 
+                         ;; helm-source-findutils
+                         ;; helm-source-bookmarks
+                         ;; helm-source-locate
+                         ;; helm-source-file-name-history
+                         ;; helm-source-buffer-not-found
+                         )
+                       "*my-helm*")))
 
-(add-to-list 'helm-projectile-sources-list 'helm-source-buffers-list)
+(eval-after-load 'helm-projectile
+  '(add-to-list 'helm-projectile-sources-list 'helm-source-buffers-list))
+
+
+(evil-define-key 'normal global-map
+  "\C-p" 'helm-everything
+  "q:" 'helm-complex-command-history)
+
+(global-set-key (kbd "C-c h") 'helm-mini)
+(global-set-key (kbd "C-c o") 'helm-projectile)
+(global-set-key (kbd "C-c C-/") 'helm-complete-file-name-at-point)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -757,15 +761,21 @@
 (require 'moe-theme) ; autoload doesn't work with this somehow
 (moe-dark)
 (setq moe-theme-mode-line-color 'green)
+
+;; Resize titles
+;; (setq moe-theme-resize-markdown-title '(2.0 1.7 1.5 1.3 1.0 1.0))
+;; (setq moe-theme-resize-org-title '(2.2 1.8 1.6 1.4 1.2 1.0 1.0 1.0 1.0))
+;; (setq moe-theme-resize-rst-title '(2.0 1.7 1.5 1.3 1.1 1.0))
+
 (powerline-moe-theme)
+
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("fc55a921b2c1d24233b678d133b9899e03144877d558cf6807ed51f83459d2d9" default)))
- )
+ '(custom-safe-themes (quote ("3b7e62b9884f1533f8eac5d21b252e5b8098274d7d9096521db84e4f10797ae3" "fc55a921b2c1d24233b678d133b9899e03144877d558cf6807ed51f83459d2d9" default))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -774,3 +784,59 @@
  )
 
 
+
+
+(defvar mode-line-cleaner-alist
+  `((auto-complete-mode . "")
+    (yas-minor-mode . " ¥")
+    (paredit-mode . " π")
+    (eldoc-mode . "")
+    (abbrev-mode . "")
+    ;; Major modes
+    (lisp-interaction-mode . " λ")
+    (hi-lock-mode . "")
+    (python-mode . " Py")
+    (emacs-lisp-mode . " λ")
+    (flymake-mode . " ✓")
+    (projectile-mode . " Π")
+    (helm-mode . " H")
+    (undo-tree-mode . " Undo")
+    (auto-fill-mode . " af")
+    (nxhtml-mode . " nx"))
+  "Alist for `clean-mode-line'.
+
+When you add a new element to the alist, keep in mind that you
+must pass the correct minor/major mode symbol and a string you
+want to use in the modeline *in lieu of* the original.")
+
+
+(defun clean-mode-line ()
+  (interactive)
+  (loop for cleaner in mode-line-cleaner-alist
+        do (let* ((mode (car cleaner))
+                 (mode-str (cdr cleaner))
+                 (old-mode-str (cdr (assq mode minor-mode-alist))))
+             (when old-mode-str
+                 (setcar old-mode-str mode-str))
+               ;; major mode
+             (when (eq mode major-mode)
+               (setq mode-name mode-str)))))
+
+
+(add-hook 'after-change-major-mode-hook 'clean-mode-line)
+
+;;; alias the new `flymake-report-status-slim' to
+;;; `flymake-report-status'
+(defalias 'flymake-report-status 'flymake-report-status-slim)
+(defun flymake-report-status-slim (e-w &optional status)
+  "Show \"slim\" flymake status in mode line."
+  (when e-w
+    (setq flymake-mode-line-e-w e-w))
+  (when status
+    (setq flymake-mode-line-status status))
+  (let* ((mode-line " Φ"))
+    (when (> (length flymake-mode-line-e-w) 0)
+      (setq mode-line (concat mode-line ":" flymake-mode-line-e-w)))
+    (setq mode-line (concat mode-line flymake-mode-line-status))
+    (setq flymake-mode-line (message "FORMATSTRING" &optional ARGS)ode-line)
+    (force-mode-line-update)))

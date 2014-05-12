@@ -1,12 +1,12 @@
-"=========================================================
-"            __     _____ __  __ ____   ____
-"            \ \   / /_ _|  \/  |  _ \ / ___|
-"             \ \ / / | || |\/| | |_) | |
-"              \ V /  | || |  | |  _ <| |___
-"               \_/  |___|_|  |_|_| \_\\____|
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"                       2014-03-28
-"=========================================================
+"=====================================================================
+"                  __     _____ __  __ ____   ____
+"                  \ \   / /_ _|  \/  |  _ \ / ___|
+"                   \ \ / / | || |\/| | |_) | |
+"                    \ V /  | || |  | |  _ <| |___
+"                     \_/  |___|_|  |_|_| \_\\____|
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"                              2014-03-28
+"=====================================================================
 " General {{{
 "=====================================================================
 let os = substitute(system('uname'), "\n", "", "")
@@ -31,7 +31,6 @@ Plugin 'SirVer/ultisnips'                " Snippet system
 Plugin 'honza/vim-snippets'              " Snippets
 Plugin 'tpope/vim-repeat'                " Repeat all kinds of stuff
 Plugin 'tpope/vim-surround'              " Surround motions
-Plugin 'Lokaltog/vim-powerline'          " Fancy status line
 Plugin 'jpalardy/vim-slime'              " REPL interaction
 Plugin 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
 Plugin 'tpope/vim-fugitive'              " Git plugin
@@ -44,6 +43,8 @@ Plugin 'tpope/vim-rsi'                   " Emacs editing in insert mode
 Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
 Plugin 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
 Plugin 'junegunn/vim-easy-align'         " Align stuff
+Plugin 'tpope/vim-unimpaired'
+Plugin 'bling/vim-airline'
 
 " Nice to have
 Plugin 'Valloric/YouCompleteMe' " $ Do `./install.sh` after update
@@ -76,7 +77,7 @@ Plugin 'vim-coffee-script'
 Plugin 'ervandew/screen'
 Plugin 'groenewege/vim-less'
 Plugin 'tristen/vim-sparkup'
-Plugin "lepture/vim-jinja"
+Plugin 'lepture/vim-jinja'
 Plugin 'jaxbot/brolink.vim'
 
 " Python
@@ -121,7 +122,7 @@ filetype plugin indent on    " required
 
 if has('gui_running')               " gvim options
     if os == "Darwin"
-        set guifont=Monaco:h16
+        set guifont=Monaco\ for\ Powerline:h16
         set macmeta                 " Option as Meta
     elseif os == "Linux"
         set guifont=Deja\ Vu\ Sans\ Mono\ 10
@@ -768,9 +769,11 @@ let g:sneak#streak = 0
 let g:sneak#use_ic_scs = 1
 " 2}}}
 
-" {{{2 PowerLine
-
-" let g:Powerline_symbols = 'fancy'
+" {{{2 Airline
+" : %3p : %4l : %3c
+let g:airline_powerline_fonts = 1
+let g:airline_section_y = airline#section#create(["%{split(getcwd(), '/')[-1]}% "])
+set noshowmode
 " 2}}}
 
 " {{{2 Markology

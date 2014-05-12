@@ -1,3 +1,0 @@
-[submodule "pathogen_managed/vimproc.vim"]
-	path = pathogen_managed/vimproc.vim
-	url = https://github.com/Shougo/vimproc.vim.git

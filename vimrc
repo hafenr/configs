@@ -24,29 +24,39 @@ call pathogen#infect("pathogen_managed/*")
 " Plugins {{{
 "=====================================================================
 " Essential
-Bundle 'gmarik/vundle'
-Bundle 'kien/ctrlp.vim'
-Bundle 'SirVer/ultisnips'
-Bundle 'honza/vim-snippets'
-Bundle 'tpope/vim-commentary'
-Bundle 'tpope/vim-repeat'
-Bundle 'tpope/vim-surround'
-Bundle 'Lokaltog/vim-powerline'
+Bundle 'gmarik/vundle'                   " Package manager
+Bundle 'kien/ctrlp.vim'                  " Fuzzy file finder
+Bundle 'SirVer/ultisnips'                " Snippet system
+Bundle 'honza/vim-snippets'              " Snippets
+Bundle 'tpope/vim-commentary'            " Commenting operator gc
+Bundle 'tpope/vim-repeat'                " Repeat all kinds of stuff
+Bundle 'tpope/vim-surround'              " Surround motions
+Bundle 'Lokaltog/vim-powerline'          " Fancy status line
+Bundle 'jpalardy/vim-slime'              " REPL interaction
+Bundle 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
+Bundle 'tpope/vim-fugitive'              " Git plugin
+Bundle 'jwhitley/vim-matchit'            " More jumps for %
+Bundle 'jiangmiao/auto-pairs'            " Auto close pairs
+Bundle 'wellle/targets.vim'              " More and better text objects
+Bundle 'szw/vim-maximizer'               " Temporarily Maximize window
+Bundle 'PeterRincker/vim-argumentative'  " i, a, >, <, text objects
+Bundle 'tpope/vim-rsi'                   " Emacs editing in insert mode
+Bundle 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
+Bundle 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
+Bundle 'junegunn/vim-easy-align'         " Align stuff
+
+" Nice to have
 Bundle 'Valloric/YouCompleteMe'
-Bundle 'jpalardy/vim-slime'
-Bundle 'michaeljsmith/vim-indent-object'
-Bundle 'tpope/vim-fugitive'
-Bundle 'sjl/gundo.vim'
-Bundle 'jwhitley/vim-matchit'
-Bundle 'wellle/targets.vim'
-Bundle 'szw/vim-maximizer'
-Bundle 'PeterRincker/vim-argumentative'
-Bundle 'Raimondi/delimitMate'
-Bundle 'jeetsukumaran/vim-markology'
-Bundle 'tpope/vim-rsi'
-Bundle 'milkypostman/vim-togglelist'
-Bundle 'Xuyuanp/git-nerdtree'
 Bundle 'terryma/vim-expand-region'
+Bundle 'sjl/gundo.vim'
+Bundle 'jeetsukumaran/vim-markology'
+Bundle 'mhinz/vim-startify'
+Bundle 'rking/ag.vim'
+Bundle 'scrooloose/syntastic'
+Bundle 'tomasr/molokai'
+Bundle 'vim-scripts/matlab.vim'
+Bundle 'takac/vim-hardtime'
+Bundle 'flazz/vim-colorschemes'
 
 " By language
 " Julia
@@ -76,22 +86,15 @@ Bundle 'tpope/vim-leiningen'
 Bundle 'nelstrom/vim-markdown-folding'
 Bundle 'tpope/vim-markdown'
 
-" Other
-Bundle 'mhinz/vim-startify'
-Bundle 'rking/ag.vim'
-Bundle 'scrooloose/syntastic'
-Bundle 'tomasr/molokai'
-Bundle 'vim-scripts/matlab.vim'
-Bundle 'takac/vim-hardtime'
-Bundle 'junegunn/vim-easy-align'
-Bundle 'flazz/vim-colorschemes'
 " Dash integration
 Bundle 'rizzatti/funcoo.vim'
 Bundle 'rizzatti/dash.vim'
 Bundle 'justinmk/vim-sneak'
 Bundle 'majutsushi/tagbar'
+Bundle 'Lokaltog/vim-easymotion'
 
-" Bundle 'Lokaltog/vim-easymotion'
+Bundle 'hsitz/VimOrganizer'
+
 " }}}
 "=====================================================================
 " Startup {{{
@@ -105,7 +108,7 @@ if has('gui_running')               " gvim options
     elseif os == "Linux"
         set guifont=Deja\ Vu\ Sans\ Mono\ 10
     endif
-    colorscheme obsidian2
+    colorscheme muon
 else                                " terminal
     " set t_Co=256                    " set 256 colors for terminal
     " set term=screen-256color
@@ -130,7 +133,8 @@ set thesaurus+=~/.vim/extra/mthesaur.txt
 set spelllang=en_us
 set nospell
 " set complete+=k                     " Enable dictionary completion with C-N C-P
-" set complete+=]                     " Search tags as well
+set complete-=]                     " Search tags as well
+set complete-=t                     " Search tags as well
 set encoding=utf-8
 syntax on                           " enable syntax highlighting
 set shiftwidth=4                    " number of spaces to autoindent
@@ -147,7 +151,7 @@ set lazyredraw                      " don't update the display while executing m
 set laststatus=2                    " always show status line
 set autoread                        " automatically read a file that has changed on disk
 set ofu=syntaxcomplete#Complete     " autocompletion so that menu will always appear
-set cfu=youcompleteme#Complete
+" set cfu=youcompleteme#Complete
 set wildmenu                        " enable wildmenu
 set wildmode=list:longest,full      " how wild mode should behave
 set guioptions-=T                   " remove toolbar in gVim
@@ -274,6 +278,14 @@ augroup END
 let mapleader=","
 let maplocalleader = ","
 
+" Easier access to command-window
+nnoremap ; :<c-f>i
+nnoremap : ;
+nnoremap q; :
+xnoremap ; :<c-f>i
+xnoremap : ;
+xnoremap q; :
+
 inoremap jk <ESC>
 
 imap <S-CR> <CR><CR>end<Esc>-cc
@@ -291,7 +303,6 @@ vnoremap <silent> p p`]
 nnoremap <silent> p p`]
 
 " Navigating the location list (gets populated by e.g. Syntastic)
-nmap <script> <silent> <F4> :call ToggleLocationList()<CR>
 nnoremap ]l :lnext<CR>
 nnoremap [l :lp<CR>
 
@@ -367,6 +378,7 @@ xmap gs <Plug>VSneakForward
 nmap gS <Plug>SneakBackward
 xmap gS <Plug>VSneakBackward
 
+nmap <script> <silent> ,l :call ToggleLocationList()<CR>
 nmap <script> <silent> ,q :call ToggleQuickfixList()<CR>
 
 nnoremap <silent><space>m :MaximizerToggle<CR>
@@ -416,8 +428,8 @@ nnoremap ,xc :Latexmk<CR>
 
 " NERDTree
 " Open NERDTree at the location of the current file
-nnoremap <F2> :NERDTreeFind<CR>
-nnoremap <space>w :NERDTreeToggle<CR>
+nnoremap <space>w :NERDTreeFind<CR>
+nnoremap <F2> :NERDTreeToggle<CR>
 
 " " Tagbar
 nnoremap <F3> :TagbarToggle<CR>
@@ -493,6 +505,10 @@ let g:vim_markdown_folding_disabled=1
 " {{{2 EasyMotion
 "---------------------------------------------------------------------
 " Default leader <leader><leader>
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+" JK motions: Line motions
+map <space>j <Plug>(easymotion-j)
+map <space>k <Plug>(easymotion-k)
 " 2}}}
 
 " {{{2 R Plugin

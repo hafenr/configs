@@ -41,5 +41,9 @@ source ~/.profile
 
 unsetopt correct_all
 
+setopt extended_glob
+
 # Customize to your needs...
 #if [$TMUX = '']; then tmux; fi
+#
+#

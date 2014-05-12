@@ -493,7 +493,6 @@
   "o" 'helm-everything
   "d" 'dired
   "p" 'helm-mini
-  "gs" 'magit-status
   ";" 'smex)
 
 ; Evil paredit
@@ -727,7 +726,13 @@
 
 (evil-define-key 'normal global-map
   "\C-p" 'helm-projectile
-  "q" 'evil-record-macro)
+  "q" 'evil-record-macro
+  ":" 'evil-repeat-find-char
+  ",gs" 'magit-status
+  ";" 'evil-ex)
+
+(evil-define-key 'visual global-map
+  ";" 'evil-ex)
 
 (global-set-key (kbd "C-c h") 'helm-mini)
 (global-set-key (kbd "C-c o") 'helm-projectile)

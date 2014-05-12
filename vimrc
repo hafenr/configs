@@ -16,90 +16,108 @@ set nocompatible
 filetype off
 
 " Let Vundle manage Vundle
-set rtp+=~/.vim/vundle_managed/vundle/
-call vundle#rc("$HOME/.vim/vundle_managed")
+set rtp+=~/.vim/vundle_managed/Vundle.vim
+call vundle#begin("$HOME/.vim/vundle_managed")
 call pathogen#infect("pathogen_managed/*")
 " }}}
 "=====================================================================
 " Plugins {{{
 "=====================================================================
 " Essential
-Bundle 'gmarik/vundle'                   " Package manager
-Bundle 'kien/ctrlp.vim'                  " Fuzzy file finder
-Bundle 'SirVer/ultisnips'                " Snippet system
-Bundle 'honza/vim-snippets'              " Snippets
-Bundle 'tpope/vim-commentary'            " Commenting operator gc
-Bundle 'tpope/vim-repeat'                " Repeat all kinds of stuff
-Bundle 'tpope/vim-surround'              " Surround motions
-Bundle 'Lokaltog/vim-powerline'          " Fancy status line
-Bundle 'jpalardy/vim-slime'              " REPL interaction
-Bundle 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
-Bundle 'tpope/vim-fugitive'              " Git plugin
-Bundle 'jwhitley/vim-matchit'            " More jumps for %
-Bundle 'jiangmiao/auto-pairs'            " Auto close pairs
-Bundle 'wellle/targets.vim'              " More and better text objects
-Bundle 'szw/vim-maximizer'               " Temporarily Maximize window
-Bundle 'PeterRincker/vim-argumentative'  " i, a, >, <, text objects
-Bundle 'tpope/vim-rsi'                   " Emacs editing in insert mode
-Bundle 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
-Bundle 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
-Bundle 'junegunn/vim-easy-align'         " Align stuff
+Plugin 'gmarik/Vundle.vim'               " Package manager
+Plugin 'tpope/vim-commentary'            " Commenting operator gc
+Plugin 'kien/ctrlp.vim'                  " Fuzzy file finder
+Plugin 'SirVer/ultisnips'                " Snippet system
+Plugin 'honza/vim-snippets'              " Snippets
+Plugin 'tpope/vim-repeat'                " Repeat all kinds of stuff
+Plugin 'tpope/vim-surround'              " Surround motions
+Plugin 'Lokaltog/vim-powerline'          " Fancy status line
+Plugin 'jpalardy/vim-slime'              " REPL interaction
+Plugin 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
+Plugin 'tpope/vim-fugitive'              " Git plugin
+Plugin 'jwhitley/vim-matchit'            " More jumps for %
+Plugin 'jiangmiao/auto-pairs'            " Auto close pairs
+Plugin 'wellle/targets.vim'              " More and better text objects
+Plugin 'szw/vim-maximizer'               " Temporarily Maximize window
+Plugin 'PeterRincker/vim-argumentative'  " i, a, >, <, text objects
+Plugin 'tpope/vim-rsi'                   " Emacs editing in insert mode
+Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
+Plugin 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
+Plugin 'junegunn/vim-easy-align'         " Align stuff
 
 " Nice to have
-Bundle 'Valloric/YouCompleteMe'
-Bundle 'terryma/vim-expand-region'
-Bundle 'sjl/gundo.vim'
-Bundle 'jeetsukumaran/vim-markology'
-Bundle 'mhinz/vim-startify'
-Bundle 'rking/ag.vim'
-Bundle 'scrooloose/syntastic'
-Bundle 'tomasr/molokai'
-Bundle 'vim-scripts/matlab.vim'
-Bundle 'takac/vim-hardtime'
-Bundle 'flazz/vim-colorschemes'
+Plugin 'Valloric/YouCompleteMe' " $ Do `./install.sh` after update
+Plugin 'terryma/vim-expand-region'
+Plugin 'sjl/gundo.vim'
+Plugin 'jeetsukumaran/vim-markology'
+Plugin 'mhinz/vim-startify'
+Plugin 'rking/ag.vim'
+Plugin 'scrooloose/syntastic'
+Plugin 'tomasr/molokai'
+Plugin 'takac/vim-hardtime'
+Plugin 'flazz/vim-colorschemes'
+Plugin 'AutoTag'
+Plugin 'Shougo/vimproc.vim' " Do `$ make` after update
 
 " By language
+
+" R
+Plugin 'Vim-R-plugin'
+
 " Julia
-Bundle 'JuliaLang/julia-vim'
+Plugin 'JuliaLang/julia-vim'
+
 " LaTeX
-Bundle 'LaTeX-Box-Team/LaTeX-Box'
+Plugin 'LaTeX-Box-Team/LaTeX-Box'
+
 " HTML, CSS/LESS, JS
-Bundle 'ap/vim-css-color'
-Bundle 'ervandew/screen'
-Bundle 'groenewege/vim-less'
-Bundle 'tristen/vim-sparkup'
-Bundle "lepture/vim-jinja"
+Plugin 'ap/vim-css-color'
+Plugin 'vim-coffee-script'
+Plugin 'ervandew/screen'
+Plugin 'groenewege/vim-less'
+Plugin 'tristen/vim-sparkup'
+Plugin "lepture/vim-jinja"
+Plugin 'jaxbot/brolink.vim'
 
 " Python
-Bundle 'https://github.com/ivanov/vim-ipython'
-" Bundle 'klen/python-mode'
-"<localleader> Bundle 'davidhalter/jedi-vim'
+Plugin 'https://github.com/ivanov/vim-ipython'
+Plugin 'django.vim'
+" Plugin 'klen/python-mode'
+"<localleader> Plugin 'davidhalter/jedi-vim'
+
 " Scala
-Bundle 'spiroid/vim-ultisnip-scala'
+Plugin 'spiroid/vim-ultisnip-scala'
+Plugin 'vim-scala'
+
 " Clojure
-Bundle 'guns/vim-clojure-static'
-Bundle 'kien/rainbow_parentheses.vim'
-Bundle 'tpope/vim-fireplace'
-Bundle 'tpope/vim-leiningen'
+Plugin 'guns/vim-clojure-static'
+Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'tpope/vim-fireplace'
+Plugin 'tpope/vim-leiningen'
+
+" Matlab
+Plugin 'matlab.vim'
 
 " Markdown
-Bundle 'nelstrom/vim-markdown-folding'
-Bundle 'tpope/vim-markdown'
+Plugin 'nelstrom/vim-markdown-folding'
+Plugin 'tpope/vim-markdown'
 
 " Dash integration
-Bundle 'rizzatti/funcoo.vim'
-Bundle 'rizzatti/dash.vim'
-Bundle 'justinmk/vim-sneak'
-Bundle 'majutsushi/tagbar'
-Bundle 'Lokaltog/vim-easymotion'
+Plugin 'rizzatti/funcoo.vim'
+Plugin 'rizzatti/dash.vim'
+Plugin 'justinmk/vim-sneak'
+Plugin 'majutsushi/tagbar'
+Plugin 'Lokaltog/vim-easymotion'
 
-Bundle 'hsitz/VimOrganizer'
+" Experimental
+Plugin 'hsitz/VimOrganizer'
 
+call vundle#end()            " required
+filetype plugin indent on    " required
 " }}}
 "=====================================================================
 " Startup {{{
 "=====================================================================
-filetype plugin indent on           " enable all filetype events
 
 if has('gui_running')               " gvim options
     if os == "Darwin"
@@ -279,12 +297,12 @@ let mapleader=","
 let maplocalleader = ","
 
 " Easier access to command-window
-nnoremap ; :<c-f>i
+nnoremap ; :
 nnoremap : ;
-nnoremap q; :
-xnoremap ; :<c-f>i
+nnoremap q; :<c-f>
+xnoremap ; :
 xnoremap : ;
-xnoremap q; :
+xnoremap q; :<c-f>
 
 inoremap jk <ESC>
 
@@ -340,13 +358,13 @@ nnoremap ,,p "*p
 nnoremap ,Y "+yy
 
 " " Allow command line editing with emacs keybindings
-" cnoremap <C-a> <Home>
-" cnoremap <C-b> <Left>
-" cnoremap <C-e> <End>
-" cnoremap <C-f> <Right>
-" cnoremap <C-d> <Delete>
-" cnoremap <C-n> <Down>
-" cnoremap <C-p> <Up>
+cnoremap <C-a> <Home>
+cnoremap <C-b> <Left>
+cnoremap <C-e> <End>
+cnoremap <C-f> <Right>
+cnoremap <C-d> <Delete>
+cnoremap <C-n> <Down>
+cnoremap <C-p> <Up>
 
 " c_CTRL-F is remapped to c_CTRL-H for 'history'
 cnoremap <C-h> <C-f>

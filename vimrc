@@ -27,6 +27,7 @@ call pathogen#infect("pathogen_managed/*")
 Plugin 'gmarik/Vundle.vim'               " Package manager
 Plugin 'tpope/vim-commentary'            " Commenting operator gc
 Plugin 'kien/ctrlp.vim'                  " Fuzzy file finder
+Plugin 'suy/vim-ctrlp-commandline'
 Plugin 'SirVer/ultisnips'                " Snippet system
 Plugin 'honza/vim-snippets'              " Snippets
 Plugin 'tpope/vim-repeat'                " Repeat all kinds of stuff
@@ -47,11 +48,11 @@ Plugin 'tpope/vim-unimpaired'
 Plugin 'bling/vim-airline'
 
 " Nice to have
-Plugin 'Valloric/YouCompleteMe' " $ Do `./install.sh` after update
+" Plugin 'Valloric/YouCompleteMe' " $ Do `./install.sh` after update
 Plugin 'terryma/vim-expand-region'
 Plugin 'sjl/gundo.vim'
 Plugin 'jeetsukumaran/vim-markology'
-Plugin 'mhinz/vim-startify'
+" Plugin 'mhinz/vim-startify'
 Plugin 'rking/ag.vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'tomasr/molokai'
@@ -59,6 +60,11 @@ Plugin 'takac/vim-hardtime'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'AutoTag'
 Plugin 'Shougo/vimproc.vim' " Do `$ make` after update
+Plugin 'L9'
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-colorscheme-switcher'
+Plugin 'Valloric/YouCompleteMe'
+
 
 " By language
 
@@ -69,7 +75,8 @@ Plugin 'Vim-R-plugin'
 Plugin 'JuliaLang/julia-vim'
 
 " LaTeX
-Plugin 'LaTeX-Box-Team/LaTeX-Box'
+" Plugin 'LaTeX-Box-Team/LaTeX-Box'
+" Plugin 'Eckankar/vim-latex-folding'
 
 " HTML, CSS/LESS, JS
 Plugin 'ap/vim-css-color'
@@ -101,7 +108,7 @@ Plugin 'matlab.vim'
 
 " Markdown
 Plugin 'nelstrom/vim-markdown-folding'
-Plugin 'tpope/vim-markdown'
+Plugin 'plasticboy/vim-markdown'
 
 " Dash integration
 Plugin 'rizzatti/funcoo.vim'
@@ -127,14 +134,15 @@ if has('gui_running')               " gvim options
     elseif os == "Linux"
         set guifont=Deja\ Vu\ Sans\ Mono\ 10
     endif
-    colorscheme muon
+    colorscheme obsidian2
+    " colorscheme mustang
+    " colorscheme rdark
+    " colorscheme summerfruit
 else                                " terminal
-    " set t_Co=256                    " set 256 colors for terminal
     " set term=screen-256color
+    set t_Co=256                    " set 256 colors for terminal
     set background=dark
-    " runtime! plugin/guicolorscheme.vim
     colorscheme muon
-    " colorscheme corn
 endif
 
 " Default python imports
@@ -283,7 +291,7 @@ augroup au_Markdown
     autocmd FileType markdown iabbr ddx \frac{d}{dx}
     autocmd FileType markdown iabbr ddt \frac{d}{dt}
     " autocmd FileType markdown inoremap $ $$<Left>
-    autocmd FileType markdown setlocal spell spelllang=en_us
+    " autocmd FileType markdown setlocal spell spelllang=en_us
     " autocmd FileType markdown inoremap $$ $$<CR>$$<ESC>O
     " autocmd FileType markdown let b:AutoPairs['$'] = '$'
     " autocmd FileType markdown set foldmethod=marker
@@ -300,10 +308,12 @@ let maplocalleader = ","
 " Easier access to command-window
 nnoremap ; :
 nnoremap : ;
-nnoremap q; :<c-f>
+" nnoremap q; :<c-f>
 xnoremap ; :
 xnoremap : ;
-xnoremap q; :<c-f>
+" xnoremap q; :<c-f>
+
+nnoremap ,re :reg<CR>
 
 inoremap jk <ESC>
 
@@ -322,8 +332,14 @@ vnoremap <silent> p p`]
 nnoremap <silent> p p`]
 
 " Navigating the location list (gets populated by e.g. Syntastic)
-nnoremap ]l :lnext<CR>
-nnoremap [l :lp<CR>
+" (Rather than ]l [l from Vim-Unimpaired)
+" Change bindings to something that can be hit with two hands
+" (r for error)
+nnoremap [r     :lprevious<CR>
+nnoremap ]r     :lnext<CR>
+nnoremap [R     :lfirst<CR>
+nnoremap ]R     :llast<CR>
+
 
 " select just pasted text
 noremap gV `[v`]
@@ -403,9 +419,6 @@ nmap <script> <silent> ,q :call ToggleQuickfixList()<CR>
 nnoremap <silent><space>m :MaximizerToggle<CR>
 vnoremap <silent><space>m :MaximizerToggle<CR>gv
 
-nnoremap <F8> :NextColo<CR>
-nnoremap <F9> :PrevColo<CR>
-
 " Look up word under cursor with Dash
 nnoremap gK :Dash<CR>
 
@@ -422,17 +435,16 @@ let g:ctrlp_map = '<C-p>'
 
 " The command executed by the above mapping
 let g:ctrlp_cmd = 'CtrlPMixed'
+
 " All modes with prefix 'f' for 'fuzzy'
-nnoremap <space>fm :CtrlPMixed<CR>
 nnoremap <space>ff :CtrlPMRUFiles<CR>
 nnoremap <space>ft :CtrlPTag<CR>
-nnoremap <space>fd :CtrlPBookmarkDir<CR>
-
-nnoremap <space>o :CtrlPMixed<CR>
-nnoremap <space>d :CtrlPDir<CR>
-nnoremap <space>l :CtrlPLine<CR>
+nnoremap <space>fd :CtrlPDir<CR>
+nnoremap <space>fl :CtrlPLine<CR>
+nnoremap <space>fb :CtrlPBuffer<CR>
 nnoremap <space>b :CtrlPBuffer<CR>
-nnoremap <space>t :CtrlPTag<CR>
+nnoremap ,ls :CtrlPBuffer<CR>
+nnoremap <space>ft :CtrlPTag<CR>
 
 let g:ctrlp_root_markers = ['.ctrlp']
 " While in directory mode:
@@ -468,6 +480,9 @@ xmap t <Plug>Sneak_t
 xmap T <Plug>Sneak_T
 omap t <Plug>Sneak_t
 omap T <Plug>Sneak_T
+
+nmap : <Plug>SneakNext
+
 " 2}}}
 " 1}}}
 "=====================================================================
@@ -484,6 +499,9 @@ omap T <Plug>Sneak_T
 
 " {{{2 LaTeX-Box
 "---------------------------------------------------------------------
+" Alternative: put something like this in your bashrc
+" Then, autocompile texfiles with $ latexmk_ sometexfile.tex
+" alias latexmk_='latexmk -pdf -pvc'
 let g:LatexBox_viewer = 'open -a Skim'
 " 0: Don't open quickfix, 2: Open but don't make it the active window
 let g:LatexBox_quickfix = 0
@@ -491,9 +509,9 @@ let g:LatexBox_quickfix = 0
 " Set tex to latex, otherwise filetype is regarded as "plaintex"
 " with which most plugins won't work
 let g:tex_flavor = "latex"
-" let g:LatexBox_latexmk_options = "-pvc -pdfps"
-set cole=2
-hi Conceal guibg=black guifg=white
+let g:LatexBox_latexmk_options = "-pvc -pdf"
+" set cole=2
+" hi Conceal guibg=black guifg=white
 " 2}}}
 
 " {{{2 Sparkup
@@ -518,7 +536,6 @@ let g:maximizer_set_default_mapping = 0
 
 " {{{2 Markdown Settings
 "---------------------------------------------------------------------
-let g:vim_markdown_folding_disabled=1
 " 2}}}
 
 " {{{2 EasyMotion
@@ -573,7 +590,7 @@ let g:startify_bookmarks = [ '~/.vimrc', '~/Dev/void' ]
 " Removed TAB form list of select_completion keys since UltiSnips uses that key.
 " Select elemens by <C-n>, <C-p>
 
-let g:ycm_auto_trigger = 0
+let g:ycm_auto_trigger = 1
 let g:ycm_key_list_select_completion = ['<Down>'] " Tab removed
 let g:ycm_key_list_previous_completion = ['<Up>'] " S-Tab removed
 let g:ycm_key_invoke_completion = '<C-Space>'
@@ -583,6 +600,7 @@ let g:ycm_min_num_identifier_candidate_chars = 0 " default 0
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:pymode_rope_complete_on_dot = 0
 let g:ycm_seed_identifiers_with_syntax = 1
+
 " 2}}}
 
 " {{{2 UltiSnips
@@ -734,7 +752,7 @@ let g:list_of_normal_keys = ['h', 'j', 'k', 'l', '<UP>', '<DOWN>', '<RIGHT>', '<
 "---------------------------------------------------------------------
 " Check if better than tabularize
 " Start interactive EasyAlign in visual mode
-vmap ,a <Plug>(EasyAlign)
+vmap ,al <Plug>(EasyAlign)
 " 2}}}
 
 " {{{2 Ctrlp
@@ -742,7 +760,7 @@ vmap ,a <Plug>(EasyAlign)
 " r: Try to search for a root directory (containing .git, .ctrlp, etc.)
 " and set that dir as the working dir
 " c: working directory
-let g:ctrlp_working_path_mode = 'c'
+let g:ctrlp_working_path_mode = 'ra'
 " let g:ctrlp_match_window_reversed = 0
 " let g:ctrlp_max_height = 10
 let g:ctrlp_show_hidden = 1
@@ -761,6 +779,14 @@ let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v\.git$\|\.hg$\|\.svn$\|\.yardoc\|public\/images\|public\/system\|data\|log\|tmp$',
   \ 'file': '\v\.(o|m4a|pdf|swp|pyc|wav|mp3|ogg|blend|dvi|fls|aux|blg|bbl|log|loa|lof|toc|fdb_latexmk|lot|)$|\~$'
   \ }
+
+let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
+" let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+let g:ctrlp_extensions = [
+    \ 'commandline'
+    \ ]
+
 " 2}}}
 
 " {{{2 Sneak
@@ -771,7 +797,9 @@ let g:sneak#use_ic_scs = 1
 
 " {{{2 Airline
 " : %3p : %4l : %3c
-let g:airline_powerline_fonts = 1
+if has('gui_running')
+    let g:airline_powerline_fonts = 1
+endif
 let g:airline_section_y = airline#section#create(["%{split(getcwd(), '/')[-1]}% "])
 set noshowmode
 " 2}}}

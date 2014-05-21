@@ -34,23 +34,24 @@ Plugin 'tpope/vim-repeat'                " Repeat all kinds of stuff
 Plugin 'tpope/vim-surround'              " Surround motions
 Plugin 'jpalardy/vim-slime'              " REPL interaction
 Plugin 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
+Plugin 'PeterRincker/vim-argumentative'  " i, a, >, <, text objects
+Plugin 'wellle/targets.vim'              " More and better text objects
 Plugin 'tpope/vim-fugitive'              " Git plugin
 Plugin 'jwhitley/vim-matchit'            " More jumps for %
 Plugin 'jiangmiao/auto-pairs'            " Auto close pairs
-Plugin 'wellle/targets.vim'              " More and better text objects
 Plugin 'szw/vim-maximizer'               " Temporarily Maximize window
-Plugin 'PeterRincker/vim-argumentative'  " i, a, >, <, text objects
 Plugin 'tpope/vim-rsi'                   " Emacs editing in insert mode
 Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
 Plugin 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
 Plugin 'junegunn/vim-easy-align'         " Align stuff
-Plugin 'tpope/vim-unimpaired'
 Plugin 'bling/vim-airline'
+Plugin 'godlygeek/tabular'
+Plugin 'AndrewRadev/splitjoin.vim'
+Plugin 'sjl/gundo.vim'
 
 " Nice to have
 " Plugin 'Valloric/YouCompleteMe' " $ Do `./install.sh` after update
 Plugin 'terryma/vim-expand-region'
-Plugin 'sjl/gundo.vim'
 Plugin 'jeetsukumaran/vim-markology'
 " Plugin 'mhinz/vim-startify'
 Plugin 'rking/ag.vim'
@@ -64,7 +65,10 @@ Plugin 'L9'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-colorscheme-switcher'
 Plugin 'Valloric/YouCompleteMe'
-
+Plugin 'fisadev/vim-ctrlp-cmdpalette'
+Plugin 'paradigm/SkyBison'
+Plugin 'tpope/vim-obsession'
+" Plugin 'tpope/vim-abolish'
 
 " By language
 
@@ -75,8 +79,8 @@ Plugin 'Vim-R-plugin'
 Plugin 'JuliaLang/julia-vim'
 
 " LaTeX
-" Plugin 'LaTeX-Box-Team/LaTeX-Box'
-" Plugin 'Eckankar/vim-latex-folding'
+Plugin 'LaTeX-Box-Team/LaTeX-Box'
+Plugin 'Eckankar/vim-latex-folding'
 
 " HTML, CSS/LESS, JS
 Plugin 'ap/vim-css-color'
@@ -134,10 +138,10 @@ if has('gui_running')               " gvim options
     elseif os == "Linux"
         set guifont=Deja\ Vu\ Sans\ Mono\ 10
     endif
-    colorscheme obsidian2
+    " colorscheme obsidian2
     " colorscheme mustang
     " colorscheme rdark
-    " colorscheme summerfruit
+    " colorscheme summerfruit256
 else                                " terminal
     " set term=screen-256color
     set t_Co=256                    " set 256 colors for terminal
@@ -178,7 +182,7 @@ set lazyredraw                      " don't update the display while executing m
 set laststatus=2                    " always show status line
 set autoread                        " automatically read a file that has changed on disk
 set ofu=syntaxcomplete#Complete     " autocompletion so that menu will always appear
-" set cfu=youcompleteme#Complete
+set cfu=
 set wildmenu                        " enable wildmenu
 set wildmode=list:longest,full      " how wild mode should behave
 set guioptions-=T                   " remove toolbar in gVim
@@ -237,7 +241,6 @@ augroup au_R
     autocmd!
     au FileType r RainbowParenthesesActivate
     au FileType r set iskeyword+=.
-    iabbrev _ <-
 augroup END
 
 
@@ -306,7 +309,10 @@ let mapleader=","
 let maplocalleader = ","
 
 " Easier access to command-window
+
 nnoremap ; :
+nnoremap g; :<c-u>call SkyBison("")<cr>
+" nnoremap g; :CtrlPCmdPalette<CR>
 nnoremap : ;
 " nnoremap q; :<c-f>
 xnoremap ; :
@@ -317,15 +323,10 @@ nnoremap ,re :reg<CR>
 
 inoremap jk <ESC>
 
-imap <S-CR> <CR><CR>end<Esc>-cc
-
 nnoremap ,so :source ~/.vimrc<CR>
 nnoremap <S-space> i <ESC>
 nnoremap <C-space> :w<cr>
 nnoremap <C-\> :noh<CR>
-
-map <C-j> }
-map <C-k> {
 
 vnoremap <silent> y y`]
 vnoremap <silent> p p`]
@@ -335,10 +336,12 @@ nnoremap <silent> p p`]
 " (Rather than ]l [l from Vim-Unimpaired)
 " Change bindings to something that can be hit with two hands
 " (r for error)
-nnoremap [r     :lprevious<CR>
-nnoremap ]r     :lnext<CR>
-nnoremap [R     :lfirst<CR>
-nnoremap ]R     :llast<CR>
+nnoremap [q     :lprevious<CR>
+nnoremap [Q     :lfirst<CR>
+nnoremap ]q     :lnext<CR>
+nnoremap ]Q     :llast<CR>
+nnoremap [<space> O<ESC>j
+nnoremap ]<space> o<ESC>k
 
 
 " select just pasted text
@@ -397,8 +400,9 @@ nnoremap <M-j> zj
 nnoremap <M-k> zk
 
 " Navigate quickfix list
-nnoremap ]q :cnext<CR>
-nnoremap [q :cprevious<CR>
+" nnoremap ]q :cnext<CR>
+" nnoremap [q :cprevious<CR>
+
 " 2}}} "
 " Plugin mapings {{{2 "
 nnoremap ,gg :Gstatus<CR>
@@ -425,6 +429,9 @@ nnoremap gK :Dash<CR>
 nnoremap ,lcd :cd %:p:h<CR>
 nnoremap ,cd :lcd %:p:h<CR>
 
+nnoremap j gj
+nnoremap k gk
+
 " CtrlP
 " While in prompt: C-b and C-f switch search modes
 " C-j C-k allow navigation in results list
@@ -437,14 +444,15 @@ let g:ctrlp_map = '<C-p>'
 let g:ctrlp_cmd = 'CtrlPMixed'
 
 " All modes with prefix 'f' for 'fuzzy'
-nnoremap <space>ff :CtrlPMRUFiles<CR>
-nnoremap <space>ft :CtrlPTag<CR>
-nnoremap <space>fd :CtrlPDir<CR>
 nnoremap <space>fl :CtrlPLine<CR>
-nnoremap <space>fb :CtrlPBuffer<CR>
-nnoremap <space>b :CtrlPBuffer<CR>
 nnoremap ,ls :CtrlPBuffer<CR>
-nnoremap <space>ft :CtrlPTag<CR>
+nnoremap ,rf :CtrlPMRUFiles<CR>
+nnoremap ,ta :CtrlPTag<CR>
+
+" nnoremap <leader>b 2:<c-u>call SkyBison("b ")<cr>
+" nnoremap <leader>t 2:<c-u>call SkyBison("tag ")<cr>
+" nnoremap <leader>h 2:<c-u>call SkyBison("h ")<cr>
+" nnoremap <leader>e :<c-u>call SkyBison("e ")<cr>
 
 let g:ctrlp_root_markers = ['.ctrlp']
 " While in directory mode:
@@ -496,6 +504,22 @@ nmap : <Plug>SneakNext
 "=====================================================================
 " Plugin settings {{{1
 "=====================================================================
+
+" {{{2 Skybison
+"---------------------------------------------------------------------
+let g:skybison_fuzz = 2
+let g:skybison_numberselect = 0
+" 2}}}
+
+" {{{2 Split Join
+"---------------------------------------------------------------------
+" Default is gS and gJ
+" let g:splitjoin_split_mapping = ''
+" let g:splitjoin_join_mapping = ''
+
+" nmap <Leader>j :SplitjoinJoin<cr>
+" nmap <Leader>s :SplitjoinSplit<cr>
+" 2}}}
 
 " {{{2 LaTeX-Box
 "---------------------------------------------------------------------
@@ -590,7 +614,7 @@ let g:startify_bookmarks = [ '~/.vimrc', '~/Dev/void' ]
 " Removed TAB form list of select_completion keys since UltiSnips uses that key.
 " Select elemens by <C-n>, <C-p>
 
-let g:ycm_auto_trigger = 1
+let g:ycm_auto_trigger = 0
 let g:ycm_key_list_select_completion = ['<Down>'] " Tab removed
 let g:ycm_key_list_previous_completion = ['<Up>'] " S-Tab removed
 let g:ycm_key_invoke_completion = '<C-Space>'
@@ -892,6 +916,7 @@ function! RoundNumber(digits)
 endfunc
 
 command! -nargs=1 Round call RoundNumber(<f-args>)
+command! StartR call StartR('R')
 
 func! WordProcessorMode()
   setlocal formatoptions=1

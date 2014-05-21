@@ -10,6 +10,7 @@
 " General {{{
 "=====================================================================
 let os = substitute(system('uname'), "\n", "", "")
+let vimdir = '$HOME/.vim'
 
 " For Vundle
 set nocompatible
@@ -47,7 +48,7 @@ Plugin 'junegunn/vim-easy-align'         " Align stuff
 Plugin 'bling/vim-airline'
 Plugin 'godlygeek/tabular'
 Plugin 'AndrewRadev/splitjoin.vim'
-Plugin 'sjl/gundo.vim'
+Plugin 'mbbill/undotree'
 
 " Nice to have
 " Plugin 'Valloric/YouCompleteMe' " $ Do `./install.sh` after update
@@ -147,6 +148,15 @@ else                                " terminal
     set t_Co=256                    " set 256 colors for terminal
     set background=dark
     colorscheme muon
+endif
+
+" Keep undo history across sessions by storing it in a file
+if has('persistent_undo')
+    let my_undo_dir = expand(vimdir . '/undo')
+    " No console pops up
+    call system('mkdir ' . my_undo_dir)
+    let &undodir = my_undo_dir
+    set undofile
 endif
 
 " Default python imports
@@ -410,6 +420,7 @@ nnoremap ,gs :Gstatus<CR>
 nnoremap ,gp :Git push<CR>
 " nmap <space><space> V
 
+nnoremap <F4> :UndotreeToggle<CR>
 " let g:user_emmet_leader_key = '<c-o>'
 
 nmap gs <Plug>SneakForward

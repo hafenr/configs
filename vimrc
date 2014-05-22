@@ -1,14 +1,14 @@
-"=====================================================================
-"                  __     _____ __  __ ____   ____
-"                  \ \   / /_ _|  \/  |  _ \ / ___|
-"                   \ \ / / | || |\/| | |_) | |
-"                    \ V /  | || |  | |  _ <| |___
-"                     \_/  |___|_|  |_|_| \_\\____|
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"                              2014-03-28
-"=====================================================================
+"================================================================
+"                __     _____ __  __ ____   ____
+"                \ \   / /_ _|  \/  |  _ \ / ___|
+"                 \ \ / / | || |\/| | |_) | |
+"                  \ V /  | || |  | |  _ <| |___
+"                   \_/  |___|_|  |_|_| \_\\____|
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"                            2014-03-28
+"================================================================
 " General {{{
-"=====================================================================
+"================================================================
 let os = substitute(system('uname'), "\n", "", "")
 let vimdir = '$HOME/.vim'
 
@@ -21,9 +21,9 @@ set rtp+=~/.vim/vundle_managed/Vundle.vim
 call vundle#begin("$HOME/.vim/vundle_managed")
 call pathogen#infect("pathogen_managed/*")
 " }}}
-"=====================================================================
+"================================================================
 " Plugins {{{
-"=====================================================================
+"================================================================
 " Essential
 Plugin 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
 Plugin 'SirVer/ultisnips'                " Snippet system
@@ -61,12 +61,12 @@ Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-colorscheme-switcher'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'fisadev/vim-ctrlp-cmdpalette'
-Plugin 'paradigm/SkyBison'
 Plugin 'tpope/vim-obsession'
 " Plugin 'tpope/vim-abolish'
 Plugin 'justinmk/vim-sneak'
 Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
 Plugin 'jpalardy/vim-slime'              " REPL interaction
+Plugin 'paradigm/SkyBison'
 
 " By language
 
@@ -127,9 +127,9 @@ Plugin 'suy/vim-ctrlp-commandline'
 call vundle#end()            " required
 filetype plugin indent on    " required
 " }}}
-"=====================================================================
+"================================================================
 " Startup {{{
-"=====================================================================
+"================================================================
 
 if has('gui_running')               " gvim options
     if os == "Darwin"
@@ -163,9 +163,9 @@ py import vim, sys
 py from vim import buffers, windows, command, current, error
 
 " }}}
-"=====================================================================
+"================================================================
 " Basic Settings {{{
-"=====================================================================
+"================================================================
 set clipboard=unnamed
 " Specify the builtin list of words for C-X C-K completion
 set dictionary+=/usr/share/dict/words
@@ -223,9 +223,9 @@ set history=1000                    " set the command line history
 set cmdwinheight=10                 " window height for cmd/search history q: q/ resp. C-h (C-f default)
 set relativenumber
 " }}}
-"=====================================================================
+"================================================================
 " Autocommands {{{
-"=====================================================================
+"================================================================
 " Alternative to autotags:
 " au BufWritePost *.R,*.r,*.py,*.scala,*.clj,*.coffee silent! !ctags -R &
 autocmd BufEnter .vimrc setlocal foldmethod=marker
@@ -310,9 +310,9 @@ augroup au_Markdown
     " autocmd FileType markdown set foldmarker=-------------------------------------------------------------------------------,*******************************************************************************
 augroup END
 " }}}
-"=====================================================================
+"================================================================
 " Mappings {{{1 "
-"=====================================================================
+"================================================================
 " Basic {{{2 "
 let mapleader=","
 let maplocalleader = ","
@@ -503,17 +503,17 @@ nmap : <Plug>SneakNext
 
 " 2}}}
 " 1}}}
-"=====================================================================
+"================================================================
 " Abbreviations {{{
-"=====================================================================
+"================================================================
 " recursive search with :e
 " :e r/filename
 " cabbrev r ./**
 " iabbrev over <esc>BdWi\frac{<esc>pxi}{
 " }}}
-"=====================================================================
+"================================================================
 " Plugin settings {{{1
-"=====================================================================
+"================================================================
 
 " {{{2 Skybison
 "---------------------------------------------------------------------
@@ -834,7 +834,7 @@ let g:sneak#use_ic_scs = 1
 if has('gui_running')
     let g:airline_powerline_fonts = 1
 endif
-let g:airline_section_y = airline#section#create(["%{split(getcwd(), '/')[-1]}% "])
+let g:airline_section_y = airline#section#create(["cwd:%{split(getcwd(), '/')[-1]}% "])
 set noshowmode
 " 2}}}
 
@@ -848,9 +848,9 @@ set noshowmode
 " let g:SuperTabDefaultCompletionType = 'context'
 " 2}}}
 " 1}}}
-"=====================================================================
+"================================================================
 " Custom functions and commands {{{
-"=====================================================================
+"================================================================
 
 " " Command line with history - excecute commands by hitting enter
 " " Swap default ':', '/' and '?' with cmdline-window equivalent.
@@ -954,4 +954,4 @@ endfunction
 
 vmap <silent> <expr> p <sid>Repl()
 " }}}
-"=====================================================================
+"================================================================

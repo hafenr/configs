@@ -7,3 +7,4 @@ eclim/
 .hg*
 .VimballRecord
 .netrwhist
+undo/*

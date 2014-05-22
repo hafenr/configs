@@ -25,43 +25,37 @@ call pathogen#infect("pathogen_managed/*")
 " Plugins {{{
 "=====================================================================
 " Essential
-Plugin 'gmarik/Vundle.vim'               " Package manager
-Plugin 'tpope/vim-commentary'            " Commenting operator gc
-Plugin 'kien/ctrlp.vim'                  " Fuzzy file finder
-Plugin 'suy/vim-ctrlp-commandline'
+Plugin 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
 Plugin 'SirVer/ultisnips'                " Snippet system
-Plugin 'honza/vim-snippets'              " Snippets
-Plugin 'tpope/vim-repeat'                " Repeat all kinds of stuff
-Plugin 'tpope/vim-surround'              " Surround motions
-Plugin 'jpalardy/vim-slime'              " REPL interaction
-Plugin 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
-Plugin 'PeterRincker/vim-argumentative'  " i, a, >, <, text objects
-Plugin 'wellle/targets.vim'              " More and better text objects
-Plugin 'tpope/vim-fugitive'              " Git plugin
-Plugin 'jwhitley/vim-matchit'            " More jumps for %
-Plugin 'jiangmiao/auto-pairs'            " Auto close pairs
-Plugin 'szw/vim-maximizer'               " Temporarily Maximize window
-Plugin 'tpope/vim-rsi'                   " Emacs editing in insert mode
-Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
 Plugin 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
+Plugin 'bling/vim-airline'               " Fancy status bar
+Plugin 'gmarik/Vundle.vim'               " Package manager
+Plugin 'godlygeek/tabular'               " :Tabularize /regex
+Plugin 'honza/vim-snippets'              " Snippets
+Plugin 'jiangmiao/auto-pairs'            " Auto close pairs
 Plugin 'junegunn/vim-easy-align'         " Align stuff
-Plugin 'bling/vim-airline'
-Plugin 'godlygeek/tabular'
-Plugin 'AndrewRadev/splitjoin.vim'
-Plugin 'mbbill/undotree'
+Plugin 'jwhitley/vim-matchit'            " More jumps for %
+Plugin 'kien/ctrlp.vim'                  " Fuzzy file finder
+Plugin 'mbbill/undotree'                 " Undo history as a tree
+Plugin 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
+Plugin 'szw/vim-maximizer'               " Temporarily Maximize window
+Plugin 'tpope/vim-commentary'            " Commenting operator gc
+Plugin 'tpope/vim-fugitive'              " Git plugin
+Plugin 'tpope/vim-repeat'                " Repeat all kinds of stuff
+Plugin 'tpope/vim-rsi'                   " Emacs editing in insert mode
+Plugin 'tpope/vim-surround'              " Surround motions
+Plugin 'wellle/targets.vim'              " More and better text objects
 
 " Nice to have
-" Plugin 'Valloric/YouCompleteMe' " $ Do `./install.sh` after update
+" Plugin 'Valloric/YouCompleteMe'        " $ Do `./install.sh` after update
 Plugin 'terryma/vim-expand-region'
 Plugin 'jeetsukumaran/vim-markology'
 " Plugin 'mhinz/vim-startify'
-Plugin 'rking/ag.vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'tomasr/molokai'
 Plugin 'takac/vim-hardtime'
 Plugin 'flazz/vim-colorschemes'
-Plugin 'AutoTag'
-Plugin 'Shougo/vimproc.vim' " Do `$ make` after update
+Plugin 'Shougo/vimproc.vim'              " Do `$ make` after update
 Plugin 'L9'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-colorscheme-switcher'
@@ -70,6 +64,9 @@ Plugin 'fisadev/vim-ctrlp-cmdpalette'
 Plugin 'paradigm/SkyBison'
 Plugin 'tpope/vim-obsession'
 " Plugin 'tpope/vim-abolish'
+Plugin 'justinmk/vim-sneak'
+Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
+Plugin 'jpalardy/vim-slime'              " REPL interaction
 
 " By language
 
@@ -118,12 +115,14 @@ Plugin 'plasticboy/vim-markdown'
 " Dash integration
 Plugin 'rizzatti/funcoo.vim'
 Plugin 'rizzatti/dash.vim'
-Plugin 'justinmk/vim-sneak'
 Plugin 'majutsushi/tagbar'
 Plugin 'Lokaltog/vim-easymotion'
 
 " Experimental
 Plugin 'hsitz/VimOrganizer'
+Plugin 'rking/ag.vim'
+Plugin 'AndrewRadev/splitjoin.vim'
+Plugin 'suy/vim-ctrlp-commandline'
 
 call vundle#end()            " required
 filetype plugin indent on    " required

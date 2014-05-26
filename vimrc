@@ -222,6 +222,16 @@ set foldmethod=expr
 set history=1000                    " set the command line history
 set cmdwinheight=10                 " window height for cmd/search history q: q/ resp. C-h (C-f default)
 set relativenumber
+set cursorline                      " Highlight current line
+
+" Show insert cursor as yellow and normal mode
+" cursor as light green
+highlight Cursor guifg=black guibg=#00ff1e
+highlight iCursor guifg=black guibg=yellow
+set guicursor=n-v-c:block-Cursor
+set guicursor+=i:ver100-iCursor
+set guicursor+=n-v-c:blinkon0
+set guicursor+=i:blinkon0
 " }}}
 "================================================================
 " Autocommands {{{
@@ -320,7 +330,7 @@ let maplocalleader = ","
 " Easier access to command-window
 
 nnoremap ; :
-nnoremap g; :<c-u>call SkyBison("")<cr>
+nnoremap <space>; :<c-u>call SkyBison("")<cr>
 " nnoremap g; :CtrlPCmdPalette<CR>
 nnoremap : ;
 " nnoremap q; :<c-f>
@@ -453,11 +463,11 @@ let g:ctrlp_map = '<C-p>'
 " The command executed by the above mapping
 let g:ctrlp_cmd = 'CtrlPMixed'
 
-" All modes with prefix 'f' for 'fuzzy'
-nnoremap <space>fl :CtrlPLine<CR>
+nnoremap <space>l :CtrlPLine<CR>
 nnoremap ,ls :CtrlPBuffer<CR>
 nnoremap ,rf :CtrlPMRUFiles<CR>
 nnoremap ,ta :CtrlPTag<CR>
+nnoremap ,e :CtrlPMixed<CR>
 
 " nnoremap <leader>b 2:<c-u>call SkyBison("b ")<cr>
 " nnoremap <leader>t 2:<c-u>call SkyBison("tag ")<cr>
@@ -477,13 +487,10 @@ nnoremap ,xc :Latexmk<CR>
 
 " NERDTree
 " Open NERDTree at the location of the current file
-nnoremap <space>w :NERDTreeFind<CR>
 nnoremap <F2> :NERDTreeToggle<CR>
 
 " " Tagbar
 nnoremap <F3> :TagbarToggle<CR>
-" nnoremap ,to :TagbarToggle<CR>
-" nnoremap ,tt :TagbarOpenAutoClose<CR>
 
 nmap f <Plug>Sneak_f
 nmap F <Plug>Sneak_F

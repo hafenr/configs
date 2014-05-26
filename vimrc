@@ -130,7 +130,6 @@ filetype plugin indent on    " required
 "================================================================
 " Startup {{{
 "================================================================
-
 if has('gui_running')               " gvim options
     if os == "Darwin"
         set guifont=Monaco\ for\ Powerline:h16
@@ -138,7 +137,8 @@ if has('gui_running')               " gvim options
     elseif os == "Linux"
         set guifont=Deja\ Vu\ Sans\ Mono\ 10
     endif
-    " colorscheme obsidian2
+
+    colorscheme obsidian2
     " colorscheme mustang
     " colorscheme rdark
     " colorscheme summerfruit256
@@ -224,14 +224,6 @@ set cmdwinheight=10                 " window height for cmd/search history q: q/
 set relativenumber
 set cursorline                      " Highlight current line
 
-" Show insert cursor as yellow and normal mode
-" cursor as light green
-highlight Cursor guifg=black guibg=#00ff1e
-highlight iCursor guifg=black guibg=yellow
-set guicursor=n-v-c:block-Cursor
-set guicursor+=i:ver100-iCursor
-set guicursor+=n-v-c:blinkon0
-set guicursor+=i:blinkon0
 " }}}
 "================================================================
 " Autocommands {{{
@@ -960,5 +952,18 @@ function! s:Repl()
 endfunction
 
 vmap <silent> <expr> p <sid>Repl()
+" }}}
+"================================================================
+"================================================================
+" End {{{
+"================================================================
+" Show insert cursor as yellow and normal mode
+" cursor as light green
+highlight Cursor guifg=black guibg=#00ff1e
+highlight iCursor guifg=black guibg=yellow
+set guicursor=n-v-c:block-Cursor
+set guicursor+=i:ver100-iCursor
+set guicursor+=n-v-c:blinkon0
+set guicursor+=i:blinkon0
 " }}}
 "================================================================

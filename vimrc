@@ -67,6 +67,7 @@ Plugin 'justinmk/vim-sneak'
 Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
 Plugin 'jpalardy/vim-slime'              " REPL interaction
 Plugin 'paradigm/SkyBison'
+Plugin 'junegunn/seoul256.vim'
 
 " By language
 
@@ -138,7 +139,9 @@ if has('gui_running')               " gvim options
         set guifont=Deja\ Vu\ Sans\ Mono\ 10
     endif
 
-    colorscheme obsidian2
+    let g:seoul256_background = 236 " Range: 233 - 239"
+    colo seoul256
+    " colorscheme obsidian2
     " colorscheme mustang
     " colorscheme rdark
     " colorscheme summerfruit256

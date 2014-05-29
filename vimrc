@@ -460,6 +460,7 @@ let g:ctrlp_cmd = 'CtrlPMixed'
 
 nnoremap <space>l :CtrlPLine<CR>
 nnoremap ,ls :CtrlPBuffer<CR>
+nnoremap ,b :CtrlPBuffer<CR>
 nnoremap ,rf :CtrlPMRUFiles<CR>
 nnoremap ,ta :CtrlPTag<CR>
 nnoremap ,e :CtrlPMixed<CR>
@@ -521,6 +522,11 @@ nmap : <Plug>SneakNext
 "---------------------------------------------------------------------
 let g:skybison_fuzz = 2
 let g:skybison_numberselect = 0
+" 2}}}
+
+" {{{2 Brolink
+"---------------------------------------------------------------------
+let g:bl_no_mappings = 1
 " 2}}}
 
 " {{{2 Split Join
@@ -648,6 +654,10 @@ let g:ycm_seed_identifiers_with_syntax = 1
 let g:UltiSnipsExpandTrigger='<tab>'
 let g:UltiSnipsEditSplit='vertical'
 nnoremap ,u :UltiSnipsEdit<CR>
+
+let g:snips_author="Robin Hafen"
+let g:snips_email="robin.hafen@gmail.com"
+let g:snips_github="https://github.com/hafenr"
 " 2}}}
 
 " {{{2 Syntastic

@@ -149,7 +149,7 @@ else                                " terminal
     " set term=screen-256color
     set t_Co=256                    " set 256 colors for terminal
     set background=dark
-    colorscheme muon
+    colo seoul256
 endif
 
 " Keep undo history across sessions by storing it in a file
@@ -226,6 +226,7 @@ set history=1000                    " set the command line history
 set cmdwinheight=10                 " window height for cmd/search history q: q/ resp. C-h (C-f default)
 set relativenumber
 set cursorline                      " Highlight current line
+let grepprg="ag\ --nocolor\ --nogroup\ --silent"
 
 " }}}
 "================================================================
@@ -350,10 +351,16 @@ nnoremap <silent> p p`]
 " (Rather than ]l [l from Vim-Unimpaired)
 " Change bindings to something that can be hit with two hands
 " (r for error)
-nnoremap [q     :lprevious<CR>
-nnoremap [Q     :lfirst<CR>
-nnoremap ]q     :lnext<CR>
-nnoremap ]Q     :llast<CR>
+nnoremap ]q     :cnext<CR>
+nnoremap ]Q     :cfirst<CR>
+nnoremap [q     :cprevious<CR>
+nnoremap [Q     :clast<CR>
+
+nnoremap ]w     :lnext<CR>
+nnoremap ]W     :lfirst<CR>
+nnoremap [w     :lprevious<CR>
+nnoremap [W     :llast<CR>
+
 nnoremap [<space> O<ESC>j
 nnoremap ]<space> o<ESC>k
 
@@ -798,6 +805,7 @@ let g:list_of_normal_keys = ['h', 'j', 'k', 'l', '<UP>', '<DOWN>', '<RIGHT>', '<
 "---------------------------------------------------------------------
 " Check if better than tabularize
 " Start interactive EasyAlign in visual mode
+" :EasyAlign */regex aligns on all matches of regex, 2/regex on every second etc.
 vmap ,al <Plug>(EasyAlign)
 " 2}}}
 
@@ -980,3 +988,7 @@ set guicursor+=n-v-c:blinkon0
 set guicursor+=i:blinkon0
 " }}}
 "================================================================
+
+
+bla  = bla  =
+rofl = rofl =

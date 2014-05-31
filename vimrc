@@ -30,10 +30,10 @@ Plugin 'SirVer/ultisnips'                " Snippet system
 Plugin 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
 Plugin 'bling/vim-airline'               " Fancy status bar
 Plugin 'gmarik/Vundle.vim'               " Package manager
-Plugin 'godlygeek/tabular'               " :Tabularize /regex
 Plugin 'honza/vim-snippets'              " Snippets
 Plugin 'jiangmiao/auto-pairs'            " Auto close pairs
-Plugin 'junegunn/vim-easy-align'         " Align stuff
+Plugin 'junegunn/vim-easy-align'         " :'<,'>EasyAlign [*] DELIM or /regex/
+Plugin 'godlygeek/tabular'               " :Tabularize /regex
 Plugin 'jwhitley/vim-matchit'            " More jumps for %
 Plugin 'kien/ctrlp.vim'                  " Fuzzy file finder
 Plugin 'mbbill/undotree'                 " Undo history as a tree
@@ -45,6 +45,8 @@ Plugin 'tpope/vim-repeat'                " Repeat all kinds of stuff
 Plugin 'tpope/vim-rsi'                   " Emacs editing in insert mode
 Plugin 'tpope/vim-surround'              " Surround motions
 Plugin 'wellle/targets.vim'              " More and better text objects
+Plugin 'othree/xml.vim'                  " XML editing
+Plugin 'junegunn/seoul256.vim'           " Nice color scheme
 
 " Nice to have
 " Plugin 'Valloric/YouCompleteMe'        " $ Do `./install.sh` after update
@@ -67,7 +69,7 @@ Plugin 'justinmk/vim-sneak'
 Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
 Plugin 'jpalardy/vim-slime'              " REPL interaction
 Plugin 'paradigm/SkyBison'
-Plugin 'junegunn/seoul256.vim'
+Plugin 'kana/vim-textobj-user'
 
 " By language
 
@@ -317,7 +319,7 @@ augroup au_Markdown
 augroup END
 " }}}
 "================================================================
-" Mappings {{{1 "
+" Mappings {{{1
 "================================================================
 " Basic {{{2 "
 let mapleader=","
@@ -325,49 +327,65 @@ let maplocalleader = ","
 
 " Easier access to command-window
 
+" Use ; for command line since it's easier to type
 nnoremap ; :
-nnoremap <space>; :<c-u>call SkyBison("")<cr>
-" nnoremap g; :CtrlPCmdPalette<CR>
-nnoremap : ;
-" nnoremap q; :<c-f>
 xnoremap ; :
-xnoremap : ;
-" xnoremap q; :<c-f>
 
+" SkyBison for fuzzy searching the command line
+nnoremap <space>; :<c-u>call SkyBison("")<cr>
+
+" Use : for 'go-to-next-match' when `f`ing
+nnoremap : ;
+xnoremap : ;
+
+" Command line with history
+nnoremap q; q:
+xnoremap q; q:
+
+" Show the registers
 nnoremap ,re :reg<CR>
 
+" Old escape (now Caps-Lock)
 inoremap jk <ESC>
 
 nnoremap ,so :source ~/.vimrc<CR>
+
+" Insert an empty space
 nnoremap <S-space> i <ESC>
+
+" Save the file
 nnoremap <C-space> :w<cr>
+
+" Clear all highlightning
 nnoremap <C-\> :noh<CR>
 
+" After yanking or putting switch to the lower-end
+" of the selection. This allows pasting multiple times
+" the same selection (and generally feels more natural imo).
 vnoremap <silent> y y`]
 vnoremap <silent> p p`]
 nnoremap <silent> p p`]
 
-" Navigating the location list (gets populated by e.g. Syntastic)
-" (Rather than ]l [l from Vim-Unimpaired)
-" Change bindings to something that can be hit with two hands
-" (r for error)
+" Navigating quickfix list (gets populated by e.g. vimgrep/ag)
 nnoremap ]q     :cnext<CR>
 nnoremap ]Q     :cfirst<CR>
 nnoremap [q     :cprevious<CR>
 nnoremap [Q     :clast<CR>
 
+" Navigating the location list (gets populated by e.g. Syntastic)
 nnoremap ]w     :lnext<CR>
 nnoremap ]W     :lfirst<CR>
 nnoremap [w     :lprevious<CR>
 nnoremap [W     :llast<CR>
 
+" Empty line above, below
 nnoremap [<space> O<ESC>j
 nnoremap ]<space> o<ESC>k
 
-
-" select just pasted text
+" Select just pasted text
 noremap gV `[v`]
 
+" Disable arrow keys
 inoremap  <Up>     <NOP>
 inoremap  <Down>   <NOP>
 inoremap  <Left>   <NOP>
@@ -388,6 +406,7 @@ cnoremap  <Right>  <NOP>
 " inoremap <C-b> <C-o>h
 " inoremap <C-f> <C-o>l
 " inoremap <C-e> <C-o>$
+
 nnoremap Q @q
 " Reload vimrc
 nnoremap ,y "+y
@@ -398,14 +417,15 @@ nnoremap ,,y "*y
 nnoremap ,,p "*p
 nnoremap ,Y "+yy
 
-" " Allow command line editing with emacs keybindings
-cnoremap <C-a> <Home>
-cnoremap <C-b> <Left>
-cnoremap <C-e> <End>
-cnoremap <C-f> <Right>
-cnoremap <C-d> <Delete>
-cnoremap <C-n> <Down>
-cnoremap <C-p> <Up>
+" Allow command line editing with emacs keybindings
+" (Done by vim-rsi plugin now)
+" cnoremap <C-a> <Home>
+" cnoremap <C-b> <Left>
+" cnoremap <C-e> <End>
+" cnoremap <C-f> <Right>
+" cnoremap <C-d> <Delete>
+" cnoremap <C-n> <Down>
+" cnoremap <C-p> <Up>
 
 " c_CTRL-F is remapped to c_CTRL-H for 'history'
 cnoremap <C-h> <C-f>
@@ -417,6 +437,7 @@ cnoremap <C-h> <C-f>
 nnoremap <space>j o<ESC>k
 nnoremap <space>k O<ESC>j
 
+" Go to next fold
 nnoremap <M-j> zj
 nnoremap <M-k> zk
 
@@ -424,16 +445,30 @@ nnoremap <M-k> zk
 " nnoremap ]q :cnext<CR>
 " nnoremap [q :cprevious<CR>
 
-" 2}}} "
+" Typing ,lcd or ,cd will switch the (local)
+" working directory to the current file's
+nnoremap ,lcd :cd %:p:h<CR>
+nnoremap ,cd :lcd %:p:h<CR>
+
+" Scroll by visual lines
+nnoremap j gj
+nnoremap k gk
+" 2}}}
+
 " Plugin mapings {{{2 "
+" Fugitive
 nnoremap ,gg :Gstatus<CR>
 nnoremap ,gs :Gstatus<CR>
 nnoremap ,gp :Git push<CR>
 " nmap <space><space> V
 
+" Undotree
 nnoremap <F4> :UndotreeToggle<CR>
+
+" Emmet, no idea what key to use. C-o in insert mode is `execute normal command`
 " let g:user_emmet_leader_key = '<c-o>'
 
+" Sneak
 nmap gs <Plug>SneakForward
 xmap gs <Plug>VSneakForward
 nmap gS <Plug>SneakBackward
@@ -447,12 +482,6 @@ vnoremap <silent><space>m :MaximizerToggle<CR>gv
 
 " Look up word under cursor with Dash
 nnoremap gK :Dash<CR>
-
-nnoremap ,lcd :cd %:p:h<CR>
-nnoremap ,cd :lcd %:p:h<CR>
-
-nnoremap j gj
-nnoremap k gk
 
 " CtrlP
 " While in prompt: C-b and C-f switch search modes
@@ -843,6 +872,37 @@ let g:ctrlp_extensions = [
 
 " 2}}}
 
+" {{{2 vim-textobj-user
+call textobj#user#plugin('line', {
+\   '-': {
+\     'select-a-function': 'CurrentLineA',
+\     'select-a': 'al',
+\     'select-i-function': 'CurrentLineI',
+\     'select-i': 'il',
+\   },
+\ })
+
+function! CurrentLineA()
+  normal! 0
+  let head_pos = getpos('.')
+  normal! $
+  let tail_pos = getpos('.')
+  return ['v', head_pos, tail_pos]
+endfunction
+
+function! CurrentLineI()
+  normal! ^
+  let head_pos = getpos('.')
+  normal! g_
+  let tail_pos = getpos('.')
+  let non_blank_char_exists_p = getline('.')[head_pos[2] - 1] !~# '\s'
+  return
+  \ non_blank_char_exists_p
+  \ ? ['v', head_pos, tail_pos]
+  \ : 0
+endfunction
+" 2}}} "
+
 " {{{2 Sneak
 "---------------------------------------------------------------------
 let g:sneak#streak = 0
@@ -975,7 +1035,6 @@ endfunction
 vmap <silent> <expr> p <sid>Repl()
 " }}}
 "================================================================
-"================================================================
 " End {{{
 "================================================================
 " Show insert cursor as yellow and normal mode
@@ -988,7 +1047,3 @@ set guicursor+=n-v-c:blinkon0
 set guicursor+=i:blinkon0
 " }}}
 "================================================================
-
-
-bla  = bla  =
-rofl = rofl =

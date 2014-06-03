@@ -38,7 +38,7 @@ Plugin 'jwhitley/vim-matchit'            " More jumps for %
 Plugin 'kien/ctrlp.vim'                  " Fuzzy file finder
 Plugin 'mbbill/undotree'                 " Undo history as a tree
 Plugin 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
-Plugin 'szw/vim-maximizer'               " Temporarily Maximize window
+Plugin 'szw/vim-maximizer'               " Temporarily maximize window
 Plugin 'tpope/vim-commentary'            " Commenting operator gc
 Plugin 'tpope/vim-fugitive'              " Git plugin
 Plugin 'tpope/vim-repeat'                " Repeat all kinds of stuff
@@ -47,13 +47,16 @@ Plugin 'tpope/vim-surround'              " Surround motions
 Plugin 'wellle/targets.vim'              " More and better text objects
 Plugin 'othree/xml.vim'                  " XML editing
 Plugin 'junegunn/seoul256.vim'           " Nice color scheme
+Plugin 'scrooloose/syntastic'
+Plugin 'YankRing.vim'
+Plugin 'ivyl/vim-bling'
+Plugin 'yaifa.vim'
 
 " Nice to have
 " Plugin 'Valloric/YouCompleteMe'        " $ Do `./install.sh` after update
 Plugin 'terryma/vim-expand-region'
 Plugin 'jeetsukumaran/vim-markology'
 " Plugin 'mhinz/vim-startify'
-Plugin 'scrooloose/syntastic'
 Plugin 'tomasr/molokai'
 Plugin 'takac/vim-hardtime'
 Plugin 'flazz/vim-colorschemes'
@@ -61,15 +64,15 @@ Plugin 'Shougo/vimproc.vim'              " Do `$ make` after update
 Plugin 'L9'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-colorscheme-switcher'
-Plugin 'Valloric/YouCompleteMe'
+" Plugin 'Valloric/YouCompleteMe'
 Plugin 'fisadev/vim-ctrlp-cmdpalette'
 Plugin 'tpope/vim-obsession'
 " Plugin 'tpope/vim-abolish'
 Plugin 'justinmk/vim-sneak'
 Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
 Plugin 'jpalardy/vim-slime'              " REPL interaction
-Plugin 'paradigm/SkyBison'
 Plugin 'kana/vim-textobj-user'
+Plugin 'Lokaltog/vim-easymotion'
 
 " By language
 
@@ -119,13 +122,11 @@ Plugin 'plasticboy/vim-markdown'
 Plugin 'rizzatti/funcoo.vim'
 Plugin 'rizzatti/dash.vim'
 Plugin 'majutsushi/tagbar'
-Plugin 'Lokaltog/vim-easymotion'
 
 " Experimental
 Plugin 'hsitz/VimOrganizer'
 Plugin 'rking/ag.vim'
 Plugin 'AndrewRadev/splitjoin.vim'
-Plugin 'suy/vim-ctrlp-commandline'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -136,7 +137,9 @@ filetype plugin indent on    " required
 if has('gui_running')               " gvim options
     if os == "Darwin"
         set guifont=Monaco\ for\ Powerline:h16
-        set macmeta                 " Option as Meta
+        " Send option presses to macvim. Allows binding <M-x>
+        " but won't allow typing special characaters anymore.
+        " set macmeta
     elseif os == "Linux"
         set guifont=Deja\ Vu\ Sans\ Mono\ 10
     endif
@@ -247,9 +250,9 @@ autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 " ---------------------------------------------------------------------
 " HTML, XML
 " ---------------------------------------------------------------------
- augroup au_HTML_XML
-     autocmd Filetype html,xml,xsl source ~/.vim/plugin/closetag.vim
- augroup END
+" augroup au_HTML_XML
+"     autocmd Filetype html,xml,xsl source ~/.vim/plugin/closetag.vim
+" augroup END
 
 "---------------------------------------------------------------------
 " R
@@ -385,33 +388,9 @@ nnoremap ]<space> o<ESC>k
 " Select just pasted text
 noremap gV `[v`]
 
-" Disable arrow keys
-inoremap  <Up>     <NOP>
-inoremap  <Down>   <NOP>
-inoremap  <Left>   <NOP>
-inoremap  <Right>  <NOP>
-vnoremap  <Up>     <NOP>
-vnoremap  <Down>   <NOP>
-vnoremap  <Left>   <NOP>
-vnoremap  <Right>  <NOP>
-nnoremap  <Up>     <NOP>
-nnoremap  <Down>   <NOP>
-nnoremap  <Left>   <NOP>
-nnoremap  <Right>  <NOP>
-cnoremap  <Up>     <NOP>
-cnoremap  <Down>   <NOP>
-cnoremap  <Left>   <NOP>
-cnoremap  <Right>  <NOP>
+" nnoremap ,y "+y
+" vnoremap ,p "+p
 
-" inoremap <C-b> <C-o>h
-" inoremap <C-f> <C-o>l
-" inoremap <C-e> <C-o>$
-
-nnoremap Q @q
-" Reload vimrc
-nnoremap ,y "+y
-vnoremap ,p "+p
-" Copy paste from secondary system clipboard
 " (highlighted text, normal paste via mouse3)
 nnoremap ,,y "*y
 nnoremap ,,p "*p
@@ -456,6 +435,9 @@ nnoremap k gk
 " 2}}}
 
 " Plugin mapings {{{2 "
+" YankRing
+nnoremap ,p :YRShow<CR>
+
 " Fugitive
 nnoremap ,gg :Gstatus<CR>
 nnoremap ,gs :Gstatus<CR>

@@ -48,7 +48,6 @@ Plugin 'wellle/targets.vim'              " More and better text objects
 Plugin 'othree/xml.vim'                  " XML editing
 Plugin 'junegunn/seoul256.vim'           " Nice color scheme
 Plugin 'scrooloose/syntastic'
-Plugin 'YankRing.vim'
 Plugin 'ivyl/vim-bling'
 Plugin 'yaifa.vim'
 
@@ -73,6 +72,7 @@ Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
 Plugin 'jpalardy/vim-slime'              " REPL interaction
 Plugin 'kana/vim-textobj-user'
 Plugin 'Lokaltog/vim-easymotion'
+Plugin 'maxbrunsfeld/vim-yankstack'
 
 " By language
 
@@ -341,10 +341,6 @@ nnoremap <space>; :<c-u>call SkyBison("")<cr>
 nnoremap : ;
 xnoremap : ;
 
-" Command line with history
-nnoremap q; q:
-xnoremap q; q:
-
 " Show the registers
 nnoremap ,re :reg<CR>
 
@@ -435,8 +431,10 @@ nnoremap k gk
 " 2}}}
 
 " Plugin mapings {{{2 "
-" YankRing
-nnoremap ,p :YRShow<CR>
+
+" Yankstack
+nmap ,p <Plug>yankstack_substitute_older_paste
+nmap ,P <Plug>yankstack_substitute_newer_paste
 
 " Fugitive
 nnoremap ,gg :Gstatus<CR>
@@ -502,6 +500,7 @@ nnoremap ,xc :Latexmk<CR>
 " NERDTree
 " Open NERDTree at the location of the current file
 nnoremap <F2> :NERDTreeToggle<CR>
+nnoremap <S-F2> :NERDTreeFind<CR>
 
 " " Tagbar
 nnoremap <F3> :TagbarToggle<CR>

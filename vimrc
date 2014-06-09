@@ -31,7 +31,7 @@ Plugin 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
 Plugin 'bling/vim-airline'               " Fancy status bar
 Plugin 'gmarik/Vundle.vim'               " Package manager
 Plugin 'honza/vim-snippets'              " Snippets
-Plugin 'jiangmiao/auto-pairs'            " Auto close pairs
+Plugin 'delimitMate.vim'                 " Automatically close pairs (where appropriate)
 Plugin 'junegunn/vim-easy-align'         " :'<,'>EasyAlign [*] DELIM or /regex/
 Plugin 'godlygeek/tabular'               " :Tabularize /regex
 Plugin 'jwhitley/vim-matchit'            " More jumps for %
@@ -145,7 +145,8 @@ if has('gui_running')               " gvim options
     endif
 
     let g:seoul256_background = 236 " Range: 233 - 239"
-    colo seoul256
+    " colo seoul256
+    colo default
     " colorscheme obsidian2
     " colorscheme mustang
     " colorscheme rdark
@@ -187,6 +188,7 @@ set encoding=utf-8
 syntax on                           " enable syntax highlighting
 set shiftwidth=4                    " number of spaces to autoindent
 set tabstop=4                       " number of spaces for a tabstop
+set softtabstop=4
 set expandtab                       " expand tab to spaces in insert mode
 set autoindent                      " enable autoindenting
 set number                          " view line numbers
@@ -422,8 +424,8 @@ nnoremap <M-k> zk
 
 " Typing ,lcd or ,cd will switch the (local)
 " working directory to the current file's
-nnoremap ,lcd :cd %:p:h<CR>
-nnoremap ,cd :lcd %:p:h<CR>
+nnoremap ,lcd :lcd %:p:h<CR>
+nnoremap ,cd :cd %:p:h<CR>
 
 " Scroll by visual lines
 nnoremap j gj
@@ -1021,7 +1023,7 @@ vmap <silent> <expr> p <sid>Repl()
 " Show insert cursor as yellow and normal mode
 " cursor as light green
 highlight Cursor guifg=black guibg=#00ff1e
-highlight iCursor guifg=black guibg=yellow
+highlight iCursor guifg=black guibg=cyan
 set guicursor=n-v-c:block-Cursor
 set guicursor+=i:ver100-iCursor
 set guicursor+=n-v-c:blinkon0

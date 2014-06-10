@@ -42,7 +42,7 @@ Plugin 'szw/vim-maximizer'               " Temporarily maximize window
 Plugin 'tpope/vim-commentary'            " Commenting operator gc
 Plugin 'tpope/vim-fugitive'              " Git plugin
 Plugin 'tpope/vim-repeat'                " Repeat all kinds of stuff
-Plugin 'tpope/vim-rsi'                   " Emacs editing in insert mode
+Plugin 'maxbrunsfeld/vim-yankstack'      " Needs to be started before surround!
 Plugin 'tpope/vim-surround'              " Surround motions
 Plugin 'wellle/targets.vim'              " More and better text objects
 Plugin 'othree/xml.vim'                  " XML editing
@@ -72,7 +72,6 @@ Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
 Plugin 'jpalardy/vim-slime'              " REPL interaction
 Plugin 'kana/vim-textobj-user'
 Plugin 'Lokaltog/vim-easymotion'
-Plugin 'maxbrunsfeld/vim-yankstack'
 
 " By language
 
@@ -394,15 +393,29 @@ nnoremap ,,y "*y
 nnoremap ,,p "*p
 nnoremap ,Y "+yy
 
-" Allow command line editing with emacs keybindings
-" (Done by vim-rsi plugin now)
-" cnoremap <C-a> <Home>
-" cnoremap <C-b> <Left>
-" cnoremap <C-e> <End>
-" cnoremap <C-f> <Right>
-" cnoremap <C-d> <Delete>
-" cnoremap <C-n> <Down>
-" cnoremap <C-p> <Up>
+" THIS IS COPIED FROM TPOPE's PLUGIN VIM-RSI
+" vim-rsi: https://github.com/tpope/vim-rsi/blob/master/plugin/rsi.vim
+"
+" It allows emacs-like navigation in command mode and insert mode
+" The reason I didn't include the full plugin was that some of
+" it's meta-mappings messed with my keyboard layout
+" BEGIN vim-rsi snippet
+inoremap        <C-A> <C-O>^
+inoremap   <C-X><C-A> <C-A>
+cnoremap        <C-A> <Home>
+cnoremap   <C-X><C-A> <C-A>
+
+inoremap <expr> <C-B> getline('.')=~'^\s*$'&&col('.')>strlen(getline('.'))?"0\<Lt>C-D>\<Lt>Esc>kJs":"\<Lt>Left>"
+cnoremap        <C-B> <Left>
+
+inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
+cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
+
+inoremap <expr> <C-E> col('.')>strlen(getline('.'))?"\<Lt>C-E>":"\<Lt>End>"
+
+inoremap <expr> <C-F> col('.')>strlen(getline('.'))?"\<Lt>C-F>":"\<Lt>Right>"
+cnoremap <expr> <C-F> getcmdpos()>strlen(getcmdline())?&cedit:"\<Lt>Right>"
+" END vim-rsi snippet
 
 " c_CTRL-F is remapped to c_CTRL-H for 'history'
 cnoremap <C-h> <C-f>
@@ -672,7 +685,8 @@ let g:ycm_seed_identifiers_with_syntax = 1
 " g:UltiSnipsJumpBackwardTrigger         <c-k>
 let g:UltiSnipsExpandTrigger='<tab>'
 let g:UltiSnipsEditSplit='vertical'
-nnoremap ,u :UltiSnipsEdit<CR>
+" Edit snippets
+nnoremap ,es :UltiSnipsEdit<CR>
 
 let g:snips_author="Robin Hafen"
 let g:snips_email="robin.hafen@gmail.com"

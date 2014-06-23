@@ -50,6 +50,8 @@ Plugin 'junegunn/seoul256.vim'           " Nice color scheme
 Plugin 'scrooloose/syntastic'
 Plugin 'ivyl/vim-bling'
 Plugin 'yaifa.vim'
+Plugin 'mattn/emmet-vim'
+Plugin 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
 
 " Nice to have
 " Plugin 'Valloric/YouCompleteMe'        " $ Do `./install.sh` after update
@@ -124,7 +126,6 @@ Plugin 'majutsushi/tagbar'
 
 " Experimental
 Plugin 'hsitz/VimOrganizer'
-Plugin 'rking/ag.vim'
 Plugin 'AndrewRadev/splitjoin.vim'
 
 call vundle#end()            " required
@@ -144,8 +145,8 @@ if has('gui_running')               " gvim options
     endif
 
     let g:seoul256_background = 236 " Range: 233 - 239"
-    " colo seoul256
-    colo default
+    colo seoul256
+    " colo default
     " colorscheme obsidian2
     " colorscheme mustang
     " colorscheme rdark
@@ -326,11 +327,13 @@ augroup END
 " Mappings {{{1
 "================================================================
 " Basic {{{2 "
-let mapleader=","
+let mapleader="<space>"
 let maplocalleader = ","
 
-" Easier access to command-window
+" Select most recently pasted text
+nnoremap gv `[v`]
 
+" Easier access to command-window
 " Use ; for command line since it's easier to type
 nnoremap ; :
 xnoremap ; :
@@ -393,6 +396,10 @@ nnoremap ,,y "*y
 nnoremap ,,p "*p
 nnoremap ,Y "+yy
 
+" Jump in the middle of the _current_ line, not the middle of
+" the display
+nnoremap <silent> gm :call cursor(0, virtcol('$')/2)<cr>
+
 " THIS IS COPIED FROM TPOPE's PLUGIN VIM-RSI
 " vim-rsi: https://github.com/tpope/vim-rsi/blob/master/plugin/rsi.vim
 "
@@ -437,12 +444,12 @@ nnoremap <M-k> zk
 
 " Typing ,lcd or ,cd will switch the (local)
 " working directory to the current file's
-nnoremap ,lcd :lcd %:p:h<CR>
+nnoremap ,cld :lcd %:p:h<CR>
 nnoremap ,cd :cd %:p:h<CR>
 
 " Scroll by visual lines
-nnoremap j gj
-nnoremap k gk
+" nnoremap j gj
+" nnoremap k gk
 " 2}}}
 
 " Plugin mapings {{{2 "
@@ -460,8 +467,8 @@ nnoremap ,gp :Git push<CR>
 " Undotree
 nnoremap <F4> :UndotreeToggle<CR>
 
-" Emmet, no idea what key to use. C-o in insert mode is `execute normal command`
-" let g:user_emmet_leader_key = '<c-o>'
+" Emmet, remap to something less awkward
+imap <C-l> <C-y>,
 
 " Sneak
 nmap gs <Plug>SneakForward
@@ -469,11 +476,11 @@ xmap gs <Plug>VSneakForward
 nmap gS <Plug>SneakBackward
 xmap gS <Plug>VSneakBackward
 
-nmap <script> <silent> ,l :call ToggleLocationList()<CR>
-nmap <script> <silent> ,q :call ToggleQuickfixList()<CR>
+nmap <script> <silent> <space>l :call ToggleLocationList()<CR>
+nmap <script> <silent> <space>q :call ToggleQuickfixList()<CR>
 
-nnoremap <silent><space>m :MaximizerToggle<CR>
-vnoremap <silent><space>m :MaximizerToggle<CR>gv
+nnoremap <C-w>o :MaximizerToggle<CR>
+vnoremap <C-w>o :MaximizerToggle<CR>gv
 
 " Look up word under cursor with Dash
 nnoremap gK :Dash<CR>
@@ -489,9 +496,9 @@ let g:ctrlp_map = '<C-p>'
 " The command executed by the above mapping
 let g:ctrlp_cmd = 'CtrlPMixed'
 
-nnoremap <space>l :CtrlPLine<CR>
-nnoremap ,ls :CtrlPBuffer<CR>
+nnoremap ,pl :CtrlPLine<CR>
 nnoremap ,b :CtrlPBuffer<CR>
+nnoremap ,ls :CtrlPBuffer<CR>
 nnoremap ,rf :CtrlPMRUFiles<CR>
 nnoremap ,ta :CtrlPTag<CR>
 nnoremap ,e :CtrlPMixed<CR>

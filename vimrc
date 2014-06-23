@@ -346,12 +346,12 @@ nnoremap : ;
 xnoremap : ;
 
 " Show the registers
-nnoremap ,re :reg<CR>
+nnoremap <space>re :reg<CR>
 
 " Old escape (now Caps-Lock)
 inoremap jk <ESC>
 
-nnoremap ,so :source ~/.vimrc<CR>
+nnoremap <space>so :source ~/.vimrc<CR>
 
 " Insert an empty space
 nnoremap <S-space> i <ESC>
@@ -444,8 +444,8 @@ nnoremap <M-k> zk
 
 " Typing ,lcd or ,cd will switch the (local)
 " working directory to the current file's
-nnoremap ,cld :lcd %:p:h<CR>
-nnoremap ,cd :cd %:p:h<CR>
+nnoremap <space>cld :lcd %:p:h<CR>
+nnoremap <space>cd :cd %:p:h<CR>
 
 " Scroll by visual lines
 " nnoremap j gj
@@ -455,13 +455,13 @@ nnoremap ,cd :cd %:p:h<CR>
 " Plugin mapings {{{2 "
 
 " Yankstack
-nmap ,p <Plug>yankstack_substitute_older_paste
-nmap ,P <Plug>yankstack_substitute_newer_paste
+nmap <space>p <Plug>yankstack_substitute_older_paste
+nmap <space>P <Plug>yankstack_substitute_newer_paste
 
 " Fugitive
-nnoremap ,gg :Gstatus<CR>
-nnoremap ,gs :Gstatus<CR>
-nnoremap ,gp :Git push<CR>
+nnoremap <space>gg :Gstatus<CR>
+nnoremap <space>gs :Gstatus<CR>
+nnoremap <space>gp :Git push<CR>
 " nmap <space><space> V
 
 " Undotree
@@ -496,12 +496,12 @@ let g:ctrlp_map = '<C-p>'
 " The command executed by the above mapping
 let g:ctrlp_cmd = 'CtrlPMixed'
 
-nnoremap ,pl :CtrlPLine<CR>
-nnoremap ,b :CtrlPBuffer<CR>
-nnoremap ,ls :CtrlPBuffer<CR>
-nnoremap ,rf :CtrlPMRUFiles<CR>
-nnoremap ,ta :CtrlPTag<CR>
-nnoremap ,e :CtrlPMixed<CR>
+nnoremap <space>pl :CtrlPLine<CR>
+nnoremap <space>b :CtrlPBuffer<CR>
+nnoremap <space>ls :CtrlPBuffer<CR>
+nnoremap <space>rf :CtrlPMRUFiles<CR>
+nnoremap <space>ta :CtrlPTag<CR>
+nnoremap <space>e :CtrlPMixed<CR>
 
 " nnoremap <leader>b 2:<c-u>call SkyBison("b ")<cr>
 " nnoremap <leader>t 2:<c-u>call SkyBison("tag ")<cr>
@@ -693,7 +693,7 @@ let g:ycm_seed_identifiers_with_syntax = 1
 let g:UltiSnipsExpandTrigger='<tab>'
 let g:UltiSnipsEditSplit='vertical'
 " Edit snippets
-nnoremap ,es :UltiSnipsEdit<CR>
+nnoremap <space>es :UltiSnipsEdit<CR>
 
 let g:snips_author="Robin Hafen"
 let g:snips_email="robin.hafen@gmail.com"

@@ -50,8 +50,11 @@ Plugin 'junegunn/seoul256.vim'           " Nice color scheme
 Plugin 'scrooloose/syntastic'
 Plugin 'ivyl/vim-bling'
 Plugin 'yaifa.vim'
-Plugin 'mattn/emmet-vim'
+Plugin 'mattn/emmet-vim'                 " Zencoding successor
 Plugin 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
+Plugin 'kana/vim-textobj-user'           " Needed for textobj-python
+Plugin 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, if
+
 
 " Nice to have
 " Plugin 'Valloric/YouCompleteMe'        " $ Do `./install.sh` after update
@@ -72,7 +75,6 @@ Plugin 'tpope/vim-obsession'
 Plugin 'justinmk/vim-sneak'
 Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
 Plugin 'jpalardy/vim-slime'              " REPL interaction
-Plugin 'kana/vim-textobj-user'
 Plugin 'Lokaltog/vim-easymotion'
 
 " By language

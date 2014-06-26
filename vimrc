@@ -486,8 +486,8 @@ xmap gS <Plug>VSneakBackward
 nmap <script> <silent> <space>l :call ToggleLocationList()<CR>
 nmap <script> <silent> <space>q :call ToggleQuickfixList()<CR>
 
-nnoremap <C-w>o :MaximizerToggle<CR>
-vnoremap <C-w>o :MaximizerToggle<CR>gv
+nnoremap <C-w>m :MaximizerToggle<CR>
+vnoremap <C-w>m :MaximizerToggle<CR>gv
 
 " Look up word under cursor with Dash
 nnoremap gK :Dash<CR>

@@ -189,14 +189,13 @@ set complete-=t                     " Search tags as well
 set encoding=utf-8
 syntax on                           " enable syntax highlighting
 set shiftwidth=4                    " number of spaces to autoindent
-set tabstop=4                       " number of spaces for a tabstop
-set softtabstop=4
-set expandtab                       " expand tab to spaces in insert mode
+set tabstop=4                       " # spaces shown for one TAB
+set softtabstop=4                   " # spaces that are actually inserted/removed for a tab
+set expandtab                       " insert spaces when hitting TAB (with above options)
 set autoindent                      " enable autoindenting
 set number                          " view line numbers
 set showmode                        " show current mode
 set ruler                           " always show cursor position
-set nocursorline                    " have a line indicate cursor position
 set showcmd                         " display incomplete commands on lower right
 set hidden                          " edit another buffer while another one is unsaved
 set lazyredraw                      " don't update the display while executing macros
@@ -204,15 +203,15 @@ set laststatus=2                    " always show status line
 set autoread                        " automatically read a file that has changed on disk
 set ofu=syntaxcomplete#Complete     " autocompletion so that menu will always appear
 set cfu=
-set wildmenu                        " enable wildmenu
+set wildmenu                        " show a menu of possible completions when TABing incomplete commands
 set wildmode=list:longest,full      " how wild mode should behave
 set guioptions-=T                   " remove toolbar in gVim
 set guioptions-=r                   " remove right scrollbar
 set guioptions-=R                   " remove right scrollbar
 set guioptions-=l                   " remove left scrollbar
 set guioptions-=L                   " remove left scrollbar
-set hlsearch                        " highlight search results, see mapping for disable highlighting
-set incsearch                       " set incremental search
+set hlsearch                        " highlight search results, C-/ to clear the highlighting
+set incsearch                       " incremental search: search as you type the query string
 set ignorecase                      " ignores case while searching
 set smartcase                       " if a search contains a upper case char, make search case sensitive
 set diffopt=vertical                " always split vertical with :diffsplit otherfile
@@ -222,13 +221,16 @@ set wrap                            " wrap whole words
 set linebreak                       " vim will break lines at the chars given in 'set brakeat'
 set showbreak=......\|\             " show linebreaks with: ......| wrapped text
 set textwidth=0                     " don't insert EOLs at linebreak
-set noswapfile                      " Don't use swapfile
-set nobackup            		        " Don't create annoying backup files
-set splitright                      " Split vertical windows right to the current windows
-set splitbelow                      " Split horizontal windows below to the current windows
+set noswapfile                      " don't use swapfile
+set nobackup            	    " don't create backup files
+set splitright                      " split vertical windows right to the current windows
+set splitbelow                      " split horizontal windows below to the current windows
 set so=7                            " keep 7 empty lines from the cursor to the border when scrolling with j or k
 set mouse=a
 set visualbell                      " no annoying beeping
+set foldenable                      " enable folding
+set foldlevelstart=-1               " the fold level to show at file open (-1 is the default: fold all)
+set foldnestmax=20                  " maximal fold level to show (20 is the default)
 set foldmethod=expr
 " set colorcolumn=80                  " highlight the 80th col
 set history=1000                    " set the command line history
@@ -236,7 +238,7 @@ set cmdwinheight=10                 " window height for cmd/search history q: q/
 set relativenumber
 set cursorline                      " Highlight current line
 let grepprg="ag\ --nocolor\ --nogroup\ --silent"
-
+set showmatch                       " Highlight (blinking) matching [{( when inserting the closing )}]
 " }}}
 "================================================================
 " Autocommands {{{
@@ -333,7 +335,7 @@ let mapleader="<space>"
 let maplocalleader = ","
 
 " Select most recently pasted text
-nnoremap gv `[v`]
+nnoremap gV `[v`]
 
 " Easier access to command-window
 " Use ; for command line since it's easier to type
@@ -456,6 +458,9 @@ nnoremap <space>cd :cd %:p:h<CR>
 
 " Plugin mapings {{{2 "
 
+" Ag
+nnoremap <space>a :Ag ""<Left>
+
 " Yankstack
 nmap <space>p <Plug>yankstack_substitute_older_paste
 nmap <space>P <Plug>yankstack_substitute_newer_paste
@@ -488,6 +493,11 @@ vnoremap <C-w>o :MaximizerToggle<CR>gv
 nnoremap gK :Dash<CR>
 
 " CtrlP
+
+" Respect CWD changes
+ let g:ctrlp_working_path=0
+ " let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
+
 " While in prompt: C-b and C-f switch search modes
 " C-j C-k allow navigation in results list
 " <CR> opens file in current window

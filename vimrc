@@ -54,7 +54,7 @@ Plugin 'mattn/emmet-vim'                 " Zencoding successor
 Plugin 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
 Plugin 'kana/vim-textobj-user'           " Needed for textobj-python
 Plugin 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, if
-
+Plugin 'MHordecki/vim-subword'           " - as a text object for such_sub_words or suchSubWords
 
 " Nice to have
 " Plugin 'Valloric/YouCompleteMe'        " $ Do `./install.sh` after update

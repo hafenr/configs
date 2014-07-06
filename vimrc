@@ -97,6 +97,7 @@ Plugin 'groenewege/vim-less'
 Plugin 'tristen/vim-sparkup'
 Plugin 'lepture/vim-jinja'
 Plugin 'jaxbot/brolink.vim'
+Plugin 'othree/html5.vim'
 
 " Python
 Plugin 'https://github.com/ivanov/vim-ipython'
@@ -943,10 +944,34 @@ set noshowmode
 " let g:SuperTabMappingBackward = '<C-p>'
 " let g:SuperTabDefaultCompletionType = 'context'
 " 2}}}
+
+" Targets {{{2 "
+" Remove underscore and dot from list
+" Since I made my own text objects using these separators
+" using text-obj-user
+let g:targets_separators = ', ; : + - = ~ * # / | \ & $ . _'
+" 2}}}
 " 1}}}
 "================================================================
 " Custom functions and commands {{{
 "================================================================
+" Custom text objects
+call textobj#user#plugin('subword', {
+\   'wide_case': {
+\     'pattern': '\(_\|\<\)[a-zA-Z]\{-}\(_\|\>\)',
+\     'select': ['a_', 'i_'],
+\   },
+\   'camelCase': {
+\     'pattern': '\<\d\d:\d\d:\d\d\>',
+\     'select': ['ac', 'ic'],
+\   },
+\   'dot.separated': {
+\     'pattern': '\(\.\|\<\)[a-zA-Z]\+\(\.\|\>\)',
+\     'select': ['a.', 'i.'],
+\   },
+\ })
+
+" das_sub_word_wide_case
 
 " " Command line with history - excecute commands by hitting enter
 " " Swap default ':', '/' and '?' with cmdline-window equivalent.

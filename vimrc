@@ -25,40 +25,38 @@ call pathogen#infect("pathogen_managed/*")
 " Plugins {{{
 "================================================================
 " Essential
-Plugin 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
-Plugin 'SirVer/ultisnips'                " Snippet system
-Plugin 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
-Plugin 'bling/vim-airline'               " Fancy status bar
 Plugin 'gmarik/Vundle.vim'               " Package manager
+Plugin 'tpope/vim-commentary'            " Commenting operator gc
+Plugin 'SirVer/ultisnips'                " Snippet system
 Plugin 'honza/vim-snippets'              " Snippets
+Plugin 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
 Plugin 'delimitMate.vim'                 " Automatically close pairs (where appropriate)
+Plugin 'kien/ctrlp.vim'                  " Fuzzy file finder
+Plugin 'bling/vim-airline'               " Fancy status bar
+Plugin 'tpope/vim-fugitive'              " Git plugin
+Plugin 'tpope/vim-repeat'                " Repeat all kinds of stuff
+Plugin 'tpope/vim-surround'              " Surround motions
+Plugin 'mbbill/undotree'                 " Undo history as a tree
+Plugin 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
+
+" Nice to have
+Plugin 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
 Plugin 'junegunn/vim-easy-align'         " :'<,'>EasyAlign [*] DELIM or /regex/
 Plugin 'godlygeek/tabular'               " :Tabularize /regex
 Plugin 'jwhitley/vim-matchit'            " More jumps for %
-Plugin 'kien/ctrlp.vim'                  " Fuzzy file finder
-Plugin 'mbbill/undotree'                 " Undo history as a tree
 Plugin 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
 Plugin 'szw/vim-maximizer'               " Temporarily maximize window
-Plugin 'tpope/vim-commentary'            " Commenting operator gc
-Plugin 'tpope/vim-fugitive'              " Git plugin
-Plugin 'tpope/vim-repeat'                " Repeat all kinds of stuff
-Plugin 'maxbrunsfeld/vim-yankstack'      " Needs to be started before surround!
-Plugin 'tpope/vim-surround'              " Surround motions
-Plugin 'wellle/targets.vim'              " More and better text objects
 Plugin 'othree/xml.vim'                  " XML editing
 Plugin 'junegunn/seoul256.vim'           " Nice color scheme
 Plugin 'scrooloose/syntastic'
 Plugin 'ivyl/vim-bling'
 Plugin 'yaifa.vim'
 Plugin 'mattn/emmet-vim'                 " Zencoding successor
-Plugin 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
 Plugin 'kana/vim-textobj-user'           " Needed for textobj-python
 Plugin 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, if
 Plugin 'MHordecki/vim-subword'           " - as a text object for such_sub_words or suchSubWords
-
-" Nice to have
+Plugin 'maxbrunsfeld/vim-yankstack'      " Needs to be started before surround!
 " Plugin 'Valloric/YouCompleteMe'        " $ Do `./install.sh` after update
-Plugin 'terryma/vim-expand-region'
 Plugin 'jeetsukumaran/vim-markology'
 " Plugin 'mhinz/vim-startify'
 Plugin 'tomasr/molokai'
@@ -69,7 +67,6 @@ Plugin 'L9'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-colorscheme-switcher'
 " Plugin 'Valloric/YouCompleteMe'
-Plugin 'fisadev/vim-ctrlp-cmdpalette'
 Plugin 'tpope/vim-obsession'
 " Plugin 'tpope/vim-abolish'
 Plugin 'justinmk/vim-sneak'
@@ -94,7 +91,6 @@ Plugin 'ap/vim-css-color'
 Plugin 'vim-coffee-script'
 Plugin 'ervandew/screen'
 Plugin 'groenewege/vim-less'
-Plugin 'tristen/vim-sparkup'
 Plugin 'lepture/vim-jinja'
 Plugin 'jaxbot/brolink.vim'
 Plugin 'othree/html5.vim'
@@ -126,10 +122,6 @@ Plugin 'plasticboy/vim-markdown'
 Plugin 'rizzatti/funcoo.vim'
 Plugin 'rizzatti/dash.vim'
 Plugin 'majutsushi/tagbar'
-
-" Experimental
-Plugin 'hsitz/VimOrganizer'
-Plugin 'AndrewRadev/splitjoin.vim'
 
 call vundle#end()            " required
 filetype plugin indent on    " required

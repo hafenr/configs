@@ -75,6 +75,8 @@ Plugin 'jpalardy/vim-slime'              " REPL interaction
 Plugin 'Lokaltog/vim-easymotion'
 
 " By language
+" Swift
+Plugin 'Keithbsmiley/swift.vim'
 
 " R
 Plugin 'Vim-R-plugin'

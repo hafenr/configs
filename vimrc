@@ -55,7 +55,7 @@ Plugin 'mattn/emmet-vim'                 " Zencoding successor
 Plugin 'kana/vim-textobj-user'           " Needed for textobj-python
 Plugin 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, if
 Plugin 'MHordecki/vim-subword'           " - as a text object for such_sub_words or suchSubWords
-Plugin 'maxbrunsfeld/vim-yankstack'      " Needs to be started before surround!
+" Plugin 'maxbrunsfeld/vim-yankstack'      " Needs to be started before surround!
 " Plugin 'Valloric/YouCompleteMe'        " $ Do `./install.sh` after update
 Plugin 'jeetsukumaran/vim-markology'
 " Plugin 'mhinz/vim-startify'
@@ -244,12 +244,12 @@ set showmatch                       " Highlight (blinking) matching [{( when ins
 " Alternative to autotags:
 " au BufWritePost *.R,*.r,*.py,*.scala,*.clj,*.coffee silent! !ctags -R &
 autocmd BufEnter .vimrc setlocal foldmethod=marker
-autocmd BufEnter,BufRead *.Rmd setfiletype rmarkdown.rmd
 
 "---------------------------------------------------------------------
 " Default
 "---------------------------------------------------------------------
 " autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
+" Automatically delete trailing whitespace
 autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
 " ---------------------------------------------------------------------
@@ -262,17 +262,23 @@ autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 "---------------------------------------------------------------------
 " R
 "---------------------------------------------------------------------
-augroup au_R
+augroup R
     autocmd!
     au FileType r RainbowParenthesesActivate
     au FileType r set iskeyword+=.
+
+    function! SetRmdOptions()
+        setfiletype rmarkdown.rmd
+    endfunction
+
+    autocmd BufEnter,BufRead *.Rmd call SetRmdOptions()
 augroup END
 
 
 "---------------------------------------------------------------------
 " Clojure
 "---------------------------------------------------------------------
-augroup au_Clojure
+augroup Clojure
     autocmd!
     au FileType clojure RainbowParenthesesActivate
     au FileType clojure RainbowParenthesesLoadRound
@@ -283,7 +289,7 @@ augroup END
 "---------------------------------------------------------------------
 " Python
 "---------------------------------------------------------------------
-augroup au_Python
+augroup Python
     autocmd!
     autocmd FileType python setlocal foldmethod=indent foldnestmax=2
     autocmd FileType python setlocal shiftwidth=4 tabstop=4
@@ -295,7 +301,7 @@ augroup END
 "---------------------------------------------------------------------
 " Latex
 "---------------------------------------------------------------------
-augroup autex
+augroup Autex
     autocmd!
     " autocmd FileType tex set mps+=$:$
     au FileType tex let b:delimitMate_matchpairs = "\(:\)"
@@ -305,7 +311,7 @@ augroup autex
     " autocmd FileType tex nnoremap <buffer> <leader>v <leader>lv
 augroup END
 
-augroup au_Darwin
+augroup Darwin
     autocmd!
     autocmd BufRead,BufNewFile *.drw set filetype=darwin
 augroup END
@@ -314,7 +320,7 @@ augroup END
 "---------------------------------------------------------------------
 " Markdown
 "---------------------------------------------------------------------
-augroup au_Markdown
+augroup Markdown
     autocmd!
     autocmd FileType markdown iabbr ddx \frac{d}{dx}
     autocmd FileType markdown iabbr ddt \frac{d}{dt}

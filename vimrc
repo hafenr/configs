@@ -80,6 +80,9 @@ Plugin 'Keithbsmiley/swift.vim'
 
 " R
 Plugin 'Vim-R-plugin'
+Plugin 'vim-pandoc/vim-pandoc'
+Plugin 'vim-pandoc/vim-pandoc-syntax'
+Plugin 'vim-pandoc/vim-rmarkdown'
 
 " Julia
 Plugin 'JuliaLang/julia-vim'
@@ -241,6 +244,7 @@ set showmatch                       " Highlight (blinking) matching [{( when ins
 " Alternative to autotags:
 " au BufWritePost *.R,*.r,*.py,*.scala,*.clj,*.coffee silent! !ctags -R &
 autocmd BufEnter .vimrc setlocal foldmethod=marker
+autocmd BufEnter,BufRead *.Rmd setfiletype rmarkdown.rmd
 
 "---------------------------------------------------------------------
 " Default
@@ -447,8 +451,11 @@ nnoremap <space>cld :lcd %:p:h<CR>
 nnoremap <space>cd :cd %:p:h<CR>
 
 " Scroll by visual lines
-" nnoremap j gj
-" nnoremap k gk
+nnoremap j gj
+nnoremap k gk
+" nnoremap gj j
+" nnoremap gk k
+
 " 2}}}
 
 " Plugin mapings {{{2 "

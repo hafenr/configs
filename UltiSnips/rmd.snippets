@@ -1,7 +1,96 @@
-snippet ch "Rmd chunk"
-\`\`\`{r}
-${1:code}
-\`\`\`
+extends markdown
+extends sh
+extends r
 
-${0}
+###########################################################################
+#                          SNIPPETS for RMARKDOWN                          #
+###########################################################################
+snippet rc "R code"
+\`\`\`\{r ${1:`!v expand("%:t:r")`_${2:Title}}\}
+${0:${VISUAL}}
+\`\`\`
+endsnippet
+
+snippet rp "R plot"
+\`\`\`\{r ${1:`!v expand("%:t:r")`_${2:Title},} dev=${3:'svg'}${4:, warning=${5:FALSE}}\}
+${0:${VISUAL}}
+\`\`\`
+endsnippet
+
+snippet python "include python script sourcecode"
+\`\`\`\{r, echo=F, cache=FALSE}
+read_chunk('$1.py', labels = '$1')
+\`\`\`
+\`\`\`\{r $1, engine='${2:python}', eval=FALSE, cache=FALSE\}
+\`\`\`
+endsnippet
+
+snippet perl "include perl script sourcecode"
+\`\`\`\{r, echo=F, cache=FALSE}
+read_chunk('$1.pl', labels = '$1')
+\`\`\`
+\`\`\`\{r $1, engine='${2:perl}', eval=FALSE, cache=FALSE\}
+\`\`\`
+endsnippet
+
+snippet source "include source code without output" !b
+\`\`\`{r, echo=F, cache=FALSE, results='asis'}
+source_code($1)
+\`\`\`
+endsnippet
+
+snippet bash "bash shell commands"
+\`\`\`\{r ${3:`!v expand("%:t:r")`_${1:Title},} engine='${2:bash}'\}
+${0:${VISUAL}}
+\`\`\`
+endsnippet
+
+snippet julia "include julia code" !b
+\`\`\`\{r ${3:`!v expand("%:t:r")`_${1:Title},} engine='julia'\}
+${0:${VISUAL}}
+\`\`\`
+endsnippet
+
+snippet start "setup caching"
+# ${1:Title} #
+\`\`\`{r ${2:`!v expand("%:t:r")`_${3:setup}}, cache=FALSE, include=FALSE}
+mtime <- function(files){
+  lapply(Sys.glob(files),function(x) file.info(x)$mtime)
+}
+source_code = function(file, type=NULL){
+  if(is.null(type))
+    type = gsub(pattern='.+[.]', '', file)
+  cat(paste0('```', type, '\n'), paste0(collapse='\n', readLines(file)), '\n```\n')
+}
+files <- c('${4}')
+opts_chunk$set(cache.extra=mtime(files), cache=TRUE, engine.opts='-l', tidy=FALSE)
+knit_hooks$set(inline=function(x) prettyNum(round(x,2), big.mark=","))
+\`\`\`
+$0
+Author: [Jim Hester](http://jimhester.com)
+Created: TIMESTAMP
+Last Modified: TIMESTAMP
+endsnippet
+
+snippet cache "add cache.extra" w
+cache.extra=mtime(c('${0:${VISUAL:file}}'))
+endsnippet
+
+snippet c "concatenate vector" w
+c('$1'$0)
+endsnippet
+
+snippet , "quoted comma" i
+, '$1'$0
+endsnippet
+
+snippet child "include child document"
+\`\`\`\{r child="${1:child}${2:.Rmd}"}
+\`\`\`
+endsnippet
+
+snippet xtable "insert xtable"
+\`\`\`{r echo=F, cache=F, results='asis'}
+print(xtable(${0:${VISUAL}}), type='html', include.rownames=FALSE)
+\`\`\`
 endsnippet

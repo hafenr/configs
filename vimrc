@@ -60,29 +60,23 @@ Plugin 'MHordecki/vim-subword'           " - as a text object for such_sub_words
 Plugin 'jeetsukumaran/vim-markology'
 " Plugin 'mhinz/vim-startify'
 Plugin 'tomasr/molokai'
-Plugin 'takac/vim-hardtime'
-Plugin 'flazz/vim-colorschemes'
 Plugin 'Shougo/vimproc.vim'              " Do `$ make` after update
-Plugin 'L9'
-Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-colorscheme-switcher'
 " Plugin 'Valloric/YouCompleteMe'
 Plugin 'tpope/vim-obsession'
 " Plugin 'tpope/vim-abolish'
-Plugin 'justinmk/vim-sneak'
 Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
 Plugin 'jpalardy/vim-slime'              " REPL interaction
-Plugin 'Lokaltog/vim-easymotion'
+Plugin 'majutsushi/tagbar'
 
 " By language
 " Swift
 Plugin 'Keithbsmiley/swift.vim'
 
 " R
-Plugin 'Vim-R-plugin'
 Plugin 'vim-pandoc/vim-pandoc'
 Plugin 'vim-pandoc/vim-pandoc-syntax'
 Plugin 'vim-pandoc/vim-rmarkdown'
+Plugin 'Vim-R-plugin'
 
 " Julia
 Plugin 'JuliaLang/julia-vim'
@@ -101,7 +95,6 @@ Plugin 'jaxbot/brolink.vim'
 Plugin 'othree/html5.vim'
 
 " Python
-Plugin 'https://github.com/ivanov/vim-ipython'
 Plugin 'django.vim'
 " Plugin 'klen/python-mode'
 "<localleader> Plugin 'davidhalter/jedi-vim'
@@ -110,23 +103,12 @@ Plugin 'django.vim'
 Plugin 'spiroid/vim-ultisnip-scala'
 Plugin 'vim-scala'
 
-" Clojure
-Plugin 'guns/vim-clojure-static'
-Plugin 'kien/rainbow_parentheses.vim'
-Plugin 'tpope/vim-fireplace'
-Plugin 'tpope/vim-leiningen'
-
 " Matlab
 Plugin 'matlab.vim'
 
 " Markdown
 Plugin 'nelstrom/vim-markdown-folding'
 Plugin 'plasticboy/vim-markdown'
-
-" Dash integration
-Plugin 'rizzatti/funcoo.vim'
-Plugin 'rizzatti/dash.vim'
-Plugin 'majutsushi/tagbar'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -264,7 +246,6 @@ autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 "---------------------------------------------------------------------
 augroup R
     autocmd!
-    au FileType r RainbowParenthesesActivate
     au FileType r set iskeyword+=.
 
     function! SetRmdOptions()
@@ -274,17 +255,6 @@ augroup R
     autocmd BufEnter,BufRead *.Rmd call SetRmdOptions()
 augroup END
 
-
-"---------------------------------------------------------------------
-" Clojure
-"---------------------------------------------------------------------
-augroup Clojure
-    autocmd!
-    au FileType clojure RainbowParenthesesActivate
-    au FileType clojure RainbowParenthesesLoadRound
-    au FileType clojure RainbowParenthesesLoadSquare
-    au FileType clojure RainbowParenthesesLoadBraces
-augroup END
 
 "---------------------------------------------------------------------
 " Python
@@ -485,12 +455,6 @@ nnoremap <F4> :UndotreeToggle<CR>
 " Emmet, remap to something less awkward
 imap <C-l> <C-y>,
 
-" Sneak
-nmap gs <Plug>SneakForward
-xmap gs <Plug>VSneakForward
-nmap gS <Plug>SneakBackward
-xmap gS <Plug>VSneakBackward
-
 nmap <script> <silent> <space>l :call ToggleLocationList()<CR>
 nmap <script> <silent> <space>q :call ToggleQuickfixList()<CR>
 
@@ -546,23 +510,6 @@ nnoremap <S-F2> :NERDTreeFind<CR>
 
 " " Tagbar
 nnoremap <F3> :TagbarToggle<CR>
-
-nmap f <Plug>Sneak_f
-nmap F <Plug>Sneak_F
-xmap f <Plug>Sneak_f
-xmap F <Plug>Sneak_F
-omap f <Plug>Sneak_f
-omap F <Plug>Sneak_F
-
-nmap t <Plug>Sneak_t
-nmap T <Plug>Sneak_T
-xmap t <Plug>Sneak_t
-xmap T <Plug>Sneak_T
-omap t <Plug>Sneak_t
-omap T <Plug>Sneak_T
-
-nmap : <Plug>SneakNext
-
 " 2}}}
 " 1}}}
 "================================================================
@@ -571,31 +518,15 @@ nmap : <Plug>SneakNext
 " recursive search with :e
 " :e r/filename
 " cabbrev r ./**
-" iabbrev over <esc>BdWi\frac{<esc>pxi}{
+cabbrev stat ~/Dropbox/CBB/StatMethods
 " }}}
 "================================================================
 " Plugin settings {{{1
 "================================================================
 
-" {{{2 Skybison
-"---------------------------------------------------------------------
-let g:skybison_fuzz = 2
-let g:skybison_numberselect = 0
-" 2}}}
-
 " {{{2 Brolink
 "---------------------------------------------------------------------
 let g:bl_no_mappings = 1
-" 2}}}
-
-" {{{2 Split Join
-"---------------------------------------------------------------------
-" Default is gS and gJ
-" let g:splitjoin_split_mapping = ''
-" let g:splitjoin_join_mapping = ''
-
-" nmap <Leader>j :SplitjoinJoin<cr>
-" nmap <Leader>s :SplitjoinSplit<cr>
 " 2}}}
 
 " {{{2 LaTeX-Box
@@ -615,13 +546,6 @@ let g:LatexBox_latexmk_options = "-pvc -pdf"
 " hi Conceal guibg=black guifg=white
 " 2}}}
 
-" {{{2 Sparkup
-"---------------------------------------------------------------------
-let g:sparkupExecuteMapping='<c-o>'
-let g:sparkupMappingInsertModeOnly=1
-let g:sparkupNextMapping='<c-j>'
-" 2}}}
-
 " {{{2 Argumentative
 "---------------------------------------------------------------------
 " Experimental
@@ -637,15 +561,6 @@ let g:maximizer_set_default_mapping = 0
 
 " {{{2 Markdown Settings
 "---------------------------------------------------------------------
-" 2}}}
-
-" {{{2 EasyMotion
-"---------------------------------------------------------------------
-" Default leader <leader><leader>
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
-" JK motions: Line motions
-map <space>j <Plug>(easymotion-j)
-map <space>k <Plug>(easymotion-k)
 " 2}}}
 
 " {{{2 R Plugin
@@ -670,17 +585,6 @@ if !has('gui_running')
 endif
 " 2}}}
 
-" {{{2 Py-Mode settings
-"---------------------------------------------------------------------
-let g:pymode_rope = 0 " Disable Rope due to buggy behavior
-" 2}}}
-
-" {{{2 Eclim
-"---------------------------------------------------------------------
-" To make it play nicely with YCM
-" let g:EclimCompletionMethod = 'omnifunc'
-" 2}}}
-
 " {{{2 Startify
 "---------------------------------------------------------------------
 let g:startify_bookmarks = [ '~/.vimrc', '~/Dev/void' ]
@@ -701,7 +605,6 @@ let g:ycm_min_num_identifier_candidate_chars = 0 " default 0
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:pymode_rope_complete_on_dot = 0
 let g:ycm_seed_identifiers_with_syntax = 1
-
 " 2}}}
 
 " {{{2 UltiSnips
@@ -734,61 +637,53 @@ let g:syntastic_python_checkers = ['pyflakes', 'flake8']
 let g:syntastic_haskell_checkers = ['hlint']
 " 2}}}
 
-" {{{2 Python Mode - temp removed
-"---------------------------------------------------------------------
-" See all default settings at: https://github.com/klen/python-mode
-" Enable with :PyLintCheckerToggle
-" let g:pymode_lint = 0
-" let g:pymode_lint_ignore = "E501"
-" 2}}}
-
 " " {{{2 Tagbar
 " "---------------------------------------------------------------------
-" let g:tagbar_type_r = {
-"     \ 'ctagstype' : 'r',
-"     \ 'kinds'     : [
-"         \ 'f:Functions',
-"         \ 'g:GlobalVariables',
-"         \ 'v:FunctionVariables',
-"     \ ]
-" \ }
+let g:tagbar_type_r = {
+    \ 'ctagstype' : 'r',
+    \ 'kinds'     : [
+        \ 'f:Functions',
+        \ 'g:GlobalVariables',
+        \ 'v:FunctionVariables',
+    \ ]
+\ }
 
-" let g:tagbar_type_scala = {
-"     \ 'ctagstype' : 'Scala',
-"     \ 'kinds'     : [
-"         \ 'p:packages:1',
-"         \ 'V:values',
-"         \ 'v:variables',
-"         \ 'T:types',
-"         \ 't:traits',
-"         \ 'o:objects',
-"         \ 'a:aclasses',
-"         \ 'c:classes',
-"         \ 'r:cclasses',
-"         \ 'm:methods'
-"     \ ]
-" \ }
+let g:tagbar_type_scala = {
+    \ 'ctagstype' : 'Scala',
+    \ 'kinds'     : [
+        \ 'p:packages:1',
+        \ 'V:values',
+        \ 'v:variables',
+        \ 'T:types',
+        \ 't:traits',
+        \ 'o:objects',
+        \ 'a:aclasses',
+        \ 'c:classes',
+        \ 'r:cclasses',
+        \ 'm:methods'
+    \ ]
+\ }
 
-" let g:tagbar_type_markdown = {
-" 	\ 'ctagstype' : 'markdown',
-" 	\ 'kinds' : [
-" 		\ 'h:Heading_L1',
-" 		\ 'i:Heading_L2',
-" 		\ 'k:Heading_L3'
-" 	\ ]
-" \ }
+let g:tagbar_type_markdown = {
+	\ 'ctagstype' : 'markdown',
+	\ 'kinds' : [
+		\ 'h:Heading_L1',
+		\ 'i:Heading_L2',
+		\ 'k:Heading_L3'
+	\ ]
+\ }
 
-" let g:tagbar_type_coffee = {
-"     \ 'ctagstype' : 'coffee',
-"     \ 'kinds'     : [
-"         \ 'c:classes',
-"         \ 'm:methods',
-"         \ 'f:functions',
-"         \ 'v:variables',
-"         \ 'f:fields',
-"     \ ]
-" \ }
-" " 2}}}
+let g:tagbar_type_coffee = {
+    \ 'ctagstype' : 'coffee',
+    \ 'kinds'     : [
+        \ 'c:classes',
+        \ 'm:methods',
+        \ 'f:functions',
+        \ 'v:variables',
+        \ 'f:fields',
+    \ ]
+\ }
+" 2}}}
 
 " {{{2 Vim-slime
 "---------------------------------------------------------------------
@@ -848,12 +743,6 @@ let g:startify_custom_header = [
 " |g:startify_disable_at_vimenter|
 " 2}}}
 
-" {{{2 HardTime
-"---------------------------------------------------------------------
-let g:hardtime_default_on = 0
-let g:list_of_normal_keys = ['h', 'j', 'k', 'l', '<UP>', '<DOWN>', '<RIGHT>', '<LEFT>']
-" 2}}}
-
 " {{{2 EasyAlign
 "---------------------------------------------------------------------
 " Check if better than tabularize
@@ -863,7 +752,6 @@ vmap ,al <Plug>(EasyAlign)
 " 2}}}
 
 " {{{2 Ctrlp
-
 " r: Try to search for a root directory (containing .git, .ctrlp, etc.)
 " and set that dir as the working dir
 " c: working directory
@@ -893,7 +781,6 @@ let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
 let g:ctrlp_extensions = [
     \ 'commandline'
     \ ]
-
 " 2}}}
 
 " {{{2 vim-textobj-user
@@ -926,12 +813,6 @@ function! CurrentLineI()
   \ : 0
 endfunction
 " 2}}} "
-
-" {{{2 Sneak
-"---------------------------------------------------------------------
-let g:sneak#streak = 0
-let g:sneak#use_ic_scs = 1
-" 2}}}
 
 " {{{2 Airline
 " : %3p : %4l : %3c

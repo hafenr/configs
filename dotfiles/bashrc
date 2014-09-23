@@ -1,36 +1,59 @@
-alias l='ls -al'
+# === config ===
+export EDITOR=vim
+export LANG=en_US.UTF-8
+stty -ixon
+
+# === aliases ===
+alias l='ls -alh'
 alias u='cd ..'
 alias uu='cd ../..'
 alias uuu='cd ../../..'
 alias uuuu='cd ../../../..'
 
-# Latex
+# === programs ===
+# > LaTeX
 alias latexmk_='latexmk -pdf -pvc'
 function pdflatex-watch() { while true; do inotifywait -e modify "$1"; pdflatex "$1"; done;}
+# > tmux
+alias tmux="TERM=screen-256color tmux"
 
-export EDITOR=vim
+# === environments ===
+export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
 export WORKON_HOME=~/.virtualenvs
-# export TERM=screen-256color
 export R_HOME=/Library/Frameworks/R.framework/Resources
 export JAVA_HOME=$(/usr/libexec/java_home)
-export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
-# .zshrc
-# alias tmux="TERM=screen-256color tmux"
-alias tmux="TERM=screen-256color tmux"
-export LANG=en_US.UTF-8
 
-stty -ixon
+# === os specific config ===
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    # Linux
+    :
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # Mac OSX
 
-if [ `uname` = "Darwin" ]; then
     # autostart virtual env
     export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python
     source /usr/local/bin/virtualenvwrapper.sh
 
     alias ipy="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
-
-    alias cdcb='cd ~/Dropbox/CBB/ComputationalBiology'
-    alias cdcsb='cd ~/Dropbox/CBB/ComputationalSystemsBiology'
     alias cded='cd ~/Dropbox/CBB/EvolutionaryDynamics'
-    alias cdml='cd ~/Dropbox/CBB/MachineLearning'
-fi
+    alias man='_() { echo $1; man -M $(brew --prefix)/opt/coreutils/libexec/gnuman $1 1>/dev/null 2>&1;  if [ "$?" -eq 0 ]; then man -M $(brew --prefix)/opt/coreutils/libexec/gnuman $1; else man $1; fi }; _'
 
+    # use gnu cmdline utilities instead of bsd ones
+    export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:$PATH"
+
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+    # POSIX compatibility layer and Linux environment emulation for Windows
+    :
+elif [[ "$OSTYPE" == "msys" ]]; then
+    # Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
+    :
+elif [[ "$OSTYPE" == "win32" ]]; then
+    # I'm not sure this can happen.
+    :
+elif [[ "$OSTYPE" == "freebsd"* ]]; then
+    # FreeBSD
+    :
+else
+    echo "[error] uknown OS: $OSTYPE"
+    echo "can't initialize properly"
+fi

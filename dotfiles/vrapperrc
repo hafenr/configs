@@ -9,3 +9,5 @@ set incsearch                       " set incremental search
 set ignorecase                      " ignores case while searching
 set smartcase                       " if a search contains a upper case char, make search case sensitive
 set gvimpath=/usr/bin/mvim
+nnoremap ; :
+nnoremap : ;

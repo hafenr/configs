@@ -38,6 +38,7 @@ Plugin 'tpope/vim-repeat'                " Repeat all kinds of stuff
 Plugin 'tpope/vim-surround'              " Surround motions
 Plugin 'mbbill/undotree'                 " Undo history as a tree
 Plugin 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
+Plugin 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): yal, yil etc.
 
 " Nice to have
 Plugin 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
@@ -58,7 +59,7 @@ Plugin 'MHordecki/vim-subword'           " - as a text object for such_sub_words
 " Plugin 'maxbrunsfeld/vim-yankstack'      " Needs to be started before surround!
 " Plugin 'Valloric/YouCompleteMe'        " $ Do `./install.sh` after update
 Plugin 'jeetsukumaran/vim-markology'
-" Plugin 'mhinz/vim-startify'
+Plugin 'mhinz/vim-startify'
 Plugin 'tomasr/molokai'
 Plugin 'Shougo/vimproc.vim'              " Do `$ make` after update
 " Plugin 'Valloric/YouCompleteMe'
@@ -79,7 +80,7 @@ Plugin 'vim-pandoc/vim-rmarkdown'
 Plugin 'Vim-R-plugin'
 
 " Julia
-Plugin 'JuliaLang/julia-vim'
+" Plugin 'JuliaLang/julia-vim'
 
 " LaTeX
 Plugin 'LaTeX-Box-Team/LaTeX-Box'
@@ -106,10 +107,6 @@ Plugin 'vim-scala'
 " Matlab
 Plugin 'matlab.vim'
 
-" Markdown
-Plugin 'nelstrom/vim-markdown-folding'
-Plugin 'plasticboy/vim-markdown'
-
 call vundle#end()            " required
 filetype plugin indent on    " required
 " }}}
@@ -132,7 +129,8 @@ if has('gui_running')               " gvim options
     " colorscheme obsidian2
     " colorscheme mustang
     " colorscheme rdark
-    " colorscheme summerfruit256
+    colorscheme seoul256
+    "
 else                                " terminal
     " set term=screen-256color
     set t_Co=256                    " set 256 colors for terminal
@@ -209,7 +207,8 @@ set so=7                            " keep 7 empty lines from the cursor to the 
 set mouse=a
 set visualbell                      " no annoying beeping
 set foldenable                      " enable folding
-set foldlevelstart=-1               " the fold level to show at file open (-1 is the default: fold all)
+set foldlevelstart=20               " the fold level to show at file open (-1 is the default: fold all)
+set foldlevel=20
 set foldnestmax=20                  " maximal fold level to show (20 is the default)
 set foldmethod=expr
 " set colorcolumn=80                  " highlight the 80th col
@@ -219,6 +218,8 @@ set relativenumber
 set cursorline                      " Highlight current line
 let grepprg="ag\ --nocolor\ --nogroup\ --silent"
 set showmatch                       " Highlight (blinking) matching [{( when inserting the closing )}]
+" set list listchars=tab:»·,trail:·,extends:$,nbsp:= " Display tabs and trailing whitespace
+set list listchars=tab:⇥\ ,nbsp:·,trail:␣,extends:▸,precedes:◂
 " }}}
 "================================================================
 " Autocommands {{{
@@ -232,7 +233,7 @@ autocmd BufEnter .vimrc setlocal foldmethod=marker
 "---------------------------------------------------------------------
 " autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
 " Automatically delete trailing whitespace
-autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+" autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
 " ---------------------------------------------------------------------
 " HTML, XML
@@ -244,16 +245,16 @@ autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 "---------------------------------------------------------------------
 " R
 "---------------------------------------------------------------------
-augroup R
-    autocmd!
-    au FileType r set iskeyword+=.
+" augroup R
+"     autocmd!
+"     au FileType r set iskeyword+=.
 
-    function! SetRmdOptions()
-        setfiletype rmarkdown.rmd
-    endfunction
+"     function! SetRmdOptions()
+"         setfiletype rmarkdown.rmd
+"     endfunction
 
-    autocmd BufEnter,BufRead *.Rmd call SetRmdOptions()
-augroup END
+"     autocmd BufEnter,BufRead *.Rmd call SetRmdOptions()
+" augroup END
 
 
 "---------------------------------------------------------------------
@@ -344,9 +345,9 @@ nnoremap <C-\> :noh<CR>
 " After yanking or putting switch to the lower-end
 " of the selection. This allows pasting multiple times
 " the same selection (and generally feels more natural imo).
-vnoremap <silent> y y`]
-vnoremap <silent> p p`]
-nnoremap <silent> p p`]
+" vnoremap <silent> y y`]
+" vnoremap <silent> p p`]
+" nnoremap <silent> p p`]
 
 " Navigating quickfix list (gets populated by e.g. vimgrep/ag)
 nnoremap ]q     :cnext<CR>
@@ -466,10 +467,6 @@ nnoremap gK :Dash<CR>
 
 " CtrlP
 
-" Respect CWD changes
- let g:ctrlp_working_path=0
- " let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
-
 " While in prompt: C-b and C-f switch search modes
 " C-j C-k allow navigation in results list
 " <CR> opens file in current window
@@ -477,27 +474,12 @@ nnoremap gK :Dash<CR>
 " <C-s> opens file in horizontal split
 let g:ctrlp_map = '<C-p>'
 
-" The command executed by the above mapping
-let g:ctrlp_cmd = 'CtrlPMixed'
-
-nnoremap <space>pl :CtrlPLine<CR>
+nnoremap <space>l :CtrlPLine<CR>
 nnoremap <space>b :CtrlPBuffer<CR>
-nnoremap <space>ls :CtrlPBuffer<CR>
-nnoremap <space>rf :CtrlPMRUFiles<CR>
-nnoremap <space>ta :CtrlPTag<CR>
+nnoremap <space>f :CtrlPMRUFiles<CR>
+nnoremap <space>t :CtrlPTag<CR>
 nnoremap <space>e :CtrlPMixed<CR>
-
-" nnoremap <leader>b 2:<c-u>call SkyBison("b ")<cr>
-" nnoremap <leader>t 2:<c-u>call SkyBison("tag ")<cr>
-" nnoremap <leader>h 2:<c-u>call SkyBison("h ")<cr>
-" nnoremap <leader>e :<c-u>call SkyBison("e ")<cr>
-
-let g:ctrlp_root_markers = ['.ctrlp']
-" While in directory mode:
-" <cr> change the local working directory for CtrlP and keep it open.
-" <c-t> change the global working directory (exit).
-" <c-v> change the local working directory for the current window (exit).
-" <c-x> change the global working directory to CtrlP's current local
+nnoremap <space>d :CtrlPBookmarkDir<CR>
 
 " LateX-Box
 nnoremap ,xv :LatexView<CR>
@@ -542,8 +524,6 @@ let g:LatexBox_quickfix = 0
 " with which most plugins won't work
 let g:tex_flavor = "latex"
 let g:LatexBox_latexmk_options = "-pvc -pdf"
-" set cole=2
-" hi Conceal guibg=black guifg=white
 " 2}}}
 
 " {{{2 Argumentative
@@ -587,7 +567,10 @@ endif
 
 " {{{2 Startify
 "---------------------------------------------------------------------
-let g:startify_bookmarks = [ '~/.vimrc', '~/Dev/void' ]
+let g:startify_bookmarks = ['~/Dropbox/CBB/StatMethods', '~/Dropbox/CBB/Bio373']
+let g:startify_custom_header =
+  \ map(split(system('fortune -s | cowsay'), '\n'), '"   ". v:val') + ['','']
+
 " 2}}}
 
 " {{{2 YouCompleteMe
@@ -616,7 +599,7 @@ let g:ycm_seed_identifiers_with_syntax = 1
 let g:UltiSnipsExpandTrigger='<tab>'
 let g:UltiSnipsEditSplit='vertical'
 " Edit snippets
-nnoremap <space>es :UltiSnipsEdit<CR>
+nnoremap <space>ue :UltiSnipsEdit<CR>
 
 let g:snips_author="Robin Hafen"
 let g:snips_email="robin.hafen@gmail.com"
@@ -627,6 +610,11 @@ let g:snips_github="https://github.com/hafenr"
 "---------------------------------------------------------------------
 let g:syntastic_warning_symbol='⚠'
 let g:syntastic_error_symbol='✗'
+let g:syntastic_r_lint_styles = 'list(spacing.indentation.notabs, spacing.indentation.evenindent)'
+let g:syntastic_r_checkers = ["lint", "svTools"]
+let g:syntastic_enable_r_svtools_checker = 1
+let g:syntastic_enable_r_lint_checker = 1
+
 " Remember to actually install all the syntax errors and style checkers"
 " pip install pyflakes pep8 pep257 flake8 pylint etc.
 " npm install -g jslint coffeelint # js, html, and coffee
@@ -719,21 +707,6 @@ let g:jedi#popup_select_first = 0
 " |g:startify_skiplist_server|
 " |g:startify_change_to_dir|
 " |g:startify_custom_indices|
-
-let g:startify_custom_header = [
-\ 'Folds:                ',
-\ '----------------------',
-\ 'move: zj zk           ',
-\ 'open (rec): zo zO     ',
-\ 'close (rec): zc zC    ',
-\ '----------------------',
-\ 'Indent text objects:',
-\ 'Vii caii etc. ..."      ',
-\ '----------------------',
-\ 'move in changelist: g; and g,',
-\ '                      ',
-\ '                      ']
-
 " |g:startify_custom_footer|
 " |g:startify_restore_position|
 " |g:startify_empty_buffer_key|
@@ -752,19 +725,29 @@ vmap ,al <Plug>(EasyAlign)
 " 2}}}
 
 " {{{2 Ctrlp
+"---------------------------------------------------------------------
+" Respect CWD changes
+let g:ctrlp_working_path=0
+
 " r: Try to search for a root directory (containing .git, .ctrlp, etc.)
 " and set that dir as the working dir
 " c: working directory
+"
 let g:ctrlp_working_path_mode = 'ra'
 " let g:ctrlp_match_window_reversed = 0
 " let g:ctrlp_max_height = 10
+"
 let g:ctrlp_show_hidden = 1
+" The command executed by the above mapping
+"
+let g:ctrlp_cmd = 'CtrlPMixed'
 
-" Dir mode settings:
+" While in directory mode:
 " <cr> change the local working directory for CtrlP and keep it open.
 " <c-t> change the global working directory (exit).
 " <c-v> change the local working directory for the current window (exit).
-" <c-x> change the global working directory to CtrlP's current local wd (exit)
+" <c-x> change the global working directory to CtrlP's current local
+let g:ctrlp_root_markers = ['.ctrlp']
 
 " Default is search by full path. Switch with CTRL-d while in CtrlP prompt.
 let g:ctrlp_by_filename = 0
@@ -775,13 +758,9 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\v\.(o|m4a|pdf|swp|pyc|wav|mp3|ogg|blend|dvi|fls|aux|blg|bbl|log|loa|lof|toc|fdb_latexmk|lot|)$|\~$'
   \ }
 
+" Important: save cache across sessions => much faster. Refresh with F5
+let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
-" let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-let g:ctrlp_extensions = [
-    \ 'commandline'
-    \ ]
-" 2}}}
 
 " {{{2 vim-textobj-user
 call textobj#user#plugin('line', {
@@ -962,6 +941,13 @@ function! s:Repl()
 endfunction
 
 vmap <silent> <expr> p <sid>Repl()
+" }}}
+"================================================================
+" Colors {{{
+"================================================================
+" cursor as light green
+" Conceal background should be the same as seoul256 bg
+hi Conceal guibg=#3f3f3f
 " }}}
 "================================================================
 " End {{{

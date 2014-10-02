@@ -52,3 +52,9 @@ setopt autopushd    # make cd push directories onto stack
 setopt pushdminus  # invert meanings of +N and -N arguments to pushd
 export DIRSTACKSIZE=8
 alias dh='dirs -v' # show the cd history
+
+
+chpwd() {
+    ls -alh
+}
+

@@ -304,8 +304,8 @@
 ; Status bar
 ;--------------------------------------------------------------------------------
 ; Power line, (a custom version frm git)
-(add-to-list 'load-path "~/.emacs.d/powerline")
-(require 'powerline)
+; (add-to-list 'load-path "~/.emacs.d/powerline")
+; (require 'powerline)
 ;; (powerline-default-theme)
 ; (powerline-default-theme)
 

@@ -318,9 +318,6 @@ nnoremap gV `[v`]
 nnoremap ; :
 xnoremap ; :
 
-" SkyBison for fuzzy searching the command line
-nnoremap <space>; :<c-u>call SkyBison("")<cr>
-
 " Use : for 'go-to-next-match' when `f`ing
 nnoremap : ;
 xnoremap : ;
@@ -474,12 +471,13 @@ nnoremap gK :Dash<CR>
 " <C-s> opens file in horizontal split
 let g:ctrlp_map = '<C-p>'
 
-nnoremap <space>l :CtrlPLine<CR>
-nnoremap <space>b :CtrlPBuffer<CR>
-nnoremap <space>f :CtrlPMRUFiles<CR>
-nnoremap <space>t :CtrlPTag<CR>
 nnoremap <space>e :CtrlPMixed<CR>
-nnoremap <space>d :CtrlPBookmarkDir<CR>
+nnoremap <space>b :CtrlPBuffer<CR>
+nnoremap <space>t :CtrlPTag<CR>
+
+nnoremap <space>L :CtrlPLine<CR>
+nnoremap <space>F :CtrlPMRUFiles<CR>
+nnoremap <space>D :CtrlPBookmarkDir<CR>
 
 " LateX-Box
 nnoremap ,xv :LatexView<CR>

@@ -57,3 +57,5 @@ else
     echo "[error] uknown OS: $OSTYPE"
     echo "can't initialize properly"
 fi
+
+export PATH="$PATH:/Users/robin/Dropbox/CBB/Bio373/utils"

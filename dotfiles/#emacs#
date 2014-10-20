@@ -80,15 +80,14 @@
 (defvar my-elpa-packages '(
                            ;; Sane defaults
                            starter-kit
-
                            auto-complete
-                           dropdown-list
 
                            ;; Clojure/Lisp support
                            clojure-mode
                            clojure-test-mode
                            clojure-snippets
 		           cider
+
                            paredit
                            paredit-menu
                            rainbow-delimiters
@@ -99,11 +98,11 @@
 
                            undo-tree
                            window-numbering
-                           linum-off
-                           projectile
-                           
                            auctex
-
+                           dropdown-list
+                           projectile
+                           linum-off
+                           
                            ;; Fuzzy matching for nearly everything
                            helm
                            helm-flycheck
@@ -384,6 +383,7 @@
 ;                ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
 ;                ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
 
+;
 (global-set-key (kbd "C-c l") 'org-store-link)
 ; brew install imagemagick
 ; (setq org-latex-create-formula-image-program 'imagemagick)
@@ -507,7 +507,7 @@
 (global-set-key (kbd "M-;") 'comment-dwim)
 
 ; Set keys like this:
-(evil-leader/set-key
+(evil-lEader/set-key
   "j" 'ace-jump-line-mode
   "b" 'ido-switch-buffer
   "o" 'helm-everything

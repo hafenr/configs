@@ -39,6 +39,8 @@ Plugin 'tpope/vim-surround'              " Surround motions
 Plugin 'mbbill/undotree'                 " Undo history as a tree
 Plugin 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
 Plugin 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): yal, yil etc.
+Plugin 'haya14busa/incsearch.vim'
+
 
 " Nice to have
 Plugin 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
@@ -471,6 +473,7 @@ nnoremap gK :Dash<CR>
 " <C-s> opens file in horizontal split
 let g:ctrlp_map = '<C-p>'
 
+nnoremap <space>p :CtrlPMixed<CR>
 nnoremap <space>e :CtrlPMixed<CR>
 nnoremap <space>b :CtrlPBuffer<CR>
 nnoremap <space>t :CtrlPTag<CR>
@@ -795,6 +798,8 @@ endfunction
 " : %3p : %4l : %3c
 if has('gui_running')
     let g:airline_powerline_fonts = 1
+    let g:airline_theme='dark'
+    
 endif
 let g:airline_section_y = airline#section#create(["cwd:%{split(getcwd(), '/')[-1]}% "])
 set noshowmode
@@ -802,6 +807,24 @@ set noshowmode
 
 " {{{2 Markology
  let g:markology_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+" 2}}}
+
+" {{{2 incsearch.vim
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+
+" Enable mappings below for automatic 'nohlsearch' after hitting the
+" last match:
+
+" set hlsearch
+" let g:incsearch#auto_nohlsearch = 1
+" map n  <Plug>(incsearch-nohl-n)
+" map N  <Plug>(incsearch-nohl-N)
+" map *  <Plug>(incsearch-nohl-*)
+" map #  <Plug>(incsearch-nohl-#)
+" map g* <Plug>(incsearch-nohl-g*)
+" map g# <Plug>(incsearch-nohl-g#)
 " 2}}}
 
 " SuperTab {{{2 "

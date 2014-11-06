@@ -76,11 +76,11 @@ Plugin 'majutsushi/tagbar'
 Plugin 'Keithbsmiley/swift.vim'
 
 " R
-Plugin 'vim-pandoc/vim-pandoc'
+" Plugin 'vim-pandoc/vim-pandoc'
 Plugin 'vim-pandoc/vim-pandoc-syntax'
 Plugin 'vim-pandoc/vim-rmarkdown'
 Plugin 'Vim-R-plugin'
-
+Plugin 'nelstrom/vim-markdown-folding'
 " Julia
 " Plugin 'JuliaLang/julia-vim'
 
@@ -319,10 +319,11 @@ nnoremap gV `[v`]
 " Use ; for command line since it's easier to type
 nnoremap ; :
 xnoremap ; :
+vnoremap ; :
 
 " Use : for 'go-to-next-match' when `f`ing
 nnoremap : ;
-xnoremap : ;
+xnoremap ; :
 
 " Show the registers
 nnoremap <space>re :reg<CR>
@@ -455,7 +456,7 @@ nnoremap <F4> :UndotreeToggle<CR>
 " Emmet, remap to something less awkward
 imap <C-l> <C-y>,
 
-nmap <script> <silent> <space>l :call ToggleLocationList()<CR>
+nmap <script> <silent> <space>ll :call ToggleLocationList()<CR>
 nmap <script> <silent> <space>q :call ToggleQuickfixList()<CR>
 
 nnoremap <C-w>m :MaximizerToggle<CR>
@@ -476,6 +477,7 @@ let g:ctrlp_map = '<C-p>'
 nnoremap <space>p :CtrlPMixed<CR>
 nnoremap <space>e :CtrlPMixed<CR>
 nnoremap <space>b :CtrlPBuffer<CR>
+nnoremap <space>ls :CtrlPBuffer<CR>
 nnoremap <space>t :CtrlPTag<CR>
 
 nnoremap <space>L :CtrlPLine<CR>
@@ -559,8 +561,6 @@ if !has('gui_running')
     " For integration of r-plugin with screen.vim
     " Don't use conque shell if installed
     let vimrplugin_conqueplugin = 0
-    " map the letter 'r' to send visually selected lines to R
-    let g:vimrplugin_map_r = 1
     " see R documentation in a Vim buffer
     let vimrplugin_vimpager = "no""
 endif
@@ -569,8 +569,8 @@ endif
 " {{{2 Startify
 "---------------------------------------------------------------------
 let g:startify_bookmarks = ['~/Dropbox/CBB/StatMethods', '~/Dropbox/CBB/Bio373']
-let g:startify_custom_header =
-  \ map(split(system('fortune -s | cowsay'), '\n'), '"   ". v:val') + ['','']
+" let g:startify_custom_header =
+"   \ map(split(system('fortune -s | cowsay'), '\n'), '"   ". v:val') + ['','']
 
 " 2}}}
 
@@ -962,6 +962,43 @@ function! s:Repl()
 endfunction
 
 vmap <silent> <expr> p <sid>Repl()
+
+call textobj#user#plugin('rchunk', {
+\   'code': {
+\     'select-a': 'ar',
+\     'select-a-function': 'RChunkA',
+\     'select-i': 'ir',
+\     'select-i-function': 'RChunkI',
+\   },
+\ })
+
+function! RChunkA()
+    set noincsearch
+    set nohlsearch
+    execute "norm ?```"
+    let upper_pos = getpos('.')
+    echom upper_pos[1]
+    execute "norm /```"
+    let lower_pos = getpos('.')
+    set nohlsearch
+    set incsearch
+    return ['V', upper_pos, lower_pos]
+endfunction
+
+function! RChunkI()
+    set noincsearch
+    set nohlsearch
+    execute "norm ?```"
+    norm! j
+    let upper_pos = getpos('.')
+    execute "norm /```"
+    norm! k
+    let lower_pos = getpos('.')
+    set nohlsearch
+    set incsearch
+    return ['V', upper_pos, lower_pos]
+endfunction
+
 " }}}
 "================================================================
 " Colors {{{

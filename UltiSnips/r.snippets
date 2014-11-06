@@ -1,17 +1,50 @@
+global !p
+class Arg(object):
+    def __init__(self, arg):
+        self.arg = arg
+        self.name = arg.split('=')[0].strip()
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name
+
+    def is_kwarg(self):
+        return '=' in self.arg
+
+def get_args(arglist):
+    args = [Arg(arg.strip()) for arg in arglist.split(',') if arg]
+    return args
+
+def write_roxygen_param_block(args, snip):
+    for arg in args:
+        if arg.name:
+            snip += "#' @param %s @TODO" % arg
+
+def header_line(textlen, lchar='-', commentchar='#', nstart=3, upto=80):
+    prefix = commentchar + ' ' + lchar * nstart + ' '
+    nremaining = upto - nstart - 3 - len(commentchar) - textlen
+    suffix = ' ' + lchar * nremaining
+    return (prefix, suffix)
+endglobal
+
+
 snippet lap "lapply"
-lapply(${1:list}, ${2:function(${3:arg}) \{
-    ${4:body}
+lapply(${1:list}, ${2:function(${3:e}) \{
+	${4:# TODO: body}
 \}})
 endsnippet
 
 snippet sap "sapply"
-sapply(${1:list}, ${2:function(${3:arg}) \{
-    ${4:body}
+sapply(${1:list}, ${2:function(${3:e}) \{
+	${4:# TODO: body}
 \}})
 endsnippet
 
 snippet ap "apply"
-apply(${1:array}, ${2:dim}, ${3:function(${4:arg}) \{
+apply(${1:array}, ${2:1}, ${3:function(${4:`!p
+snip.rv += 'col' if t[2] == '2' else 'row'`}) \{
     ${5:body}
 \}})
 endsnippet
@@ -22,16 +55,51 @@ for (${1:iter} in ${2:seq}) \{
 \}
 endsnippet
 
-snippet defun
-${1:name} <- function(${2:variables}) {
-    ${0}
+snippet defun "Function definition with roxygen comment."
+#' Title for function $1.
+#'
+#' Description for $1.
+#'`!p
+args = get_args(t[2])
+write_roxygen_param_block(args, snip)`
+#' @return @TODO
+${1:name} <- function($2) {
+	${0:# @TODO}
 }
 endsnippet
 
-snippet fun
+snippet defn "Simple function definition."
+${1:name} <- function(${2:variables}) {
+	${0:# @TODO}
+}
+endsnippet
+
+snippet fun "Simple function with braces."
+function(${1}) {
+	${2}
+}
+endsnippet
+
+snippet fn "Simple function."
 function(${1}) {${2}}
 endsnippet
 
-snippet bioconductor "Source bioconductor install function" b
+snippet bioc "Source bioconductor install function" b
 source("http://bioconductor.org/biocLite.R")
+endsnippet
+
+snippet h1 "A level one header" b
+`!p
+line = header_line(len(t[1]), '=')
+snip.rv += line[0] `${1:Title}`!p
+snip.rv += line[1]`
+$0
+endsnippet
+
+snippet h2 "A level two header" b
+`!p
+line = header_line(len(t[1]), '-')
+snip.rv += line[0] `${1:Subtitle}`!p
+snip.rv += line[1]`
+$0
 endsnippet

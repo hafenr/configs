@@ -26,6 +26,11 @@ export JAVA_HOME=$(/usr/libexec/java_home)
 # === os specific config ===
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     # Linux
+    xmodmap ~/.xmodmappings
+    xmodmap -e 'keycode 66 = Control_L'
+    xmodmap -e 'clear Lock'
+    xmodmap -e 'add Control = Control_L'
+    /opt/xcape/xcape -e 'Control_L=Escape'
     :
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     # Mac OSX

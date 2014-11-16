@@ -43,6 +43,8 @@ Plugin 'haya14busa/incsearch.vim'
 
 
 " Nice to have
+Plugin 'chrisbra/csv.vim'
+Plugin 'salsifis/vim-transpose'
 Plugin 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
 Plugin 'junegunn/vim-easy-align'         " :'<,'>EasyAlign [*] DELIM or /regex/
 Plugin 'godlygeek/tabular'               " :Tabularize /regex
@@ -57,7 +59,6 @@ Plugin 'yaifa.vim'
 Plugin 'mattn/emmet-vim'                 " Zencoding successor
 Plugin 'kana/vim-textobj-user'           " Needed for textobj-python
 Plugin 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, if
-Plugin 'MHordecki/vim-subword'           " - as a text object for such_sub_words or suchSubWords
 " Plugin 'maxbrunsfeld/vim-yankstack'      " Needs to be started before surround!
 " Plugin 'Valloric/YouCompleteMe'        " $ Do `./install.sh` after update
 Plugin 'jeetsukumaran/vim-markology'
@@ -227,7 +228,7 @@ set list listchars=tab:⇥\ ,nbsp:·,trail:␣,extends:▸,precedes:◂
 " Autocommands {{{
 "================================================================
 " Alternative to autotags:
-" au BufWritePost *.R,*.r,*.py,*.scala,*.clj,*.coffee silent! !ctags -R &
+" au BufWritePost *.R,*.r,*.Rmd,*.py,*.scala,*.clj,*.coffee silent! !ctags -R &
 autocmd BufEnter .vimrc setlocal foldmethod=marker
 
 "---------------------------------------------------------------------
@@ -333,6 +334,9 @@ inoremap jk <ESC>
 
 nnoremap <space>so :source ~/.vimrc<CR>
 
+" Append a comment
+nnoremap <C-a> A  <C-r>=&comments[1]<CR>
+
 " Insert an empty space
 nnoremap <S-space> i <ESC>
 
@@ -375,6 +379,9 @@ noremap gV `[v`]
 nnoremap ,,y "*y
 nnoremap ,,p "*p
 nnoremap ,Y "+yy
+
+" Knit to pdf
+nnoremap <space>R :!Rscript -e "require(knitr); knit2pdf('<C-R>%')"<CR>
 
 " Jump in the middle of the _current_ line, not the middle of
 " the display
@@ -475,10 +482,12 @@ nnoremap gK :Dash<CR>
 let g:ctrlp_map = '<C-p>'
 
 nnoremap <space>p :CtrlPMixed<CR>
-nnoremap <space>e :CtrlPMixed<CR>
+
 nnoremap <space>b :CtrlPBuffer<CR>
+nnoremap <space>u :CtrlPBuffer<CR>
 nnoremap <space>ls :CtrlPBuffer<CR>
 nnoremap <space>t :CtrlPTag<CR>
+nnoremap <space>w :CtrlPTag<CR>
 
 nnoremap <space>L :CtrlPLine<CR>
 nnoremap <space>F :CtrlPMRUFiles<CR>
@@ -549,7 +558,9 @@ let g:maximizer_set_default_mapping = 0
 " {{{2 R Plugin
 "---------------------------------------------------------------------
 let g:vimrplugin_assign='<'
+let vimrplugin_assign_map = "<M-->"
 
+let r_syntax_folding = 1
 if !has('gui_running')
     let vimrplugin_term = "/Applications/iTerm.app/Contents/MacOS/iTerm"
     let vimrplugin_term_cmd =  "/Applications/iTerm.app/Contents/MacOS/iTerm"
@@ -562,13 +573,13 @@ if !has('gui_running')
     " Don't use conque shell if installed
     let vimrplugin_conqueplugin = 0
     " see R documentation in a Vim buffer
-    let vimrplugin_vimpager = "no""
+    let vimrplugin_vimpager = 'no'
 endif
 " 2}}}
 
 " {{{2 Startify
 "---------------------------------------------------------------------
-let g:startify_bookmarks = ['~/Dropbox/CBB/StatMethods', '~/Dropbox/CBB/Bio373']
+" let g:startify_bookmarks = ['~/Dropbox/CBB/StatMethods', '~/Dropbox/CBB/Bio373']
 " let g:startify_custom_header =
 "   \ map(split(system('fortune -s | cowsay'), '\n'), '"   ". v:val') + ['','']
 

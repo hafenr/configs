@@ -62,6 +62,6 @@ export PATH="$PATH:/Users/robin/Dropbox/CBB/Bio373/utils"
 
 fortune -s | cowsay
 
-if [[ ! $TERM =~ screen ]]; then
-    exec tmux
-fi
+# if [[ ! $TERM =~ screen ]]; then
+#     exec tmux
+# fi

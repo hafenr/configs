@@ -43,6 +43,7 @@ Plugin 'haya14busa/incsearch.vim'
 
 
 " Nice to have
+Plugin 'gosukiwi/vim-atom-dark'
 Plugin 'chrisbra/csv.vim'
 Plugin 'salsifis/vim-transpose'
 Plugin 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
@@ -75,6 +76,14 @@ Plugin 'majutsushi/tagbar'
 " By language
 " Swift
 Plugin 'Keithbsmiley/swift.vim'
+
+" Clojure
+Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'tpope/vim-fireplace'
+Plugin 'vim-scripts/paredit.vim'
+
+" Ruby
+Plugin 'vim-ruby/vim-ruby'
 
 " R
 " Plugin 'vim-pandoc/vim-pandoc'
@@ -127,12 +136,13 @@ if has('gui_running')               " gvim options
     endif
 
     let g:seoul256_background = 236 " Range: 233 - 239"
-    colo seoul256
+    " colo seoul256
     " colo default
-    " colorscheme obsidian2
+    colorscheme obsidian2
     " colorscheme mustang
     " colorscheme rdark
-    colorscheme seoul256
+    " colorscheme atom-dark
+    " colorscheme seoul256
     "
 else                                " terminal
     " set term=screen-256color
@@ -228,8 +238,24 @@ set list listchars=tab:⇥\ ,nbsp:·,trail:␣,extends:▸,precedes:◂
 " Autocommands {{{
 "================================================================
 " Alternative to autotags:
-" au BufWritePost *.R,*.r,*.Rmd,*.py,*.scala,*.clj,*.coffee silent! !ctags -R &
-autocmd BufEnter .vimrc setlocal foldmethod=marker
+augroup ctags
+    autocmd!
+    " au BufWritePost *.R,*.r,*.Rmd,*.py,*.scala,*.clj,*.coffee silent! !ctags -R
+augroup END
+
+augroup general
+    autocmd!
+    autocmd BufEnter .vimrc setlocal foldmethod=marker
+augroup END
+
+augroup parens
+    autocmd!
+    au VimEnter * RainbowParenthesesToggle
+    au Syntax * RainbowParenthesesLoadRound " ()
+    au Syntax * RainbowParenthesesLoadSquare " []
+    au Syntax * RainbowParenthesesLoadBraces " {}
+    au Syntax * RainbowParenthesesLoadChevrons " <>
+augroup END
 
 "---------------------------------------------------------------------
 " Default
@@ -258,7 +284,6 @@ autocmd BufEnter .vimrc setlocal foldmethod=marker
 
 "     autocmd BufEnter,BufRead *.Rmd call SetRmdOptions()
 " augroup END
-
 
 "---------------------------------------------------------------------
 " Python
@@ -482,12 +507,12 @@ nnoremap gK :Dash<CR>
 let g:ctrlp_map = '<C-p>'
 
 nnoremap <space>p :CtrlPMixed<CR>
+nnoremap <space>e :CtrlPMixed<CR>
 
 nnoremap <space>b :CtrlPBuffer<CR>
 nnoremap <space>u :CtrlPBuffer<CR>
 nnoremap <space>ls :CtrlPBuffer<CR>
-nnoremap <space>t :CtrlPTag<CR>
-nnoremap <space>w :CtrlPTag<CR>
+nnoremap <space>d :CtrlPTag<CR>
 
 nnoremap <space>L :CtrlPLine<CR>
 nnoremap <space>F :CtrlPMRUFiles<CR>

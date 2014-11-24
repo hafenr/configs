@@ -17,12 +17,6 @@ function pdflatex-watch() { while true; do inotifywait -e modify "$1"; pdflatex 
 # > tmux
 alias tmux="TERM=screen-256color tmux"
 
-# === environments ===
-export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
-export WORKON_HOME=~/.virtualenvs
-export R_HOME=/Library/Frameworks/R.framework/Resources
-export JAVA_HOME=$(/usr/libexec/java_home)
-
 # === os specific config ===
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     # Linux
@@ -34,6 +28,12 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     :
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     # Mac OSX
+    # === environments ===
+    export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
+    export WORKON_HOME=~/.virtualenvs
+    export R_HOME=/Library/Frameworks/R.framework/Resources
+    export JAVA_HOME=$(/usr/libexec/java_home)
+
 
     # autostart virtual env
     export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python

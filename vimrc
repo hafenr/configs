@@ -72,15 +72,19 @@ Plugin 'tpope/vim-obsession'
 Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
 Plugin 'jpalardy/vim-slime'              " REPL interaction
 Plugin 'majutsushi/tagbar'
+Plugin 'noahfrederick/vim-hemisu'
 
 " By language
 " Swift
 Plugin 'Keithbsmiley/swift.vim'
 
 " Clojure
+Plugin 'guns/vim-clojure-static'
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'tpope/vim-fireplace'
 Plugin 'vim-scripts/paredit.vim'
+Plugin 'tpope/vim-sexp-mappings-for-regular-people.git'
+Plugin 'guns/vim-sexp.git'
 
 " Ruby
 Plugin 'vim-ruby/vim-ruby'
@@ -138,7 +142,9 @@ if has('gui_running')               " gvim options
     let g:seoul256_background = 236 " Range: 233 - 239"
     " colo seoul256
     " colo default
-    colorscheme obsidian2
+    " colorscheme obsidian2
+    colorscheme hemisu
+    set background=dark
     " colorscheme mustang
     " colorscheme rdark
     " colorscheme atom-dark
@@ -147,8 +153,8 @@ if has('gui_running')               " gvim options
 else                                " terminal
     " set term=screen-256color
     set t_Co=256                    " set 256 colors for terminal
+    colorscheme hemisu
     set background=dark
-    colo seoul256
 endif
 
 " Keep undo history across sessions by storing it in a file
@@ -248,15 +254,6 @@ augroup general
     autocmd BufEnter .vimrc setlocal foldmethod=marker
 augroup END
 
-augroup parens
-    autocmd!
-    au VimEnter * RainbowParenthesesToggle
-    au Syntax * RainbowParenthesesLoadRound " ()
-    au Syntax * RainbowParenthesesLoadSquare " []
-    au Syntax * RainbowParenthesesLoadBraces " {}
-    au Syntax * RainbowParenthesesLoadChevrons " <>
-augroup END
-
 "---------------------------------------------------------------------
 " Default
 "---------------------------------------------------------------------
@@ -295,6 +292,26 @@ augroup Python
     " autocmd FileType python set omnifunc=pythoncomplete#Complete
     " autocmd FileType python setlocal ofu=jedi#completions
     " autocmd BufWritePost *.py silent! !ctags -R --exclude=.git --exclude=lib --exclude=external --languages=python
+augroup END
+
+
+function! SetClojureSettings()
+    nnoremap <silent> <M-l> :<C-u>call PareditMoveRight()<CR>
+    nnoremap <silent> <M-h> :<C-u>call PareditMoveLeft()<CR>
+    nnoremap <silent> <C-l> :<C-u>call PareditMoveRight()<CR>
+    nnoremap <silent> <C-h> :<C-u>call PareditMoveLeft()<CR>
+endfunction
+
+augroup Clojure
+    autocmd!
+    autocmd FileType clojure call SetClojureSettings()
+    au BufEnter *.clj,*.cljs setlocal macmeta
+    au VimEnter *.clj,*.el RainbowParenthesesActivate
+    au Syntax   *.clj,*.el RainbowParenthesesLoadRound " ()
+    au Syntax   *.clj,*.el RainbowParenthesesLoadSquare " []
+    au Syntax   *.clj,*.el RainbowParenthesesLoadBraces " {}
+    au Syntax   *.clj,*.el RainbowParenthesesLoadChevrons " <>
+    " au BufWritePost *.cljs :BLReloadPage
 augroup END
 
 "---------------------------------------------------------------------
@@ -338,6 +355,9 @@ augroup END
 let mapleader="<space>"
 let maplocalleader = ","
 
+nnoremap <silent> <C-right> :<C-u>call PareditMoveRight()<CR>
+nnoremap <silent> <C-left> :<C-u>call PareditMoveLeft()<CR>
+
 " Select most recently pasted text
 nnoremap gV `[v`]
 
@@ -352,7 +372,7 @@ nnoremap : ;
 xnoremap ; :
 
 " Show the registers
-nnoremap <space>re :reg<CR>
+nnoremap <space>R :reg<CR>
 
 " Old escape (now Caps-Lock)
 inoremap jk <ESC>
@@ -367,6 +387,7 @@ nnoremap <S-space> i <ESC>
 
 " Save the file
 nnoremap <C-space> :w<cr>
+nnoremap <S-space> :BLReloadPage<CR>
 
 " Clear all highlightning
 nnoremap <C-\> :noh<CR>
@@ -510,7 +531,7 @@ nnoremap <space>p :CtrlPMixed<CR>
 nnoremap <space>e :CtrlPMixed<CR>
 
 nnoremap <space>b :CtrlPBuffer<CR>
-nnoremap <space>u :CtrlPBuffer<CR>
+nnoremap <space>r :CtrlPBuffer<CR>
 nnoremap <space>ls :CtrlPBuffer<CR>
 nnoremap <space>d :CtrlPTag<CR>
 
@@ -543,6 +564,11 @@ cabbrev stat ~/Dropbox/CBB/StatMethods
 " Plugin settings {{{1
 "================================================================
 
+" {{{2 delimitMate
+"---------------------------------------------------------------------
+let delimitMate_expand_cr = 1
+" 2}}}
+"
 " {{{2 Brolink
 "---------------------------------------------------------------------
 let g:bl_no_mappings = 1
@@ -791,9 +817,9 @@ let g:ctrlp_by_filename = 0
 let g:ctrlp_root_markers = ['.ctrlp']
 
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v\.git$\|\.hg$\|\.svn$\|\.yardoc\|public\/images\|public\/system\|data\|log\|tmp$',
-  \ 'file': '\v\.(o|m4a|pdf|swp|pyc|wav|mp3|ogg|blend|dvi|fls|aux|blg|bbl|log|loa|lof|toc|fdb_latexmk|lot|)$|\~$'
-  \ }
+\   'dir':  '\v\.git$\|\.hg$\|\.svn$\|\.yardoc\|public\/images\|public\/system\|data\|log\|tmp$|/react-cljs/resources/public/js',
+\   'file': '\v\.(o|m4a|pdf|swp|pyc|wav|mp3|ogg|blend|dvi|fls|aux|blg|bbl|log|loa|lof|toc|fdb_latexmk|lot|)$|\~$'
+\   }
 
 " Important: save cache across sessions => much faster. Refresh with F5
 let g:ctrlp_clear_cache_on_exit = 0

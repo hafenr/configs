@@ -44,7 +44,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     alias man='_() { echo $1; man -M $(brew --prefix)/opt/coreutils/libexec/gnuman $1 1>/dev/null 2>&1;  if [ "$?" -eq 0 ]; then man -M $(brew --prefix)/opt/coreutils/libexec/gnuman $1; else man $1; fi }; _'
 
     # use gnu cmdline utilities instead of bsd ones
-    export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/texbin:$PATH"
+    export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/texbin:$PATH:/opt/xpdf"
 
 elif [[ "$OSTYPE" == "cygwin" ]]; then
     # POSIX compatibility layer and Linux environment emulation for Windows
@@ -63,7 +63,6 @@ else
     echo "can't initialize properly"
 fi
 
-export PATH="$PATH:/Users/robin/Dropbox/CBB/Bio373/utils"
 
 cat <<'EOF'
                       __gggrgM**M#mggg__

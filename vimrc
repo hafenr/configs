@@ -42,6 +42,7 @@ Plugin 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): y
 Plugin 'haya14busa/incsearch.vim'
 
 
+
 " Nice to have
 Plugin 'gosukiwi/vim-atom-dark'
 Plugin 'chrisbra/csv.vim'
@@ -73,6 +74,8 @@ Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
 Plugin 'jpalardy/vim-slime'              " REPL interaction
 Plugin 'majutsushi/tagbar'
 Plugin 'noahfrederick/vim-hemisu'
+Plugin 'rizzatti/dash.vim'
+Plugin 'https://github.com/freeo/vim-kalisi'
 
 " By language
 " Swift
@@ -102,9 +105,13 @@ Plugin 'nelstrom/vim-markdown-folding'
 Plugin 'LaTeX-Box-Team/LaTeX-Box'
 Plugin 'Eckankar/vim-latex-folding'
 
-" HTML, CSS/LESS, JS
-Plugin 'ap/vim-css-color'
+" JavaScript, TypeScript, CoffeeScript
+Plugin 'jason0x43/vim-js-indent'
+Plugin 'leafgarland/typescript-vim'
 Plugin 'vim-coffee-script'
+
+" HTML, CSS/LESS
+" Plugin 'ap/vim-css-color'
 Plugin 'ervandew/screen'
 Plugin 'groenewege/vim-less'
 Plugin 'lepture/vim-jinja'
@@ -113,8 +120,6 @@ Plugin 'othree/html5.vim'
 
 " Python
 Plugin 'django.vim'
-" Plugin 'klen/python-mode'
-"<localleader> Plugin 'davidhalter/jedi-vim'
 
 " Scala
 Plugin 'spiroid/vim-ultisnip-scala'
@@ -140,21 +145,14 @@ if has('gui_running')               " gvim options
     endif
 
     let g:seoul256_background = 236 " Range: 233 - 239"
-    " colo seoul256
-    " colo default
-    " colorscheme obsidian2
-    colorscheme hemisu
     set background=dark
-    " colorscheme mustang
-    " colorscheme rdark
-    " colorscheme atom-dark
-    " colorscheme seoul256
+    colorscheme mustang
     "
 else                                " terminal
     " set term=screen-256color
     set t_Co=256                    " set 256 colors for terminal
-    colorscheme hemisu
     set background=dark
+    colorscheme seoul256
 endif
 
 " Keep undo history across sessions by storing it in a file
@@ -170,6 +168,7 @@ endif
 py import vim, sys
 py from vim import buffers, windows, command, current, error
 
+set rtp+=/usr/local/lib/node_modules/typescript-tools
 " }}}
 "================================================================
 " Basic Settings {{{
@@ -254,12 +253,14 @@ augroup general
     autocmd BufEnter .vimrc setlocal foldmethod=marker
 augroup END
 
+au BufRead,BufNewFile *.ts        setlocal filetype=typescript
+autocmd QuickFixCmdPost [^l]* nested cwindow
+autocmd QuickFixCmdPost    l* nested lwindow
 "---------------------------------------------------------------------
 " Default
 "---------------------------------------------------------------------
-" autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
 " Automatically delete trailing whitespace
-" autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
 " ---------------------------------------------------------------------
 " HTML, XML
@@ -337,13 +338,6 @@ augroup END
 " Markdown
 "---------------------------------------------------------------------
 augroup Markdown
-    autocmd!
-    autocmd FileType markdown iabbr ddx \frac{d}{dx}
-    autocmd FileType markdown iabbr ddt \frac{d}{dt}
-    " autocmd FileType markdown inoremap $ $$<Left>
-    " autocmd FileType markdown setlocal spell spelllang=en_us
-    " autocmd FileType markdown inoremap $$ $$<CR>$$<ESC>O
-    " autocmd FileType markdown let b:AutoPairs['$'] = '$'
     " autocmd FileType markdown set foldmethod=marker
     " autocmd FileType markdown set foldmarker=-------------------------------------------------------------------------------,*******************************************************************************
 augroup END
@@ -418,8 +412,8 @@ nnoremap ]<space> o<ESC>k
 " Select just pasted text
 noremap gV `[v`]
 
-" nnoremap ,y "+y
-" vnoremap ,p "+p
+nnoremap ,y "+y
+vnoremap ,p "+p
 
 " (highlighted text, normal paste via mouse3)
 nnoremap ,,y "*y
@@ -427,7 +421,7 @@ nnoremap ,,p "*p
 nnoremap ,Y "+yy
 
 " Knit to pdf
-nnoremap <space>R :!Rscript -e "require(knitr); knit2pdf('<C-R>%')"<CR>
+" nnoremap <space>R :!Rscript -e "require(knitr); knit2pdf('<C-R>%')"<CR>
 
 " Jump in the middle of the _current_ line, not the middle of
 " the display
@@ -438,7 +432,7 @@ nnoremap <silent> gm :call cursor(0, virtcol('$')/2)<cr>
 "
 " It allows emacs-like navigation in command mode and insert mode
 " The reason I didn't include the full plugin was that some of
-" it's meta-mappings messed with my keyboard layout
+" its meta-mappings messed with my keyboard layout
 " BEGIN vim-rsi snippet
 inoremap        <C-A> <C-O>^
 inoremap   <C-X><C-A> <C-A>
@@ -483,12 +477,15 @@ nnoremap <space>cd :cd %:p:h<CR>
 " Scroll by visual lines
 nnoremap j gj
 nnoremap k gk
-" nnoremap gj j
-" nnoremap gk k
 
 " 2}}}
 
 " Plugin mapings {{{2 "
+
+" TypeScript Server
+" type of symbol under cursor
+nnoremap ,tt :TSStype<CR>
+nnoremap ,td :TSSdef<CR>
 
 " Ag
 nnoremap <space>a :Ag ""<Left>
@@ -507,9 +504,9 @@ nnoremap <space>gp :Git push<CR>
 nnoremap <F4> :UndotreeToggle<CR>
 
 " Emmet, remap to something less awkward
-imap <C-l> <C-y>,
+imap <C-e> <C-y>,
 
-nmap <script> <silent> <space>ll :call ToggleLocationList()<CR>
+nmap <script> <silent> <space>w :call ToggleLocationList()<CR>
 nmap <script> <silent> <space>q :call ToggleQuickfixList()<CR>
 
 nnoremap <C-w>m :MaximizerToggle<CR>
@@ -527,12 +524,11 @@ nnoremap gK :Dash<CR>
 " <C-s> opens file in horizontal split
 let g:ctrlp_map = '<C-p>'
 
-nnoremap <space>p :CtrlPMixed<CR>
+" (e)dit
 nnoremap <space>e :CtrlPMixed<CR>
-
-nnoremap <space>b :CtrlPBuffer<CR>
+" buffe(r)
 nnoremap <space>r :CtrlPBuffer<CR>
-nnoremap <space>ls :CtrlPBuffer<CR>
+" (d)efinitions
 nnoremap <space>d :CtrlPTag<CR>
 
 nnoremap <space>L :CtrlPLine<CR>
@@ -628,19 +624,10 @@ if !has('gui_running')
 endif
 " 2}}}
 
-" {{{2 Startify
-"---------------------------------------------------------------------
-" let g:startify_bookmarks = ['~/Dropbox/CBB/StatMethods', '~/Dropbox/CBB/Bio373']
-" let g:startify_custom_header =
-"   \ map(split(system('fortune -s | cowsay'), '\n'), '"   ". v:val') + ['','']
-
-" 2}}}
-
 " {{{2 YouCompleteMe
 "---------------------------------------------------------------------
 " Removed TAB form list of select_completion keys since UltiSnips uses that key.
 " Select elemens by <C-n>, <C-p>
-
 let g:ycm_auto_trigger = 0
 let g:ycm_key_list_select_completion = ['<Down>'] " Tab removed
 let g:ycm_key_list_previous_completion = ['<Up>'] " S-Tab removed
@@ -757,31 +744,8 @@ let g:jedi#popup_select_first = 0
 " let g:jedi#show_call_signatures = "1"
 " 2}}}
 
-" {{{2 Startify
-"---------------------------------------------------------------------
-" |g:startify_session_dir|
-" |g:startify_list_order|
-" |g:startify_bookmarks|
-" |g:startify_files_number|
-" |g:startify_session_detection|
-" |g:startify_session_autoload|
-" |g:startify_session_persistence|
-" |g:startify_skiplist|
-" |g:startify_skiplist_server|
-" |g:startify_change_to_dir|
-" |g:startify_custom_indices|
-" |g:startify_custom_footer|
-" |g:startify_restore_position|
-" |g:startify_empty_buffer_key|
-" |g:startify_enable_special|
-" |g:startify_session_savevars|
-" |g:startify_session_savecmds|
-" |g:startify_disable_at_vimenter|
-" 2}}}
-
 " {{{2 EasyAlign
 "---------------------------------------------------------------------
-" Check if better than tabularize
 " Start interactive EasyAlign in visual mode
 " :EasyAlign */regex aligns on all matches of regex, 2/regex on every second etc.
 vmap ,al <Plug>(EasyAlign)
@@ -789,35 +753,25 @@ vmap ,al <Plug>(EasyAlign)
 
 " {{{2 Ctrlp
 "---------------------------------------------------------------------
-" Respect CWD changes
-let g:ctrlp_working_path=0
-
 " r: Try to search for a root directory (containing .git, .ctrlp, etc.)
 " and set that dir as the working dir
 " c: working directory
-"
 let g:ctrlp_working_path_mode = 'ra'
-" let g:ctrlp_match_window_reversed = 0
-" let g:ctrlp_max_height = 10
-"
 let g:ctrlp_show_hidden = 1
 " The command executed by the above mapping
-"
-let g:ctrlp_cmd = 'CtrlPMixed'
 
 " While in directory mode:
 " <cr> change the local working directory for CtrlP and keep it open.
 " <c-t> change the global working directory (exit).
 " <c-v> change the local working directory for the current window (exit).
 " <c-x> change the global working directory to CtrlP's current local
-let g:ctrlp_root_markers = ['.ctrlp']
 
 " Default is search by full path. Switch with CTRL-d while in CtrlP prompt.
 let g:ctrlp_by_filename = 0
 let g:ctrlp_root_markers = ['.ctrlp']
 
 let g:ctrlp_custom_ignore = {
-\   'dir':  '\v\.git$\|\.hg$\|\.svn$\|\.yardoc\|public\/images\|public\/system\|data\|log\|tmp$|/react-cljs/resources/public/js',
+\   'dir':  '\v\.git$\|\.hg$\|\.svn$\|\.yardoc\|public\/images\|public\/system\|data\|log\|tmp$|resources/public/js',
 \   'file': '\v\.(o|m4a|pdf|swp|pyc|wav|mp3|ogg|blend|dvi|fls|aux|blg|bbl|log|loa|lof|toc|fdb_latexmk|lot|)$|\~$'
 \   }
 
@@ -861,7 +815,6 @@ endfunction
 if has('gui_running')
     let g:airline_powerline_fonts = 1
     let g:airline_theme='dark'
-    
 endif
 let g:airline_section_y = airline#section#create(["cwd:%{split(getcwd(), '/')[-1]}% "])
 set noshowmode
@@ -889,12 +842,6 @@ map g/ <Plug>(incsearch-stay)
 " map g# <Plug>(incsearch-nohl-g#)
 " 2}}}
 
-" SuperTab {{{2 "
-" let g:SuperTabMappingForward = '<C-n>'
-" let g:SuperTabMappingBackward = '<C-p>'
-" let g:SuperTabDefaultCompletionType = 'context'
-" 2}}}
-
 " Targets {{{2 "
 " Remove underscore and dot from list
 " Since I made my own text objects using these separators
@@ -905,6 +852,21 @@ let g:targets_separators = ', ; : + - = ~ * # / | \ & $ . _'
 "================================================================
 " Custom functions and commands {{{
 "================================================================
+
+" CLOJURESCRIPT
+" 1) Open vim
+" 2) Back in the terminal, run lein repl
+" 3) In the repl, do (run)
+" 4) In vim, open the cljs file and do
+" :Piggieback (weasel.repl.websocket/repl-env :ip "0.0.0.0" :port 9001)
+" 5) Open browser to http://localhost:10555/
+" 6) Use fireplace
+command! ConnectChestnut Piggieback (weasel.repl.websocket/repl-env :ip "0.0.0.0" :port 9001)
+" From another user on SO (maybe useful in the future):
+command! Piggie :Piggieback (cemerick.austin/exec-env)
+command! Biggie :Piggieback (cemerick.austin/exec-env :exec-cmds ["open" "-ga" "/Applications/Google Chrome.app"])
+command! Wiggie :Piggieback (weasel.repl.websocket/repl-env :ip "0.0.0.0" :port 9001)
+
 " Custom text objects
 call textobj#user#plugin('subword', {
 \   'wide_case': {
@@ -923,21 +885,20 @@ call textobj#user#plugin('subword', {
 
 " das_sub_word_wide_case
 
-" " Command line with history - excecute commands by hitting enter
-" " Swap default ':', '/' and '?' with cmdline-window equivalent.
-" nnoremap : q:
-" xnoremap : q:
+" Command line with history - excecute commands by hitting enter
+" Swap default ':', '/' and '?' with cmdline-window equivalent.
+" nnoremap ; q:
+" xnoremap ; q:
 " nnoremap / q/
 " xnoremap / q/
 " nnoremap ? q?
 " xnoremap ? q?
-" nnoremap q: :
-" xnoremap q: :
+" nnoremap q; :
+" xnoremap q; :
 " nnoremap q/ /
 " xnoremap q/ /
 " nnoremap q? ?
 " xnoremap q? ?
-
 " augroup command_window
 "     autocmd!
 "     " have <Ctrl-C> leave cmdline-window

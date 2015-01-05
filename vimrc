@@ -40,7 +40,7 @@ Plugin 'mbbill/undotree'                 " Undo history as a tree
 Plugin 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
 Plugin 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): yal, yil etc.
 Plugin 'haya14busa/incsearch.vim'
-
+Plugin 'editorconfig/editorconfig-vim'
 
 
 " Nice to have
@@ -76,6 +76,7 @@ Plugin 'majutsushi/tagbar'
 Plugin 'noahfrederick/vim-hemisu'
 Plugin 'rizzatti/dash.vim'
 Plugin 'https://github.com/freeo/vim-kalisi'
+Plugin 'kurkale6ka/vim-pairs'
 
 " By language
 " Swift
@@ -544,8 +545,11 @@ nnoremap ,xc :Latexmk<CR>
 nnoremap <F2> :NERDTreeToggle<CR>
 nnoremap <S-F2> :NERDTreeFind<CR>
 
-" " Tagbar
+" Tagbar
 nnoremap <F3> :TagbarToggle<CR>
+
+" UltiSnips
+nnoremap <space>ue :UltiSnipsEdit<CR>
 " 2}}}
 " 1}}}
 "================================================================
@@ -560,11 +564,17 @@ cabbrev stat ~/Dropbox/CBB/StatMethods
 " Plugin settings {{{1
 "================================================================
 
+" {{{2 Startify
+"---------------------------------------------------------------------
+let g:startify_change_to_dir = 0
+let g:startify_change_to_vcs_root = 1
+" 2}}}
+
 " {{{2 delimitMate
 "---------------------------------------------------------------------
 let delimitMate_expand_cr = 1
 " 2}}}
-"
+
 " {{{2 Brolink
 "---------------------------------------------------------------------
 let g:bl_no_mappings = 1
@@ -572,34 +582,17 @@ let g:bl_no_mappings = 1
 
 " {{{2 LaTeX-Box
 "---------------------------------------------------------------------
-" Alternative: put something like this in your bashrc
-" Then, autocompile texfiles with $ latexmk_ sometexfile.tex
-" alias latexmk_='latexmk -pdf -pvc'
 let g:LatexBox_viewer = 'open -a Skim'
 " 0: Don't open quickfix, 2: Open but don't make it the active window
 let g:LatexBox_quickfix = 0
 " let g:main_tex_file = '~/Dev/dcop-bachelor-thesis/thesis/thesis.tex'
-" Set tex to latex, otherwise filetype is regarded as "plaintex"
-" with which most plugins won't work
 let g:tex_flavor = "latex"
 let g:LatexBox_latexmk_options = "-pvc -pdf"
-" 2}}}
-
-" {{{2 Argumentative
-"---------------------------------------------------------------------
-" Experimental
-" Shifting arguments with <, and >,
-" Moving between argument boundaries with [, and ],
-" New text objects a, and i,
 " 2}}}
 
 " {{{2 Maximizer
 "---------------------------------------------------------------------
 let g:maximizer_set_default_mapping = 0
-" 2}}}
-
-" {{{2 Markdown Settings
-"---------------------------------------------------------------------
 " 2}}}
 
 " {{{2 R Plugin
@@ -643,14 +636,8 @@ let g:ycm_seed_identifiers_with_syntax = 1
 " {{{2 UltiSnips
 "---------------------------------------------------------------------
 " Default Keybindings
-" g:UltiSnipsListSnippets                <c-tab>
-" g:UltiSnipsJumpForwardTrigger          <c-j>
-" g:UltiSnipsJumpBackwardTrigger         <c-k>
 let g:UltiSnipsExpandTrigger='<tab>'
 let g:UltiSnipsEditSplit='vertical'
-" Edit snippets
-nnoremap <space>ue :UltiSnipsEdit<CR>
-
 let g:snips_author="Robin Hafen"
 let g:snips_email="robin.hafen@gmail.com"
 let g:snips_github="https://github.com/hafenr"
@@ -735,13 +722,13 @@ let g:jedi#use_tabs_not_buffers = 0
 " let g:jedi#use_splits_not_buffers = "left"
 let g:jedi#popup_on_dot = 0
 let g:jedi#popup_select_first = 0
-" let g:jedi#goto_assignments_command = "<leader>g"
-" let g:jedi#goto_definitions_command = "<leader>d"
-" let g:jedi#documentation_command = "K"
-" let g:jedi#usages_command = "<leader>n"
-" let g:jedi#completions_command = "<C-Space>"
-" let g:jedi#rename_command = "<leader>r"
-" let g:jedi#show_call_signatures = "1"
+let g:jedi#goto_assignments_command = ",g"
+let g:jedi#goto_definitions_command = ",d"
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = ",n"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#rename_command = ",r"
+let g:jedi#show_call_signatures = "1"
 " 2}}}
 
 " {{{2 EasyAlign
@@ -758,7 +745,6 @@ vmap ,al <Plug>(EasyAlign)
 " c: working directory
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_show_hidden = 1
-" The command executed by the above mapping
 
 " While in directory mode:
 " <cr> change the local working directory for CtrlP and keep it open.
@@ -767,225 +753,19 @@ let g:ctrlp_show_hidden = 1
 " <c-x> change the global working directory to CtrlP's current local
 
 " Default is search by full path. Switch with CTRL-d while in CtrlP prompt.
-let g:ctrlp_by_filename = 0
+" let g:ctrlp_by_filename = 0
 let g:ctrlp_root_markers = ['.ctrlp']
 
 let g:ctrlp_custom_ignore = {
 \   'dir':  '\v\.git$\|\.hg$\|\.svn$\|\.yardoc\|public\/images\|public\/system\|data\|log\|tmp$|resources/public/js',
-\   'file': '\v\.(o|m4a|pdf|swp|pyc|wav|mp3|ogg|blend|dvi|fls|aux|blg|bbl|log|loa|lof|toc|fdb_latexmk|lot|)$|\~$'
+\   'file': '\v\.(o|m4a|pdf|swp|pyc|wav|mp3|ogg|blend|dvi|fls|aux|blg|bbl|log|loa|lof|toc|fdb_latexmk|lot|min.js|min.css|)$|\~$'
 \   }
 
-" Important: save cache across sessions => much faster. Refresh with F5
+" Save cache across sessions => much faster. Refresh with F5.
 let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
 
 " {{{2 vim-textobj-user
-call textobj#user#plugin('line', {
-\   '-': {
-\     'select-a-function': 'CurrentLineA',
-\     'select-a': 'al',
-\     'select-i-function': 'CurrentLineI',
-\     'select-i': 'il',
-\   },
-\ })
-
-function! CurrentLineA()
-  normal! 0
-  let head_pos = getpos('.')
-  normal! $
-  let tail_pos = getpos('.')
-  return ['v', head_pos, tail_pos]
-endfunction
-
-function! CurrentLineI()
-  normal! ^
-  let head_pos = getpos('.')
-  normal! g_
-  let tail_pos = getpos('.')
-  let non_blank_char_exists_p = getline('.')[head_pos[2] - 1] !~# '\s'
-  return
-  \ non_blank_char_exists_p
-  \ ? ['v', head_pos, tail_pos]
-  \ : 0
-endfunction
-" 2}}} "
-
-" {{{2 Airline
-" : %3p : %4l : %3c
-if has('gui_running')
-    let g:airline_powerline_fonts = 1
-    let g:airline_theme='dark'
-endif
-let g:airline_section_y = airline#section#create(["cwd:%{split(getcwd(), '/')[-1]}% "])
-set noshowmode
-" 2}}}
-
-" {{{2 Markology
- let g:markology_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-" 2}}}
-
-" {{{2 incsearch.vim
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-
-" Enable mappings below for automatic 'nohlsearch' after hitting the
-" last match:
-
-" set hlsearch
-" let g:incsearch#auto_nohlsearch = 1
-" map n  <Plug>(incsearch-nohl-n)
-" map N  <Plug>(incsearch-nohl-N)
-" map *  <Plug>(incsearch-nohl-*)
-" map #  <Plug>(incsearch-nohl-#)
-" map g* <Plug>(incsearch-nohl-g*)
-" map g# <Plug>(incsearch-nohl-g#)
-" 2}}}
-
-" Targets {{{2 "
-" Remove underscore and dot from list
-" Since I made my own text objects using these separators
-" using text-obj-user
-let g:targets_separators = ', ; : + - = ~ * # / | \ & $ . _'
-" 2}}}
-" 1}}}
-"================================================================
-" Custom functions and commands {{{
-"================================================================
-
-" CLOJURESCRIPT
-" 1) Open vim
-" 2) Back in the terminal, run lein repl
-" 3) In the repl, do (run)
-" 4) In vim, open the cljs file and do
-" :Piggieback (weasel.repl.websocket/repl-env :ip "0.0.0.0" :port 9001)
-" 5) Open browser to http://localhost:10555/
-" 6) Use fireplace
-command! ConnectChestnut Piggieback (weasel.repl.websocket/repl-env :ip "0.0.0.0" :port 9001)
-" From another user on SO (maybe useful in the future):
-command! Piggie :Piggieback (cemerick.austin/exec-env)
-command! Biggie :Piggieback (cemerick.austin/exec-env :exec-cmds ["open" "-ga" "/Applications/Google Chrome.app"])
-command! Wiggie :Piggieback (weasel.repl.websocket/repl-env :ip "0.0.0.0" :port 9001)
-
-" Custom text objects
-call textobj#user#plugin('subword', {
-\   'wide_case': {
-\     'pattern': '\(_\|\<\)[a-zA-Z]\{-}\(_\|\>\)',
-\     'select': ['a_', 'i_'],
-\   },
-\   'camelCase': {
-\     'pattern': '\<\d\d:\d\d:\d\d\>',
-\     'select': ['ac', 'ic'],
-\   },
-\   'dot.separated': {
-\     'pattern': '\(\.\|\<\)[a-zA-Z]\+\(\.\|\>\)',
-\     'select': ['a.', 'i.'],
-\   },
-\ })
-
-" das_sub_word_wide_case
-
-" Command line with history - excecute commands by hitting enter
-" Swap default ':', '/' and '?' with cmdline-window equivalent.
-" nnoremap ; q:
-" xnoremap ; q:
-" nnoremap / q/
-" xnoremap / q/
-" nnoremap ? q?
-" xnoremap ? q?
-" nnoremap q; :
-" xnoremap q; :
-" nnoremap q/ /
-" xnoremap q/ /
-" nnoremap q? ?
-" xnoremap q? ?
-" augroup command_window
-"     autocmd!
-"     " have <Ctrl-C> leave cmdline-window
-"     autocmd CmdwinEnter * nnoremap <buffer> <C-c> :q\|echo ""<cr>
-"     autocmd CmdwinEnter * inoremap <buffer> <C-c> <esc>:q\|echo ""<cr>
-"     autocmd CmdwinEnter * nnoremap <buffer> <jk> :q\|echo ""<cr>
-"     autocmd CmdwinEnter * inoremap <buffer> <jk> <esc>:q\|echo ""<cr>
-"     " start command line window in insert mode and no line numbers
-"     autocmd CmdwinEnter * startinsert
-"     autocmd CmdwinEnter * set nonumber
-"     autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g'\"" | endif
-" augroup END
-
-function! NumberToggle()
-  if(&relativenumber == 1)
-    set number
-  else
-    set relativenumber
-  endif
-endfunc
-
-" Edit vimrc
-command! Rc e ~/.vimrc
-
-" Change between tab sizes
-function! SetTabSize(number)
-    exec "set expandtab tabstop=" . a:number
-    exec "set shiftwidth=" . a:number
-    exec "set softtabstop=" . a:number
-endfunc
-
-command! -nargs=1 Tab call SetTabSize(<f-args>)
-
-function! RunCurrentFile()
-    let current_filetype = &filetype
-    if current_filetype == 'python'
-        !python %
-    else
-        echom 'Filetype not found'
-    endif
-endfunc
-
-" TODO, make a function that gets executed in augroup HTML
-" which checks if there are {{ }} or {% %} inside a html file
-" if so, :set ft=htmldjango else :set ft=html
-
-function! RoundNumber(digits)
-    let word_under_cursor = expand("<cWORD>")
-    let unrounded_str = matchstr(word_under_cursor, "[0-9]*\.[0-9][0-9]*")
-    let unrounded = str2float(unrounded_str)
-    let format_str = "%." . a:digits . "f"
-    let rounded = printf(format_str, unrounded)
-    let cmd = printf("s/%s/%s", unrounded_str, rounded)
-    execute cmd
-    set nohlsearch
-    execute "normal ``"
-endfunc
-
-command! -nargs=1 Round call RoundNumber(<f-args>)
-command! StartR call StartR('R')
-
-func! WordProcessorMode()
-  setlocal formatoptions=1
-  setlocal noexpandtab
-  map j gj
-  map k gk
-  setlocal spell spelllang=en_us
-  set thesaurus+=/Users/sbrown/.vim/thesaurus/mthesaur.txt
-  set complete+=s
-  set formatprg=par
-  setlocal wrap
-  setlocal linebreak
-endfu
-com! WP call WordProcessorMode()
-
-" vp doesn't replace paste buffer
-function! RestoreRegister()
-  let @" = s:restore_reg
-  return ''
-endfunction
-function! s:Repl()
-  let s:restore_reg = @"
-  return "p@=RestoreRegister()\<cr>"
-endfunction
-
-vmap <silent> <expr> p <sid>Repl()
-
 call textobj#user#plugin('rchunk', {
 \   'code': {
 \     'select-a': 'ar',
@@ -1021,20 +801,145 @@ function! RChunkI()
     set incsearch
     return ['V', upper_pos, lower_pos]
 endfunction
+" 2}}} "
+
+" {{{2 Airline
+" : %3p : %4l : %3c
+if has('gui_running')
+    let g:airline_powerline_fonts = 1
+    let g:airline_theme='dark'
+endif
+let g:airline_section_y = airline#section#create(["cwd:%{split(getcwd(), '/')[-1]}% "])
+set noshowmode
+" 2}}}
+
+" {{{2 Markology
+ let g:markology_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+" 2}}}
+
+" {{{2 incsearch.vim
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+
+" Enable mappings below for automatic 'nohlsearch' after hitting the last match:
+
+" set hlsearch
+" let g:incsearch#auto_nohlsearch = 1
+" map n  <Plug>(incsearch-nohl-n)
+" map N  <Plug>(incsearch-nohl-N)
+" map *  <Plug>(incsearch-nohl-*)
+" map #  <Plug>(incsearch-nohl-#)
+" map g* <Plug>(incsearch-nohl-g*)
+" map g# <Plug>(incsearch-nohl-g#)
+" 2}}}
+
+" 1}}}
+"================================================================
+" Custom functions and commands {{{
+"================================================================
+
+" CLOJURESCRIPT
+" 1) Open vim
+" 2) Back in the terminal, run lein repl
+" 3) In the repl, do (run)
+" 4) In vim, open the cljs file and do
+" :Piggieback (weasel.repl.websocket/repl-env :ip "0.0.0.0" :port 9001)
+" 5) Open browser to http://localhost:10555/
+" 6) Use fireplace
+command! ConnectChestnut Piggieback (weasel.repl.websocket/repl-env :ip "0.0.0.0" :port 9001)
+" From another user on SO (maybe useful in the future):
+command! Piggie :Piggieback (cemerick.austin/exec-env)
+command! Biggie :Piggieback (cemerick.austin/exec-env :exec-cmds ["open" "-ga" "/Applications/Google Chrome.app"])
+command! Wiggie :Piggieback (weasel.repl.websocket/repl-env :ip "0.0.0.0" :port 9001)
+
+" Command line with automatic history
+" (instead of having to press C-f bzw. C-h)
+" BEGIN CL
+" Swap default ':', '/' and '?' with cmdline-window equivalent.
+" nnoremap ; q:
+" xnoremap ; q:
+" nnoremap / q/
+" xnoremap / q/
+" nnoremap ? q?
+" xnoremap ? q?
+" nnoremap q; :
+" xnoremap q; :
+" nnoremap q/ /
+" xnoremap q/ /
+" nnoremap q? ?
+" xnoremap q? ?
+" augroup command_window
+"     autocmd!
+"     " have <Ctrl-C> leave cmdline-window
+"     autocmd CmdwinEnter * nnoremap <buffer> <C-c> :q\|echo ""<cr>
+"     autocmd CmdwinEnter * inoremap <buffer> <C-c> <esc>:q\|echo ""<cr>
+"     autocmd CmdwinEnter * nnoremap <buffer> <jk> :q\|echo ""<cr>
+"     autocmd CmdwinEnter * inoremap <buffer> <jk> <esc>:q\|echo ""<cr>
+"     " start command line window in insert mode and no line numbers
+"     autocmd CmdwinEnter * startinsert
+"     autocmd CmdwinEnter * set nonumber
+"     autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g'\"" | endif
+" augroup END
+" END CL
+
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set number
+  else
+    set relativenumber
+  endif
+endfunc
+
+" Edit vimrc
+command! Rc e ~/.vimrc
+
+" Change between tab sizes
+function! SetTabSize(number)
+    exec "set expandtab tabstop=" . a:number
+    exec "set shiftwidth=" . a:number
+    exec "set softtabstop=" . a:number
+endfunc
+
+command! -nargs=1 Tab call SetTabSize(<f-args>)
+
+function! RoundNumber(digits)
+    let word_under_cursor = expand("<cWORD>")
+    let unrounded_str = matchstr(word_under_cursor, "[0-9]*\.[0-9][0-9]*")
+    let unrounded = str2float(unrounded_str)
+    let format_str = "%." . a:digits . "f"
+    let rounded = printf(format_str, unrounded)
+    let cmd = printf("s/%s/%s", unrounded_str, rounded)
+    execute cmd
+    set nohlsearch
+    execute "normal ``"
+endfunc
+
+command! -nargs=1 Round call RoundNumber(<f-args>)
+
+" vp doesn't replace paste buffer
+function! RestoreRegister()
+  let @" = s:restore_reg
+  return ''
+endfunction
+function! s:Repl()
+  let s:restore_reg = @"
+  return "p@=RestoreRegister()\<cr>"
+endfunction
+
+vmap <silent> <expr> p <sid>Repl()
 
 " }}}
 "================================================================
 " Colors {{{
 "================================================================
-" cursor as light green
 " Conceal background should be the same as seoul256 bg
 hi Conceal guibg=#3f3f3f
 " }}}
 "================================================================
 " End {{{
 "================================================================
-" Show insert cursor as yellow and normal mode
-" cursor as light green
+" Show insert cursor as yellow and normal mode cursor as light green.
 highlight Cursor guifg=black guibg=#00ff1e
 highlight iCursor guifg=black guibg=cyan
 set guicursor=n-v-c:block-Cursor

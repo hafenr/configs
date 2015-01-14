@@ -45,6 +45,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
 
     # use gnu cmdline utilities instead of bsd ones
     export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/texbin:$PATH:/opt/xpdf"
+    export PATH="~/Dev/TissueMAPS/util:$PATH"
 
 elif [[ "$OSTYPE" == "cygwin" ]]; then
     # POSIX compatibility layer and Linux environment emulation for Windows

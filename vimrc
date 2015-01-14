@@ -24,16 +24,20 @@ let vimdir = '$HOME/.vim'
 set nocompatible
 filetype off
 
-" Let Vundle manage Vundle
-set rtp+=~/.vim/vundle_managed/Vundle.vim
-call vundle#begin("$HOME/.vim/vundle_managed")
-call pathogen#infect("pathogen_managed/*")
+" Automatically setup Vundle on first run
+if !isdirectory(expand("~/.vim/bundle/Vundle.vim"))
+    call system("git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim")
+endif
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin("$HOME/.vim/bundle")
+call pathogen#infect("pathogen/*")
 " }}}
 "=======================================================================
 " Plugins {{{
 "=======================================================================
 " Essential
-Plugin 'gmarik/Vundle.vim'               " Package manager
+Plugin 'gmarik/Vundle.vim'               " Let Vundle manage Vundle
 Plugin 'tpope/vim-commentary'            " Commenting operator gc
 Plugin 'SirVer/ultisnips'                " Snippet system
 Plugin 'honza/vim-snippets'              " Snippets
@@ -47,20 +51,19 @@ Plugin 'tpope/vim-surround'              " Surround motions
 Plugin 'mbbill/undotree'                 " Undo history as a tree
 Plugin 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
 Plugin 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): yal, yil etc.
-Plugin 'haya14busa/incsearch.vim'
-Plugin 'editorconfig/editorconfig-vim'
+" Plugin 'haya14busa/incsearch.vim'
+Plugin 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
+Plugin 'szw/vim-maximizer'               " Temporarily maximize window
 
 
 " Nice to have
 Plugin 'gosukiwi/vim-atom-dark'
 Plugin 'chrisbra/csv.vim'
 Plugin 'salsifis/vim-transpose'
-Plugin 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
 Plugin 'junegunn/vim-easy-align'         " :'<,'>EasyAlign [*] DELIM or /regex/
 Plugin 'godlygeek/tabular'               " :Tabularize /regex
 Plugin 'jwhitley/vim-matchit'            " More jumps for %
 Plugin 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
-Plugin 'szw/vim-maximizer'               " Temporarily maximize window
 Plugin 'othree/xml.vim'                  " XML editing
 Plugin 'junegunn/seoul256.vim'           " Nice color scheme
 Plugin 'scrooloose/syntastic'
@@ -70,12 +73,11 @@ Plugin 'mattn/emmet-vim'                 " Zencoding successor
 Plugin 'kana/vim-textobj-user'           " Needed for textobj-python
 Plugin 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, if
 " Plugin 'maxbrunsfeld/vim-yankstack'      " Needs to be started before surround!
-" Plugin 'Valloric/YouCompleteMe'        " $ Do `./install.sh` after update
-Plugin 'jeetsukumaran/vim-markology'
+" Plugin 'jeetsukumaran/vim-markology'
 Plugin 'mhinz/vim-startify'
 Plugin 'tomasr/molokai'
 Plugin 'Shougo/vimproc.vim'              " Do `$ make` after update
-" Plugin 'Valloric/YouCompleteMe'
+" Plugin 'Valloric/YouCompleteMe'        " $ Do `./install.sh` after update
 Plugin 'tpope/vim-obsession'
 " Plugin 'tpope/vim-abolish'
 Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
@@ -84,7 +86,9 @@ Plugin 'majutsushi/tagbar'
 Plugin 'noahfrederick/vim-hemisu'
 Plugin 'rizzatti/dash.vim'
 Plugin 'https://github.com/freeo/vim-kalisi'
-Plugin 'kurkale6ka/vim-pairs'
+Plugin 'editorconfig/editorconfig-vim'
+Plugin 'jonathanfilip/vim-lucius'
+Plugin 'croaker/mustang-vim'
 
 " By language
 " Swift
@@ -129,6 +133,7 @@ Plugin 'othree/html5.vim'
 
 " Python
 Plugin 'django.vim'
+" Plugin 'davidhalter/jedi-vim'
 
 " Scala
 Plugin 'spiroid/vim-ultisnip-scala'
@@ -153,15 +158,20 @@ if has('gui_running')               " gvim options
         set guifont=Deja\ Vu\ Sans\ Mono\ 10
     endif
 
-    let g:seoul256_background = 236 " Range: 233 - 239"
-    set background=dark
-    colorscheme mustang
-    "
+    " let g:seoul256_background = 236 " Range: 233 - 239"
+    " set background=dark
+
+    colorscheme lucius
+    LuciusDark
 else                                " terminal
     " set term=screen-256color
     set t_Co=256                    " set 256 colors for terminal
     set background=dark
-    colorscheme seoul256
+    " colorscheme lucius
+    " LuciusDark
+
+    colo lucius
+    LuciusDark
 endif
 
 " Keep undo history across sessions by storing it in a file
@@ -198,7 +208,7 @@ set tabstop=4                       " # spaces shown for one TAB
 set softtabstop=4                   " # spaces that are actually inserted/removed for a tab
 set expandtab                       " insert spaces when hitting TAB (with above options)
 set autoindent                      " enable autoindenting
-set number                          " view line numbers
+" set number                          " view line numbers
 set showmode                        " show current mode
 set ruler                           " always show cursor position
 set showcmd                         " display incomplete commands on lower right
@@ -241,7 +251,7 @@ set foldmethod=expr
 " set colorcolumn=80                  " highlight the 80th col
 set history=1000                    " set the command line history
 set cmdwinheight=10                 " window height for cmd/search history q: q/ resp. C-h (C-f default)
-set relativenumber
+" set relativenumber
 set cursorline                      " Highlight current line
 let grepprg="ag\ --nocolor\ --nogroup\ --silent"
 set showmatch                       " Highlight (blinking) matching [{( when inserting the closing )}]
@@ -265,9 +275,9 @@ augroup END
 au BufRead,BufNewFile *.ts        setlocal filetype=typescript
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 " Default
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 " Automatically delete trailing whitespace
 autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
@@ -278,9 +288,9 @@ autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 "     autocmd Filetype html,xml,xsl source ~/.vim/plugin/closetag.vim
 " augroup END
 
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 " R
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 " augroup R
 "     autocmd!
 "     au FileType r set iskeyword+=.
@@ -292,9 +302,9 @@ autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 "     autocmd BufEnter,BufRead *.Rmd call SetRmdOptions()
 " augroup END
 
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 " Python
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 augroup Python
     autocmd!
     autocmd FileType python setlocal foldmethod=indent foldnestmax=2
@@ -324,9 +334,9 @@ augroup Clojure
     " au BufWritePost *.cljs :BLReloadPage
 augroup END
 
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 " Latex
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 augroup Autex
     autocmd!
     " autocmd FileType tex set mps+=$:$
@@ -343,9 +353,9 @@ augroup Darwin
 augroup END
 
 
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 " Markdown
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 augroup Markdown
     " autocmd FileType markdown set foldmethod=marker
     " autocmd FileType markdown set foldmarker=-------------------------------------------------------------------------------,*******************************************************************************
@@ -355,11 +365,19 @@ augroup END
 " Mappings {{{1
 "=======================================================================
 " Basic {{{2 "
+
+" Command-Arrow to resize current buffer by +/- 5
+" :vert res +5 <CR> and then repeat last ex-command with @: @@ @@ @@
+nnoremap <C-w>< 10<C-w><
+nnoremap <C-w>> 10<C-w>>
+nnoremap <C-w>- 10<C-w>-
+nnoremap <C-w>+ 10<C-w>+
+
 let mapleader="<space>"
 let maplocalleader = ","
 
-nnoremap <silent> <C-right> :<C-u>call PareditMoveRight()<CR>
-nnoremap <silent> <C-left> :<C-u>call PareditMoveLeft()<CR>
+" nnoremap <silent> <C-right> :<C-u>call PareditMoveRight()<CR>
+" nnoremap <silent> <C-left> :<C-u>call PareditMoveLeft()<CR>
 
 " Select most recently pasted text
 nnoremap gV `[v`]
@@ -491,6 +509,12 @@ nnoremap k gk
 
 " Plugin mapings {{{2 "
 
+" Markdown
+inoremap <C-h>1 <ESC>yypVr=o
+inoremap <C-h>2 <ESC>yypVr-o
+nnoremap ,h1 yypVr=
+nnoremap ,h2 yypVr-
+
 " TypeScript Server
 " type of symbol under cursor
 nnoremap ,tt :TSStype<CR>
@@ -572,24 +596,32 @@ cabbrev stat ~/Dropbox/CBB/StatMethods
 " Plugin settings {{{1
 "=======================================================================
 
+" {{{2 Latex2Unicode
+"-----------------------------------------------------------------------
+let g:unicoder_cancel_normal = 1
+let g:unicoder_cancel_insert = 1
+nmap <C-l> :call unicoder#start(0)<CR>
+imap <C-l> <Esc>:call unicoder#start(1)<CR>
+" 2}}}
+
 " {{{2 Startify
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 let g:startify_change_to_dir = 0
 let g:startify_change_to_vcs_root = 1
 " 2}}}
 
 " {{{2 delimitMate
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 let delimitMate_expand_cr = 1
 " 2}}}
 
 " {{{2 Brolink
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 let g:bl_no_mappings = 1
 " 2}}}
 
 " {{{2 LaTeX-Box
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 let g:LatexBox_viewer = 'open -a Skim'
 " 0: Don't open quickfix, 2: Open but don't make it the active window
 let g:LatexBox_quickfix = 0
@@ -599,12 +631,12 @@ let g:LatexBox_latexmk_options = "-pvc -pdf"
 " 2}}}
 
 " {{{2 Maximizer
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 let g:maximizer_set_default_mapping = 0
 " 2}}}
 
 " {{{2 R Plugin
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 let g:vimrplugin_assign='<'
 let vimrplugin_assign_map = "<M-->"
 
@@ -626,7 +658,7 @@ endif
 " 2}}}
 
 " {{{2 YouCompleteMe
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 " Removed TAB form list of select_completion keys since UltiSnips uses that key.
 " Select elemens by <C-n>, <C-p>
 let g:ycm_auto_trigger = 0
@@ -642,7 +674,7 @@ let g:ycm_seed_identifiers_with_syntax = 1
 " 2}}}
 
 " {{{2 UltiSnips
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 " Default Keybindings
 let g:UltiSnipsExpandTrigger='<tab>'
 let g:UltiSnipsEditSplit='vertical'
@@ -652,7 +684,7 @@ let g:snips_github="https://github.com/hafenr"
 " 2}}}
 
 " {{{2 Syntastic
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 let g:syntastic_warning_symbol='⚠'
 let g:syntastic_error_symbol='✗'
 let g:syntastic_r_lint_styles = 'list(spacing.indentation.notabs, spacing.indentation.evenindent)'
@@ -671,7 +703,7 @@ let g:syntastic_haskell_checkers = ['hlint']
 " 2}}}
 
 " " {{{2 Tagbar
-" "---------------------------------------------------------------------
+" "-----------------------------------------------------------------------
 let g:tagbar_type_r = {
     \ 'ctagstype' : 'r',
     \ 'kinds'     : [
@@ -719,35 +751,35 @@ let g:tagbar_type_coffee = {
 " 2}}}
 
 " {{{2 Vim-slime
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 let g:slime_target = "tmux"
 let g:slime_python_ipython = 1
 " 2}}}
 
 " {{{2 Jedi
-"---------------------------------------------------------------------
-let g:jedi#use_tabs_not_buffers = 0
-" let g:jedi#use_splits_not_buffers = "left"
-let g:jedi#popup_on_dot = 0
-let g:jedi#popup_select_first = 0
-let g:jedi#goto_assignments_command = ",g"
-let g:jedi#goto_definitions_command = ",d"
-let g:jedi#documentation_command = "K"
-let g:jedi#usages_command = ",n"
-let g:jedi#completions_command = "<C-Space>"
-let g:jedi#rename_command = ",r"
-let g:jedi#show_call_signatures = "1"
+"-----------------------------------------------------------------------
+" let g:jedi#use_tabs_not_buffers = 0
+" " let g:jedi#use_splits_not_buffers = "left"
+" let g:jedi#popup_on_dot = 0
+" let g:jedi#popup_select_first = 0
+" let g:jedi#goto_assignments_command = ",g"
+" let g:jedi#goto_definitions_command = ",d"
+" let g:jedi#documentation_command = "K"
+" let g:jedi#usages_command = ",n"
+" let g:jedi#completions_command = "<C-Space>"
+" let g:jedi#rename_command = ",r"
+" let g:jedi#show_call_signatures = "1"
 " 2}}}
 
 " {{{2 EasyAlign
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 " Start interactive EasyAlign in visual mode
 " :EasyAlign */regex aligns on all matches of regex, 2/regex on every second etc.
 vmap ,al <Plug>(EasyAlign)
 " 2}}}
 
 " {{{2 Ctrlp
-"---------------------------------------------------------------------
+"-----------------------------------------------------------------------
 " r: Try to search for a root directory (containing .git, .ctrlp, etc.)
 " and set that dir as the working dir
 " c: working directory
@@ -826,9 +858,9 @@ set noshowmode
 " 2}}}
 
 " {{{2 incsearch.vim
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
+" map /  <Plug>(incsearch-forward)
+" map ?  <Plug>(incsearch-backward)
+" map g/ <Plug>(incsearch-stay)
 
 " Enable mappings below for automatic 'nohlsearch' after hitting the last match:
 

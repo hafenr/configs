@@ -1,7 +1,7 @@
 *.swp
 *.swo
-vundle_managed/*
-!vundle_managed/.gitkeep
+bundle/*
+!bundle/.gitkeep
 .DS_Store
 eclim/
 .hg*

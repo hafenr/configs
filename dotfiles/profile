@@ -1,3 +1,11 @@
 export VIM_APP_DIR=/usr/local/Cellar/macvim/7.4-72/
 
-export PATH=/usr/local/share/python:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/npm/bin:/usr/local/mysql/bin:/usr/texbin:/Applications/Julia.app/Contents/Resources/julia/bin:/Applications/MATLAB_R2013a.app/bin:~/Library/Haskell/bin:/opt/play-2.2.1:/usr/local/bin
+export PATH=/usr/local/share/python:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/npm/bin:/usr/local/mysql/bin:/usr/texbin:/Applications/Julia.app/Contents/Resources/julia/bin:/Applications/MATLAB_R2013a.app/bin:~/Library/Haskell/bin:/opt/play-2.2.1:/usr/local/bin:~/Dev/TissueMAPS/util
+export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/texbin:$PATH:/opt/xpdf"
+export PATH="~/Dev/TissueMAPS/util:$PATH"
+
+export GI_TYPELIB_PATH="/usr/local/lib/girepository-1.0/Vips-8.0.typelib"
+
+
+
+export PKG_CONFIG_PATH="/usr/local/opt/libxml2/lib/pkgconfig:/usr/local/Cellar/vips/7.40.11/include/vips/vips"

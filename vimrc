@@ -41,7 +41,7 @@ Plugin 'gmarik/Vundle.vim'               " Let Vundle manage Vundle
 Plugin 'tpope/vim-commentary'            " Commenting operator gc
 Plugin 'SirVer/ultisnips'                " Snippet system
 Plugin 'honza/vim-snippets'              " Snippets
-Plugin 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
+" Plugin 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
 Plugin 'delimitMate.vim'                 " Automatically close pairs (where appropriate)
 Plugin 'kien/ctrlp.vim'                  " Fuzzy file finder
 Plugin 'bling/vim-airline'               " Fancy status bar
@@ -54,6 +54,7 @@ Plugin 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): y
 " Plugin 'haya14busa/incsearch.vim'
 Plugin 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
 Plugin 'szw/vim-maximizer'               " Temporarily maximize window
+Plugin 'tpope/vim-vinegar.git'
 
 
 " Nice to have
@@ -89,6 +90,7 @@ Plugin 'https://github.com/freeo/vim-kalisi'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'jonathanfilip/vim-lucius'
 Plugin 'croaker/mustang-vim'
+Plugin 'renamer.vim'
 
 " By language
 " Swift
@@ -167,11 +169,10 @@ else                                " terminal
     " set term=screen-256color
     set t_Co=256                    " set 256 colors for terminal
     set background=dark
-    " colorscheme lucius
-    " LuciusDark
 
     colo lucius
     LuciusDark
+    " colo mustang
 endif
 
 " Keep undo history across sessions by storing it in a file
@@ -272,7 +273,8 @@ augroup general
     autocmd BufEnter .vimrc setlocal foldmethod=marker
 augroup END
 
-au BufRead,BufNewFile *.ts        setlocal filetype=typescript
+autocmd BufNewFile,BufRead,BufFilePre *.md set filetype=markdown
+autocmd BufNewFile,BufRead,BufFilePre *.ts set filetype=typescript
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 "-----------------------------------------------------------------------
@@ -600,8 +602,8 @@ cabbrev stat ~/Dropbox/CBB/StatMethods
 "-----------------------------------------------------------------------
 let g:unicoder_cancel_normal = 1
 let g:unicoder_cancel_insert = 1
-nmap <C-l> :call unicoder#start(0)<CR>
-imap <C-l> <Esc>:call unicoder#start(1)<CR>
+nmap <C-y> :call unicoder#start(0)<CR>
+imap <C-y> <Esc>:call unicoder#start(1)<CR>
 " 2}}}
 
 " {{{2 Startify
@@ -778,11 +780,19 @@ let g:slime_python_ipython = 1
 vmap ,al <Plug>(EasyAlign)
 " 2}}}
 
+" Netrw {{{2 "
+"-----------------------------------------------------------------------
+let g:netrw_liststyle = 3 " tree view
+let g:netrw_preview = 1 " p previews file in vertical split
+let g:netrw_altv = 0  " Split to the right
+" 2}}} "
+
 " {{{2 Ctrlp
 "-----------------------------------------------------------------------
 " r: Try to search for a root directory (containing .git, .ctrlp, etc.)
 " and set that dir as the working dir
 " c: working directory
+" let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_show_hidden = 1
 
@@ -797,8 +807,8 @@ let g:ctrlp_show_hidden = 1
 let g:ctrlp_root_markers = ['.ctrlp']
 
 let g:ctrlp_custom_ignore = {
-\   'dir':  '\v\.git$\|\.hg$\|\.svn$\|\.yardoc\|public\/images\|public\/system\|data\|log\|tmp$|resources/public/js',
-\   'file': '\v\.(o|m4a|pdf|swp|pyc|wav|mp3|ogg|blend|dvi|fls|aux|blg|bbl|log|loa|lof|toc|fdb_latexmk|lot|min.js|min.css|)$|\~$'
+\   'dir':  '\v(\.git|\.hg|\.svn|\.yardoc|public/images|public/system|data|tmp|resources/public/js|node_modules|bower_components)$',
+\   'file': '\v\.(o|m4a|pdf|swp|pyc|wav|mp3|ogg|blend|dvi|fls|aux|blg|bbl|log|loa|lof|toc|fdb_latexmk|lot|js.map|min.js|min.css|)$|\~$'
 \   }
 
 " Save cache across sessions => much faster. Refresh with F5.

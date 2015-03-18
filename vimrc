@@ -41,7 +41,8 @@ Plugin 'gmarik/Vundle.vim'               " Let Vundle manage Vundle
 Plugin 'tpope/vim-commentary'            " Commenting operator gc
 Plugin 'SirVer/ultisnips'                " Snippet system
 Plugin 'honza/vim-snippets'              " Snippets
-" Plugin 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
+Plugin 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
+Plugin 'dhruvasagar/vim-vinegar'         " Vinegar for NerdTree
 Plugin 'delimitMate.vim'                 " Automatically close pairs (where appropriate)
 Plugin 'kien/ctrlp.vim'                  " Fuzzy file finder
 Plugin 'bling/vim-airline'               " Fancy status bar
@@ -54,7 +55,8 @@ Plugin 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): y
 " Plugin 'haya14busa/incsearch.vim'
 Plugin 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
 Plugin 'szw/vim-maximizer'               " Temporarily maximize window
-Plugin 'tpope/vim-vinegar.git'
+Plugin 'vim-scripts/YankRing.vim'
+Plugin 'ludovicchabant/vim-gutentags'
 
 
 " Nice to have
@@ -73,7 +75,6 @@ Plugin 'yaifa.vim'
 Plugin 'mattn/emmet-vim'                 " Zencoding successor
 Plugin 'kana/vim-textobj-user'           " Needed for textobj-python
 Plugin 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, if
-" Plugin 'maxbrunsfeld/vim-yankstack'      " Needs to be started before surround!
 " Plugin 'jeetsukumaran/vim-markology'
 Plugin 'mhinz/vim-startify'
 Plugin 'tomasr/molokai'
@@ -91,6 +92,10 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'jonathanfilip/vim-lucius'
 Plugin 'croaker/mustang-vim'
 Plugin 'renamer.vim'
+Plugin 'rhysd/clever-f.vim'
+
+" Plugin 'xolox/vim-misc'
+" Plugin 'xolox/vim-easytags'
 
 " By language
 " Swift
@@ -199,9 +204,6 @@ set dictionary+=/usr/share/dict/words
 set thesaurus+=~/.vim/extra/mthesaur.txt
 set spelllang=en_us
 set nospell
-" set complete+=k                     " Enable dictionary completion with C-N C-P
-set complete-=]                     " Search tags as well
-set complete-=t                     " Search tags as well
 set encoding=utf-8
 syntax on                           " enable syntax highlighting
 set shiftwidth=4                    " number of spaces to autoindent
@@ -213,6 +215,7 @@ set autoindent                      " enable autoindenting
 set showmode                        " show current mode
 set ruler                           " always show cursor position
 set showcmd                         " display incomplete commands on lower right
+set complete-=t
 set hidden                          " edit another buffer while another one is unsaved
 set lazyredraw                      " don't update the display while executing macros
 set laststatus=2                    " always show status line
@@ -265,7 +268,7 @@ set list listchars=tab:⇥\ ,nbsp:·,trail:␣,extends:▸,precedes:◂
 " Alternative to autotags:
 augroup ctags
     autocmd!
-    " au BufWritePost *.R,*.r,*.Rmd,*.py,*.scala,*.clj,*.coffee silent! !ctags -R
+    " au BufWritePost *.R,*.r,*.Rmd,*.py,*.scala,*.clj,*.coffee silent! !ctags -R &
 augroup END
 
 augroup general
@@ -375,8 +378,9 @@ nnoremap <C-w>> 10<C-w>>
 nnoremap <C-w>- 10<C-w>-
 nnoremap <C-w>+ 10<C-w>+
 
-let mapleader="<space>"
+" let mapleader=""
 let maplocalleader = ","
+map <space> <leader>
 
 " nnoremap <silent> <C-right> :<C-u>call PareditMoveRight()<CR>
 " nnoremap <silent> <C-left> :<C-u>call PareditMoveLeft()<CR>
@@ -388,19 +392,13 @@ nnoremap gV `[v`]
 " Use ; for command line since it's easier to type
 nnoremap ; :
 xnoremap ; :
-vnoremap ; :
-
-" Use : for 'go-to-next-match' when `f`ing
-nnoremap : ;
-xnoremap ; :
+cnoremap jk <CR>
 
 " Show the registers
-nnoremap <space>R :reg<CR>
+nnoremap <leader>R :reg<CR>
 
-" Old escape (now Caps-Lock)
-inoremap jk <ESC>
-
-nnoremap <space>so :source ~/.vimrc<CR>
+nnoremap <leader>so :source ~/.vimrc<CR>
+nnoremap <leader>w :w<CR>
 
 " Append a comment
 nnoremap <C-a> A  <C-r>=&comments[1]<CR>
@@ -408,8 +406,6 @@ nnoremap <C-a> A  <C-r>=&comments[1]<CR>
 " Insert an empty space
 nnoremap <S-space> i <ESC>
 
-" Save the file
-nnoremap <C-space> :w<cr>
 nnoremap <S-space> :BLReloadPage<CR>
 
 " Clear all highlightning
@@ -435,8 +431,8 @@ nnoremap [w     :lprevious<CR>
 nnoremap [W     :llast<CR>
 
 " Empty line above, below
-nnoremap [<space> O<ESC>j
-nnoremap ]<space> o<ESC>k
+nnoremap [<leader> O<ESC>j
+nnoremap ]<leader> o<ESC>k
 
 " Select just pasted text
 noremap gV `[v`]
@@ -450,7 +446,7 @@ nnoremap ,,p "*p
 nnoremap ,Y "+yy
 
 " Knit to pdf
-" nnoremap <space>R :!Rscript -e "require(knitr); knit2pdf('<C-R>%')"<CR>
+" nnoremap <leader>R :!Rscript -e "require(knitr); knit2pdf('<C-R>%')"<CR>
 
 " Jump in the middle of the _current_ line, not the middle of
 " the display
@@ -483,12 +479,9 @@ cnoremap <expr> <C-F> getcmdpos()>strlen(getcmdline())?&cedit:"\<Lt>Right>"
 " c_CTRL-F is remapped to c_CTRL-H for 'history'
 cnoremap <C-h> <C-f>
 
-" jk exits command mode
-" cnoremap jk <C-c>
-
 " Insert line above/below curser
-nnoremap <space>j o<ESC>k
-nnoremap <space>k O<ESC>j
+nnoremap <leader>j o<ESC>k
+nnoremap <leader>k O<ESC>j
 
 " Go to next fold
 nnoremap <M-j> zj
@@ -500,8 +493,8 @@ nnoremap <M-k> zk
 
 " Typing ,lcd or ,cd will switch the (local)
 " working directory to the current file's
-nnoremap <space>cld :lcd %:p:h<CR>
-nnoremap <space>cd :cd %:p:h<CR>
+nnoremap <leader>cld :lcd %:p:h<CR>
+nnoremap <leader>cd :cd %:p:h<CR>
 
 " Scroll by visual lines
 nnoremap j gj
@@ -523,17 +516,13 @@ nnoremap ,tt :TSStype<CR>
 nnoremap ,td :TSSdef<CR>
 
 " Ag
-nnoremap <space>a :Ag ""<Left>
-
-" Yankstack
-nmap <space>p <Plug>yankstack_substitute_older_paste
-nmap <space>P <Plug>yankstack_substitute_newer_paste
+nnoremap <leader>a :Ag ""<Left>
 
 " Fugitive
-nnoremap <space>gg :Gstatus<CR>
-nnoremap <space>gs :Gstatus<CR>
-nnoremap <space>gp :Git push<CR>
-" nmap <space><space> V
+nnoremap <leader>gg :Gstatus<CR>
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gp :Git push<CR>
+" nmap <leader><leader> V
 
 " Undotree
 nnoremap <F4> :UndotreeToggle<CR>
@@ -541,8 +530,8 @@ nnoremap <F4> :UndotreeToggle<CR>
 " Emmet, remap to something less awkward
 imap <C-e> <C-y>,
 
-nmap <script> <silent> <space>w :call ToggleLocationList()<CR>
-nmap <script> <silent> <space>q :call ToggleQuickfixList()<CR>
+nmap <script> <silent> <leader>l :call ToggleLocationList()<CR>
+nmap <script> <silent> <leader>q :call ToggleQuickfixList()<CR>
 
 nnoremap <C-w>m :MaximizerToggle<CR>
 vnoremap <C-w>m :MaximizerToggle<CR>gv
@@ -557,18 +546,19 @@ nnoremap gK :Dash<CR>
 " <CR> opens file in current window
 " <C-v> opens file in vertical split
 " <C-s> opens file in horizontal split
-let g:ctrlp_map = '<C-p>'
 
 " (e)dit
-nnoremap <space>e :CtrlPMixed<CR>
+let g:ctrlp_map = '<C-p>'
+nnoremap <leader>e :CtrlPMixed<CR>
+nnoremap <leader>o :CtrlPMixed<CR>
 " buffe(r)
-nnoremap <space>r :CtrlPBuffer<CR>
+nnoremap <leader>r :CtrlPBuffer<CR>
 " (d)efinitions
-nnoremap <space>d :CtrlPTag<CR>
+nnoremap <leader>d :CtrlPTag<CR>
 
-nnoremap <space>L :CtrlPLine<CR>
-nnoremap <space>F :CtrlPMRUFiles<CR>
-nnoremap <space>D :CtrlPBookmarkDir<CR>
+nnoremap <leader>L :CtrlPLine<CR>
+nnoremap <leader>F :CtrlPMRUFiles<CR>
+nnoremap <leader>D :CtrlPBookmarkDir<CR>
 
 " LateX-Box
 nnoremap ,xv :LatexView<CR>
@@ -582,8 +572,13 @@ nnoremap <S-F2> :NERDTreeFind<CR>
 " Tagbar
 nnoremap <F3> :TagbarToggle<CR>
 
+" YankRing
+nnoremap <leader>p :YRShow<CR>
+let g:yankring_replace_n_pkey = '<M-p>'
+let g:yankring_replace_n_nkey = '<M-n>'
+
 " UltiSnips
-nnoremap <space>ue :UltiSnipsEdit<CR>
+nnoremap <leader>ue :UltiSnipsEdit<CR>
 " 2}}}
 " 1}}}
 "=======================================================================
@@ -666,7 +661,7 @@ endif
 let g:ycm_auto_trigger = 0
 let g:ycm_key_list_select_completion = ['<Down>'] " Tab removed
 let g:ycm_key_list_previous_completion = ['<Up>'] " S-Tab removed
-let g:ycm_key_invoke_completion = '<C-Space>'
+" let g:ycm_key_invoke_completion = '<C-Space>'
 let g:ycm_min_num_of_chars_for_completion = 2 " default 2
 let g:ycm_min_num_identifier_candidate_chars = 0 " default 0
 " Can make vim slower if tags file is on a network dir
@@ -782,9 +777,37 @@ vmap ,al <Plug>(EasyAlign)
 
 " Netrw {{{2 "
 "-----------------------------------------------------------------------
-let g:netrw_liststyle = 3 " tree view
 let g:netrw_preview = 1 " p previews file in vertical split
 let g:netrw_altv = 0  " Split to the right
+" 2}}} "
+
+" Unite {{{2 "
+"-----------------------------------------------------------------------
+let g:unite_source_history_yank_enable = 1
+noremap <leader>y :<C-u>Unite history/yank<CR>
+" 2}}} "
+
+" EasyTags {{{2 "
+"-----------------------------------------------------------------------
+" let g:easytags_opts = []
+" let g:easytags_async = 1
+" let g:easytags_by_filetype = 1
+
+" let g:easytags_languages = {
+" \   'language': {
+" \     'cmd': g:easytags_cmd,
+" \       'args': ['--exclude=*.min.js'],
+" \       'fileoutput_opt': '-f',
+" \       'stdout_opt': '-f-',
+" \       'recurse_flag': '-R'
+" \   }
+" \}
+" 2}}} "
+
+" Clever-f {{{2 "
+"-----------------------------------------------------------------------
+" Don't search across lines
+let g:clever_f_across_no_line = 1
 " 2}}} "
 
 " {{{2 Ctrlp

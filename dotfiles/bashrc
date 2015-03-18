@@ -43,9 +43,11 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     alias cded='cd ~/Dropbox/CBB/EvolutionaryDynamics'
     alias man='_() { echo $1; man -M $(brew --prefix)/opt/coreutils/libexec/gnuman $1 1>/dev/null 2>&1;  if [ "$?" -eq 0 ]; then man -M $(brew --prefix)/opt/coreutils/libexec/gnuman $1; else man $1; fi }; _'
 
+    alias open_ps='open -a /Applications/Adobe\ Photoshop\ CS6/Adobe\ Photoshop\ CS6.app'
+
     # use gnu cmdline utilities instead of bsd ones
     export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/texbin:$PATH:/opt/xpdf"
-    export PATH="/Users/robin/Dev/TissueMAPS/util/tmaps_preproc:$PATH"
+    export PATH="/Users/robin/Dev/TissueMAPS/util/:$PATH"
 
 elif [[ "$OSTYPE" == "cygwin" ]]; then
     # POSIX compatibility layer and Linux environment emulation for Windows
@@ -98,3 +100,4 @@ EOF
 # if [[ ! $TERM =~ screen ]]; then
 #     exec tmux
 # fi
+

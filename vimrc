@@ -44,8 +44,9 @@ Plug 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): yal
 Plug 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
 Plug 'szw/vim-maximizer'               " Temporarily maximize window
 Plug 'vim-scripts/YankRing.vim'
-Plug 'ludovicchabant/vim-gutentags'
-
+" Plug 'ludovicchabant/vim-gutentags'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+" Plug 'wincent/Command-T', {'do': 'cd ~/.vim/plugged/Command-T/ruby/command-t && ruby extconf.rb && make'}
 
 " Nice to have
 Plug 'gosukiwi/vim-atom-dark'
@@ -533,8 +534,7 @@ nnoremap gK :Dash<CR>
 
 " (e)dit
 let g:ctrlp_map = '<C-p>'
-nnoremap <leader>e :CtrlPMixed<CR>
-nnoremap <leader>o :CtrlPMixed<CR>
+nnoremap <leader>f :FZF<CR>
 " buffe(r)
 nnoremap <leader>r :CtrlPBuffer<CR>
 " (d)efinitions

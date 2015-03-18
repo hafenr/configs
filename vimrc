@@ -19,138 +19,124 @@
 "=======================================================================
 let os = substitute(system('uname'), "\n", "", "")
 let vimdir = '$HOME/.vim'
-
-" For Vundle
-set nocompatible
-filetype off
-
-" Automatically setup Vundle on first run
-if !isdirectory(expand("~/.vim/bundle/Vundle.vim"))
-    call system("git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim")
-endif
-
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin("$HOME/.vim/bundle")
-call pathogen#infect("pathogen/*")
 " }}}
 "=======================================================================
 " Plugins {{{
 "=======================================================================
+call plug#begin('~/.vim/plugged')
+
 " Essential
-Plugin 'gmarik/Vundle.vim'               " Let Vundle manage Vundle
-Plugin 'tpope/vim-commentary'            " Commenting operator gc
-Plugin 'SirVer/ultisnips'                " Snippet system
-Plugin 'honza/vim-snippets'              " Snippets
-Plugin 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
-Plugin 'dhruvasagar/vim-vinegar'         " Vinegar for NerdTree
-Plugin 'delimitMate.vim'                 " Automatically close pairs (where appropriate)
-Plugin 'kien/ctrlp.vim'                  " Fuzzy file finder
-Plugin 'bling/vim-airline'               " Fancy status bar
-Plugin 'tpope/vim-fugitive'              " Git plugin
-Plugin 'tpope/vim-repeat'                " Repeat all kinds of stuff
-Plugin 'tpope/vim-surround'              " Surround motions
-Plugin 'mbbill/undotree'                 " Undo history as a tree
-Plugin 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
-Plugin 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): yal, yil etc.
-" Plugin 'haya14busa/incsearch.vim'
-Plugin 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
-Plugin 'szw/vim-maximizer'               " Temporarily maximize window
-Plugin 'vim-scripts/YankRing.vim'
-Plugin 'ludovicchabant/vim-gutentags'
+Plug 'gmarik/Vundle.vim'               " Let Vundle manage Vundle
+Plug 'tpope/vim-commentary'            " Commenting operator gc
+Plug 'SirVer/ultisnips'                " Snippet system
+Plug 'honza/vim-snippets'              " Snippets
+Plug 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
+Plug 'dhruvasagar/vim-vinegar'         " Vinegar for NerdTree
+Plug 'jiangmiao/auto-pairs'            " Automatically close pairs (where appropriate)
+Plug 'kien/ctrlp.vim'                  " Fuzzy file finder
+Plug 'bling/vim-airline'               " Fancy status bar
+Plug 'tpope/vim-fugitive'              " Git plugin
+Plug 'tpope/vim-repeat'                " Repeat all kinds of stuff
+Plug 'tpope/vim-surround'              " Surround motions
+Plug 'mbbill/undotree'                 " Undo history as a tree
+Plug 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
+Plug 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): yal, yil etc.
+Plug 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
+Plug 'szw/vim-maximizer'               " Temporarily maximize window
+Plug 'vim-scripts/YankRing.vim'
+Plug 'ludovicchabant/vim-gutentags'
 
 
 " Nice to have
-Plugin 'gosukiwi/vim-atom-dark'
-Plugin 'chrisbra/csv.vim'
-Plugin 'salsifis/vim-transpose'
-Plugin 'junegunn/vim-easy-align'         " :'<,'>EasyAlign [*] DELIM or /regex/
-Plugin 'godlygeek/tabular'               " :Tabularize /regex
-Plugin 'jwhitley/vim-matchit'            " More jumps for %
-Plugin 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
-Plugin 'othree/xml.vim'                  " XML editing
-Plugin 'junegunn/seoul256.vim'           " Nice color scheme
-Plugin 'scrooloose/syntastic'
-Plugin 'ivyl/vim-bling'
-Plugin 'yaifa.vim'
-Plugin 'mattn/emmet-vim'                 " Zencoding successor
-Plugin 'kana/vim-textobj-user'           " Needed for textobj-python
-Plugin 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, if
-" Plugin 'jeetsukumaran/vim-markology'
-Plugin 'mhinz/vim-startify'
-Plugin 'tomasr/molokai'
-Plugin 'Shougo/vimproc.vim'              " Do `$ make` after update
-" Plugin 'Valloric/YouCompleteMe'        " $ Do `./install.sh` after update
-Plugin 'tpope/vim-obsession'
-" Plugin 'tpope/vim-abolish'
-Plugin 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
-Plugin 'jpalardy/vim-slime'              " REPL interaction
-Plugin 'majutsushi/tagbar'
-Plugin 'noahfrederick/vim-hemisu'
-Plugin 'rizzatti/dash.vim'
-Plugin 'https://github.com/freeo/vim-kalisi'
-Plugin 'editorconfig/editorconfig-vim'
-Plugin 'jonathanfilip/vim-lucius'
-Plugin 'croaker/mustang-vim'
-Plugin 'renamer.vim'
-Plugin 'rhysd/clever-f.vim'
+Plug 'gosukiwi/vim-atom-dark'
+Plug 'chrisbra/csv.vim'
+Plug 'junegunn/vim-easy-align'         " :'<,'>EasyAlign [*] DELIM or /regex/
+Plug 'godlygeek/tabular'               " :Tabularize /regex
+Plug 'jwhitley/vim-matchit'            " More jumps for %
+Plug 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
+Plug 'othree/xml.vim'                  " XML editing
+Plug 'junegunn/seoul256.vim'           " Nice color scheme
+Plug 'scrooloose/syntastic'
+Plug 'ivyl/vim-bling'
+Plug 'yaifa.vim'
+Plug 'mattn/emmet-vim'                 " Zencoding successor
+Plug 'kana/vim-textobj-user'           " Needed for textobj-python
+Plug 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, if
+" Plug 'jeetsukumaran/vim-markology'
+Plug 'mhinz/vim-startify'
+Plug 'tomasr/molokai'
+Plug 'Shougo/vimproc.vim'              " Do `$ make` after update
+" Plug 'Valloric/YouCompleteMe'        " $ Do `./install.sh` after update
+Plug 'tpope/vim-obsession'
+" Plug 'tpope/vim-abolish'
+Plug 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
+Plug 'jpalardy/vim-slime'              " REPL interaction
+Plug 'majutsushi/tagbar'
+Plug 'noahfrederick/vim-hemisu'
+Plug 'rizzatti/dash.vim'
+Plug 'https://github.com/freeo/vim-kalisi'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'jonathanfilip/vim-lucius'
+Plug 'croaker/mustang-vim'
+Plug 'renamer.vim'
+Plug 'rhysd/clever-f.vim'
 
-" Plugin 'xolox/vim-misc'
-" Plugin 'xolox/vim-easytags'
+" Plug 'xolox/vim-misc'
+" Plug 'xolox/vim-easytags'
 
 " By language
 " Swift
-Plugin 'Keithbsmiley/swift.vim'
+Plug 'Keithbsmiley/swift.vim', { 'for': 'swift' }
 
 " Clojure
-Plugin 'guns/vim-clojure-static'
-Plugin 'kien/rainbow_parentheses.vim'
-Plugin 'tpope/vim-fireplace'
-Plugin 'vim-scripts/paredit.vim'
-Plugin 'tpope/vim-sexp-mappings-for-regular-people.git'
-Plugin 'guns/vim-sexp.git'
+Plug 'guns/vim-clojure-static', { 'for': ['clojure', 'lisp', 'scheme'] }
+Plug 'kien/rainbow_parentheses.vim', { 'for': ['clojure', 'lisp', 'scheme'] }
+Plug 'tpope/vim-fireplace', { 'for': ['clojure', 'lisp', 'scheme'] }
+Plug 'vim-scripts/paredit.vim', { 'for': ['clojure', 'lisp', 'scheme'] }
+Plug 'tpope/vim-sexp-mappings-for-regular-people.git', { 'for': ['clojure', 'lisp', 'scheme'] }
+Plug 'guns/vim-sexp.git', { 'for': ['clojure', 'lisp', 'scheme'] }
 
 " Ruby
-Plugin 'vim-ruby/vim-ruby'
+Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 
 " R
-" Plugin 'vim-pandoc/vim-pandoc'
-Plugin 'vim-pandoc/vim-pandoc-syntax'
-Plugin 'vim-pandoc/vim-rmarkdown'
-Plugin 'Vim-R-plugin'
-Plugin 'nelstrom/vim-markdown-folding'
+" Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': 'r' }
+Plug 'vim-pandoc/vim-rmarkdown', { 'for': 'r' }
+Plug 'Vim-R-plugin', { 'for': 'r' }
+Plug 'nelstrom/vim-markdown-folding', { 'for': 'r' }
 " Julia
-" Plugin 'JuliaLang/julia-vim'
+" Plug 'JuliaLang/julia-vim'
 
 " LaTeX
-Plugin 'LaTeX-Box-Team/LaTeX-Box'
-Plugin 'Eckankar/vim-latex-folding'
+Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' }
+Plug 'Eckankar/vim-latex-folding', { 'for': 'tex' }
 
 " JavaScript, TypeScript, CoffeeScript
-Plugin 'jason0x43/vim-js-indent'
-Plugin 'leafgarland/typescript-vim'
-Plugin 'vim-coffee-script'
+Plug 'jason0x43/vim-js-indent', { 'for': 'javascript' }
+Plug 'leafgarland/typescript-vim'
+Plug 'vim-coffee-script', { 'for': 'coffee' }
 
 " HTML, CSS/LESS
-" Plugin 'ap/vim-css-color'
-Plugin 'ervandew/screen'
-Plugin 'groenewege/vim-less'
-Plugin 'lepture/vim-jinja'
-Plugin 'jaxbot/brolink.vim'
-Plugin 'othree/html5.vim'
+" Plug 'ap/vim-css-color'
+Plug 'ervandew/screen', { 'for': 'tex' }
+Plug 'groenewege/vim-less', { 'for': 'less' }
+Plug 'lepture/vim-jinja'
+Plug 'jaxbot/brolink.vim', { 'for': 'html' }
+Plug 'othree/html5.vim', { 'for': 'html' }
 
 " Python
-Plugin 'django.vim'
-" Plugin 'davidhalter/jedi-vim'
+Plug 'django.vim'
+" Plug 'davidhalter/jedi-vim'
 
 " Scala
-Plugin 'spiroid/vim-ultisnip-scala'
-Plugin 'vim-scala'
+Plug 'spiroid/vim-ultisnip-scala', { 'for': 'scala' }
+Plug 'vim-scala', { 'for': 'scala' }
 
 " Matlab
-Plugin 'matlab.vim'
+Plug 'matlab.vim'
 
-call vundle#end()            " required
-filetype plugin indent on    " required
+call plug#end()
 " }}}
 "=======================================================================
 " Startup {{{
@@ -189,10 +175,6 @@ if has('persistent_undo')
     set undofile
 endif
 
-" Default python imports
-py import vim, sys
-py from vim import buffers, windows, command, current, error
-
 set rtp+=/usr/local/lib/node_modules/typescript-tools
 " }}}
 "=======================================================================
@@ -200,6 +182,8 @@ set rtp+=/usr/local/lib/node_modules/typescript-tools
 "=======================================================================
 set clipboard=unnamed
 " Specify the builtin list of words for C-X C-K completion
+
+set nocompatible
 set dictionary+=/usr/share/dict/words
 set thesaurus+=~/.vim/extra/mthesaur.txt
 set spelllang=en_us

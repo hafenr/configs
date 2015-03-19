@@ -1,0 +1,26 @@
+snippet fac "angular factory" b
+angular.module('${1:module.name}')
+.factory('${2:name}', [${3:'dep1', 'dep2'}${3/.+/, /}function(${3/'//g}) {
+
+	$0
+
+}]);
+endsnippet
+
+snippet ctrl "angular controller" b
+angular.module('${1:module.name}')
+.controller('${2:name}', [${3:'dep1', 'dep2'}${3/.+/, /}function(${3/'//g}) {
+
+	$0
+
+}]);
+endsnippet
+
+snippet dir "angular directive" b
+angular.module('${1:module.name}')
+.directive('${2:name}', [${3:'dep1', 'dep2'}${3/.+/, /}function(${3/'//g}) {
+
+	$0
+
+}]);
+endsnippet

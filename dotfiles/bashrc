@@ -30,6 +30,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     # Mac OSX
     # === environments ===
     export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
+    export PYTHONPATH=/Users/robin/Dev:$PYTHONPATH
     export WORKON_HOME=~/.virtualenvs
     export R_HOME=/Library/Frameworks/R.framework/Resources
     export JAVA_HOME=$(/usr/libexec/java_home)
@@ -45,10 +46,12 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
 
     alias open_ps='open -a /Applications/Adobe\ Photoshop\ CS6/Adobe\ Photoshop\ CS6.app'
 
+    alias vim=nvim
+    alias vi=nvim
+
     # use gnu cmdline utilities instead of bsd ones
     export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/texbin:$PATH:/opt/xpdf"
     export PATH="/Users/robin/Dev/TissueMAPS/util/:$PATH"
-
 elif [[ "$OSTYPE" == "cygwin" ]]; then
     # POSIX compatibility layer and Linux environment emulation for Windows
     :
@@ -66,6 +69,55 @@ else
     echo "can't initialize properly"
 fi
 
+# fe [FUZZY PATTERN] - Open the selected file with the default editor
+#   - Bypass fuzzy finder if there's only one match (--select-1)
+#   - Exit if there's no match (--exit-0)
+fe() {
+  local file
+  file=$(fzf --query="$1" --select-1 --exit-0)
+  [ -n "$file" ] && ${EDITOR:-vim} "$file"
+}
+
+# Equivalent to above, but opens it with `open` command
+fo() {
+  local file
+  file=$(fzf --query="$1" --select-1 --exit-0)
+  [ -n "$file" ] && open "$file"
+}
+
+# fd - cd to selected directory
+fd() {
+  local dir
+  dir=$(find ${1:-*} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+
+# fda - including hidden directories
+fda() {
+  local dir
+  dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
+}
+
+cdf() {
+   local file
+   local dir
+   file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
+}
+
+fh() {
+      eval $(([ -n "$ZSH_NAME"  ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+}
+
+fk() {
+    pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+
+    if [ "x$pid" != "x"  ]
+    then
+        kill -${1:-9} $pid
+    fi
+
+}
 
 cat <<'EOF'
                       __gggrgM**M#mggg__
@@ -97,7 +149,9 @@ cat <<'EOF'
                              ~~~~
 
 EOF
+
+
 # if [[ ! $TERM =~ screen ]]; then
 #     exec tmux
 # fi
-
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

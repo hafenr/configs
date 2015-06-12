@@ -1,13 +1,17 @@
-snippet fac "angular factory" b
+snippet "fac?t?o?r?y?" "angular factory" rb
 angular.module('${1:module.name}')
 .factory('${2:name}', [${3:'dep1', 'dep2'}${3/.+/, /}function(${3/'//g}) {
 
-	$0
+	function $2() {
+		$0
+	}
+
+	return $2;
 
 }]);
 endsnippet
 
-snippet ctrl "angular controller" b
+snippet "(ctrl)|controller" "angular controller" rb
 angular.module('${1:module.name}')
 .controller('${2:name}', [${3:'dep1', 'dep2'}${3/.+/, /}function(${3/'//g}) {
 
@@ -16,7 +20,7 @@ angular.module('${1:module.name}')
 }]);
 endsnippet
 
-snippet dir "angular directive" b
+snippet "dir?e?c?t?i?v?e?" "angular directive" rb
 angular.module('${1:module.name}')
 .directive('${2:name}', [${3:'dep1', 'dep2'}${3/.+/, /}function(${3/'//g}) {
 

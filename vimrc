@@ -24,15 +24,14 @@ let vimdir = '$HOME/.vim'
 " Plugins {{{
 "=======================================================================
 call plug#begin('~/.vim/plugged')
-
 " Essential
 Plug 'gmarik/Vundle.vim'               " Let Vundle manage Vundle
 Plug 'tpope/vim-commentary'            " Commenting operator gc
 Plug 'SirVer/ultisnips'                " Snippet system
 Plug 'honza/vim-snippets'              " Snippets
 Plug 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
-Plug 'dhruvasagar/vim-vinegar'         " Vinegar for NerdTree
-Plug 'jiangmiao/auto-pairs'            " Automatically close pairs (where appropriate)
+Plug 'tpope/vim-vinegar'
+Plug 'Raimondi/delimitMate'
 Plug 'kien/ctrlp.vim'                  " Fuzzy file finder
 Plug 'bling/vim-airline'               " Fancy status bar
 Plug 'tpope/vim-fugitive'              " Git plugin
@@ -40,62 +39,61 @@ Plug 'tpope/vim-repeat'                " Repeat all kinds of stuff
 Plug 'tpope/vim-surround'              " Surround motions
 Plug 'mbbill/undotree'                 " Undo history as a tree
 Plug 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
+Plug 'gabesoft/vim-ags'
 Plug 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): yal, yil etc.
 Plug 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
 Plug 'szw/vim-maximizer'               " Temporarily maximize window
-Plug 'vim-scripts/YankRing.vim'
-" Plug 'ludovicchabant/vim-gutentags'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
-" Plug 'wincent/Command-T', {'do': 'cd ~/.vim/plugged/Command-T/ruby/command-t && ruby extconf.rb && make'}
-
-" Nice to have
-Plug 'gosukiwi/vim-atom-dark'
-Plug 'chrisbra/csv.vim'
-Plug 'junegunn/vim-easy-align'         " :'<,'>EasyAlign [*] DELIM or /regex/
-Plug 'godlygeek/tabular'               " :Tabularize /regex
-Plug 'jwhitley/vim-matchit'            " More jumps for %
-Plug 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
-Plug 'othree/xml.vim'                  " XML editing
-Plug 'junegunn/seoul256.vim'           " Nice color scheme
 Plug 'scrooloose/syntastic'
-Plug 'ivyl/vim-bling'
-Plug 'yaifa.vim'
-Plug 'mattn/emmet-vim'                 " Zencoding successor
-Plug 'kana/vim-textobj-user'           " Needed for textobj-python
-Plug 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, if
-" Plug 'jeetsukumaran/vim-markology'
-Plug 'mhinz/vim-startify'
-Plug 'tomasr/molokai'
-Plug 'Shougo/vimproc.vim'              " Do `$ make` after update
-" Plug 'Valloric/YouCompleteMe'        " $ Do `./install.sh` after update
-Plug 'tpope/vim-obsession'
-" Plug 'tpope/vim-abolish'
-Plug 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+Plug 'rhysd/clever-f.vim'
+" Plug 'tpope/vim-unimpaired'
+Plug 'Lokaltog/vim-easymotion'
+Plug 'jwhitley/vim-matchit'            " More jumps for %
 Plug 'jpalardy/vim-slime'              " REPL interaction
-Plug 'majutsushi/tagbar'
-Plug 'noahfrederick/vim-hemisu'
-Plug 'rizzatti/dash.vim'
+" Plug 'Valloric/YouCompleteMe', { 'do': 'cd ~/.vim/plugged/YouCompleteMe/ && sh install.sh'
+Plug 'Yggdroot/indentLine'
+Plug 'airblade/vim-gitgutter'          " ]c [c
+Plug 'mattn/gist-vim'                  " buffer or selection to gist with :Gist
+Plug 'ivyl/vim-bling'                  " blink on / n N
+Plug 'bfredl/nvim-ipy'
+Plug 'fisadev/vim-ctrlp-cmdpalette'
+Plug 'dbakker/vim-projectroot'
+Plug 'Shougo/unite.vim'
+Plug 'Shougo/neomru.vim'
+
+" Angular
+Plug 'burnettk/vim-angular', { 'for': 'javascript' }
+Plug 'matthewsimo/angular-vim-snippets', { 'for': 'javascript' }
+Plug 'claco/jasmine.vim', { 'for': 'javascript' }
+
+" Colors
 Plug 'https://github.com/freeo/vim-kalisi'
-Plug 'editorconfig/editorconfig-vim'
 Plug 'jonathanfilip/vim-lucius'
 Plug 'croaker/mustang-vim'
-Plug 'renamer.vim'
-Plug 'rhysd/clever-f.vim'
+Plug 'noahfrederick/vim-hemisu'
+Plug 'tomasr/molokai'
+Plug 'junegunn/seoul256.vim'           " Nice color scheme
 
-" Plug 'xolox/vim-misc'
-" Plug 'xolox/vim-easytags'
+" Nice to have
+Plug 'vim-scripts/IndexedSearch'
+Plug 'junegunn/vim-easy-align'         " :'<,'>EasyAlign [*] DELIM or /regex/
+Plug 'yaifa.vim'
+Plug 'kana/vim-textobj-user'           " Needed for textobj-python
+" Plug 'jeetsukumaran/vim-markology'
+" Plug 'mhinz/vim-startify'
+Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make' }
+" Plug 'tpope/vim-obsession'
+" Plug 'tpope/vim-abolish'
+Plug 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
+Plug 'editorconfig/editorconfig-vim'   " read .editorconfig files and set variables
+Plug 'renamer.vim'                     " bulk rename by calling :Renamer
 
 " By language
-" Swift
-Plug 'Keithbsmiley/swift.vim', { 'for': 'swift' }
-
 " Clojure
 Plug 'guns/vim-clojure-static', { 'for': ['clojure', 'lisp', 'scheme'] }
 Plug 'kien/rainbow_parentheses.vim', { 'for': ['clojure', 'lisp', 'scheme'] }
 Plug 'tpope/vim-fireplace', { 'for': ['clojure', 'lisp', 'scheme'] }
 Plug 'vim-scripts/paredit.vim', { 'for': ['clojure', 'lisp', 'scheme'] }
-Plug 'tpope/vim-sexp-mappings-for-regular-people.git', { 'for': ['clojure', 'lisp', 'scheme'] }
-Plug 'guns/vim-sexp.git', { 'for': ['clojure', 'lisp', 'scheme'] }
 
 " Ruby
 Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
@@ -117,26 +115,29 @@ Plug 'Eckankar/vim-latex-folding', { 'for': 'tex' }
 Plug 'jason0x43/vim-js-indent', { 'for': 'javascript' }
 Plug 'leafgarland/typescript-vim'
 Plug 'vim-coffee-script', { 'for': 'coffee' }
+Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
 
 " HTML, CSS/LESS
 " Plug 'ap/vim-css-color'
+Plug 'mattn/emmet-vim'                 " Zencoding successor
 Plug 'ervandew/screen', { 'for': 'tex' }
-Plug 'groenewege/vim-less', { 'for': 'less' }
-Plug 'lepture/vim-jinja'
-Plug 'jaxbot/brolink.vim', { 'for': 'html' }
 Plug 'othree/html5.vim', { 'for': 'html' }
+Plug 'groenewege/vim-less'
 
 " Python
-Plug 'django.vim'
-" Plug 'davidhalter/jedi-vim'
+Plug 'davidhalter/jedi-vim'
+Plug 'lepture/vim-jinja', { 'for': 'html' }
+Plug 'ivanov/vim-ipython'
+Plug 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
+Plug 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, if
 
 " Scala
 Plug 'spiroid/vim-ultisnip-scala', { 'for': 'scala' }
 Plug 'vim-scala', { 'for': 'scala' }
 
 " Matlab
-Plug 'matlab.vim'
-
+Plug 'matlab.vim', { 'for': 'matlab' }
 call plug#end()
 " }}}
 "=======================================================================
@@ -151,22 +152,13 @@ if has('gui_running')               " gvim options
     elseif os == "Linux"
         set guifont=Deja\ Vu\ Sans\ Mono\ 10
     endif
-
-    " let g:seoul256_background = 236 " Range: 233 - 239"
-    " set background=dark
-
-    colorscheme lucius
-    LuciusDark
+    colorscheme muon
 else                                " terminal
     " set term=screen-256color
     set t_Co=256                    " set 256 colors for terminal
     set background=dark
-
-    colo lucius
-    LuciusDark
-    " colo mustang
+    colorscheme muon
 endif
-
 " Keep undo history across sessions by storing it in a file
 if has('persistent_undo')
     let my_undo_dir = expand(vimdir . '/undo')
@@ -175,17 +167,14 @@ if has('persistent_undo')
     let &undodir = my_undo_dir
     set undofile
 endif
-
-set rtp+=/usr/local/lib/node_modules/typescript-tools
 " }}}
 "=======================================================================
-" Basic Settings {{{
+" Basic settings {{{
 "=======================================================================
 set clipboard=unnamed
-" Specify the builtin list of words for C-X C-K completion
 
 set nocompatible
-set dictionary+=/usr/share/dict/words
+set dictionary+=/usr/share/dict/words " Specify the builtin list of words for C-X C-K completion
 set thesaurus+=~/.vim/extra/mthesaur.txt
 set spelllang=en_us
 set nospell
@@ -196,7 +185,7 @@ set tabstop=4                       " # spaces shown for one TAB
 set softtabstop=4                   " # spaces that are actually inserted/removed for a tab
 set expandtab                       " insert spaces when hitting TAB (with above options)
 set autoindent                      " enable autoindenting
-" set number                          " view line numbers
+set relativenumber                  " view line numbers
 set showmode                        " show current mode
 set ruler                           " always show cursor position
 set showcmd                         " display incomplete commands on lower right
@@ -205,8 +194,8 @@ set hidden                          " edit another buffer while another one is u
 set lazyredraw                      " don't update the display while executing macros
 set laststatus=2                    " always show status line
 set autoread                        " automatically read a file that has changed on disk
-set ofu=syntaxcomplete#Complete     " autocompletion so that menu will always appear
-set cfu=
+" set ofu=syntaxcomplete#Complete     " autocompletion so that menu will always appear
+" set cfu=
 set wildmenu                        " show a menu of possible completions when TABing incomplete commands
 set wildmode=list:longest,full      " how wild mode should behave
 set guioptions-=T                   " remove toolbar in gVim
@@ -226,7 +215,7 @@ set linebreak                       " vim will break lines at the chars given in
 set showbreak=......\|\             " show linebreaks with: ......| wrapped text
 set textwidth=0                     " don't insert EOLs at linebreak
 set noswapfile                      " don't use swapfile
-set nobackup            	    " don't create backup files
+set nobackup                        " don't create backup files
 set splitright                      " split vertical windows right to the current windows
 set splitbelow                      " split horizontal windows below to the current windows
 set so=7                            " keep 7 empty lines from the cursor to the border when scrolling with j or k
@@ -248,14 +237,9 @@ set showmatch                       " Highlight (blinking) matching [{( when ins
 set list listchars=tab:⇥\ ,nbsp:·,trail:␣,extends:▸,precedes:◂
 " }}}
 "=======================================================================
-" Autocommands {{{
+" Auto commands {{{
 "=======================================================================
 " Alternative to autotags:
-augroup ctags
-    autocmd!
-    " au BufWritePost *.R,*.r,*.Rmd,*.py,*.scala,*.clj,*.coffee silent! !ctags -R &
-augroup END
-
 augroup general
     autocmd!
     autocmd BufEnter .vimrc setlocal foldmethod=marker
@@ -270,28 +254,6 @@ autocmd QuickFixCmdPost    l* nested lwindow
 "-----------------------------------------------------------------------
 " Automatically delete trailing whitespace
 autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
-
-" ---------------------------------------------------------------------
-" HTML, XML
-" ---------------------------------------------------------------------
-" augroup au_HTML_XML
-"     autocmd Filetype html,xml,xsl source ~/.vim/plugin/closetag.vim
-" augroup END
-
-"-----------------------------------------------------------------------
-" R
-"-----------------------------------------------------------------------
-" augroup R
-"     autocmd!
-"     au FileType r set iskeyword+=.
-
-"     function! SetRmdOptions()
-"         setfiletype rmarkdown.rmd
-"     endfunction
-
-"     autocmd BufEnter,BufRead *.Rmd call SetRmdOptions()
-" augroup END
-
 "-----------------------------------------------------------------------
 " Python
 "-----------------------------------------------------------------------
@@ -299,19 +261,16 @@ augroup Python
     autocmd!
     autocmd FileType python setlocal foldmethod=indent foldnestmax=2
     autocmd FileType python setlocal shiftwidth=4 tabstop=4
-    " autocmd FileType python set omnifunc=pythoncomplete#Complete
-    " autocmd FileType python setlocal ofu=jedi#completions
-    " autocmd BufWritePost *.py silent! !ctags -R --exclude=.git --exclude=lib --exclude=external --languages=python
 augroup END
-
-
+"-----------------------------------------------------------------------
+" Clojure
+"-----------------------------------------------------------------------
 function! SetClojureSettings()
     nnoremap <silent> <M-l> :<C-u>call PareditMoveRight()<CR>
     nnoremap <silent> <M-h> :<C-u>call PareditMoveLeft()<CR>
     nnoremap <silent> <C-l> :<C-u>call PareditMoveRight()<CR>
     nnoremap <silent> <C-h> :<C-u>call PareditMoveLeft()<CR>
 endfunction
-
 augroup Clojure
     autocmd!
     autocmd FileType clojure call SetClojureSettings()
@@ -323,49 +282,53 @@ augroup Clojure
     au Syntax   *.clj,*.el RainbowParenthesesLoadChevrons " <>
     " au BufWritePost *.cljs :BLReloadPage
 augroup END
-
 "-----------------------------------------------------------------------
 " Latex
 "-----------------------------------------------------------------------
 augroup Autex
     autocmd!
-    " autocmd FileType tex set mps+=$:$
     au FileType tex let b:delimitMate_matchpairs = "\(:\)"
     autocmd FileType tex setlocal spell
-    " autocmd FileType tex let b:AutoPairs['$'] = '$'
-    " autocmd FileType tex nnoremap <buffer> <leader>c <leader>ll
-    " autocmd FileType tex nnoremap <buffer> <leader>v <leader>lv
-augroup END
-
-augroup Darwin
-    autocmd!
-    autocmd BufRead,BufNewFile *.drw set filetype=darwin
-augroup END
-
-
-"-----------------------------------------------------------------------
-" Markdown
-"-----------------------------------------------------------------------
-augroup Markdown
-    " autocmd FileType markdown set foldmethod=marker
-    " autocmd FileType markdown set foldmarker=-------------------------------------------------------------------------------,*******************************************************************************
 augroup END
 " }}}
-"=======================================================================
+"======================================================================
 " Mappings {{{1
 "=======================================================================
 " Basic {{{2 "
+nnoremap ; :
+xnoremap ; :
+nnoremap <space>w :w<CR>
+nnoremap <space>. :source ~/.vimrc<CR>
+cnoremap jk <CR>
 
-" Command-Arrow to resize current buffer by +/- 5
-" :vert res +5 <CR> and then repeat last ex-command with @: @@ @@ @@
-nnoremap <C-w>< 10<C-w><
-nnoremap <C-w>> 10<C-w>>
-nnoremap <C-w>- 10<C-w>-
-nnoremap <C-w>+ 10<C-w>+
+nmap <space>j <Plug>(easymotion-prefix)j
+nmap <space>k <Plug>(easymotion-prefix)k
+" Mappings for neovim
+if has('nvim')
+    " ESC escapes :term (can't send ESC to terminal
+    " processes anymore)
+    tnoremap <C-[> <C-\><C-n>
+    " Select something visually and then CR
+    " sends it to the next window which should be
+    " :term
+    :xnoremap <CR> y<C-w>wpA<CR><C-\><C-n><C-w>w
+endif
 
-" let mapleader=""
+" Moving lines
+nnoremap <silent> <C-k> :move-2<cr>
+nnoremap <silent> <C-j> :move+<cr>
+nnoremap <silent> <C-h> <<
+nnoremap <silent> <C-l> >>
+xnoremap <silent> <C-k> :move-2<cr>gv
+xnoremap <silent> <C-j> :move'>+<cr>gv
+xnoremap <silent> <C-h> <gv
+xnoremap <silent> <C-l> >gv
+
+nnoremap ,f i=expand('%:t:r')<CR><ESC>
+
+let mapleader='<space>'
 let maplocalleader = ","
-map <space> <leader>
+" map <space> <leader>
 
 " nnoremap <silent> <C-right> :<C-u>call PareditMoveRight()<CR>
 " nnoremap <silent> <C-left> :<C-u>call PareditMoveLeft()<CR>
@@ -373,25 +336,15 @@ map <space> <leader>
 " Select most recently pasted text
 nnoremap gV `[v`]
 
-" Easier access to command-window
-" Use ; for command line since it's easier to type
-nnoremap ; :
-xnoremap ; :
-cnoremap jk <CR>
-
-" Show the registers
-nnoremap <leader>R :reg<CR>
-
-nnoremap <leader>so :source ~/.vimrc<CR>
-nnoremap <leader>w :w<CR>
+" nnoremap <space>b :<C-u>Unite -start-insert -auto-resize buffer<CR>
 
 " Append a comment
 nnoremap <C-a> A  <C-r>=&comments[1]<CR>
 
 " Insert an empty space
-nnoremap <S-space> i <ESC>
+" nnoremap <S-space> i <ESC>
 
-nnoremap <S-space> :BLReloadPage<CR>
+" nnoremap <S-space> :BLReloadPage<CR>
 
 " Clear all highlightning
 nnoremap <C-\> :noh<CR>
@@ -403,22 +356,6 @@ nnoremap <C-\> :noh<CR>
 " vnoremap <silent> p p`]
 " nnoremap <silent> p p`]
 
-" Navigating quickfix list (gets populated by e.g. vimgrep/ag)
-nnoremap ]q     :cnext<CR>
-nnoremap ]Q     :cfirst<CR>
-nnoremap [q     :cprevious<CR>
-nnoremap [Q     :clast<CR>
-
-" Navigating the location list (gets populated by e.g. Syntastic)
-nnoremap ]w     :lnext<CR>
-nnoremap ]W     :lfirst<CR>
-nnoremap [w     :lprevious<CR>
-nnoremap [W     :llast<CR>
-
-" Empty line above, below
-nnoremap [<leader> O<ESC>j
-nnoremap ]<leader> o<ESC>k
-
 " Select just pasted text
 noremap gV `[v`]
 
@@ -429,9 +366,6 @@ vnoremap ,p "+p
 nnoremap ,,y "*y
 nnoremap ,,p "*p
 nnoremap ,Y "+yy
-
-" Knit to pdf
-" nnoremap <leader>R :!Rscript -e "require(knitr); knit2pdf('<C-R>%')"<CR>
 
 " Jump in the middle of the _current_ line, not the middle of
 " the display
@@ -476,18 +410,12 @@ nnoremap <M-k> zk
 " nnoremap ]q :cnext<CR>
 " nnoremap [q :cprevious<CR>
 
-" Typing ,lcd or ,cd will switch the (local)
-" working directory to the current file's
-nnoremap <leader>cld :lcd %:p:h<CR>
-nnoremap <leader>cd :cd %:p:h<CR>
-
 " Scroll by visual lines
 nnoremap j gj
 nnoremap k gk
 
-" 2}}}
-
-" Plugin mapings {{{2 "
+" Create a file of the same name with _test appended.
+nnoremap ,te :e =expand('%:r') . '_test.' . expand('%:e')<CR><CR>
 
 " Markdown
 inoremap <C-h>1 <ESC>yypVr=o
@@ -495,74 +423,98 @@ inoremap <C-h>2 <ESC>yypVr-o
 nnoremap ,h1 yypVr=
 nnoremap ,h2 yypVr-
 
-" TypeScript Server
-" type of symbol under cursor
-nnoremap ,tt :TSStype<CR>
-nnoremap ,td :TSSdef<CR>
+" Emmet
+imap <C-e> <C-y>,
 
-" Ag
-nnoremap <leader>a :Ag ""<Left>
-
-" Fugitive
-nnoremap <leader>gg :Gstatus<CR>
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gp :Git push<CR>
-" nmap <leader><leader> V
+" Git
+nnoremap <space>gg :Gstatus<CR>
+nnoremap <space>gs :Gstatus<CR>
+nnoremap <space>gp :Git push<CR>
 
 " Undotree
 nnoremap <F4> :UndotreeToggle<CR>
 
-" Emmet, remap to something less awkward
-imap <C-e> <C-y>,
+" Quickfix
+nmap <script> <silent> <space>l :call ToggleLocationList()<CR>
+nmap <script> <silent> <space>q :call ToggleQuickfixList()<CR>
+" Navigating quickfix list (gets populated by e.g. vimgrep/ag)
+nnoremap ]q     :cnext<CR>
+nnoremap ]Q     :cfirst<CR>
+nnoremap [q     :cprevious<CR>
+nnoremap [Q     :clast<CR>
+" Navigating the location list (gets populated by e.g. Syntastic)
+nnoremap ]w     :lnext<CR>
+nnoremap ]W     :lfirst<CR>
+nnoremap [w     :lprevious<CR>
+nnoremap [W     :llast<CR>
 
-nmap <script> <silent> <leader>l :call ToggleLocationList()<CR>
-nmap <script> <silent> <leader>q :call ToggleQuickfixList()<CR>
+" Ex
+nnoremap <space>; :CtrlPCmdPalette<CR>
 
+" Tags
+nnoremap <space>ta :CtrlPTag<CR>
+
+" Projects
+nnoremap <space>pp :CtrlPBookmarkDir<CR>
+nnoremap <space>pf :CtrlP<CR>
+nnoremap <space>pt :NERDTreeToggle<CR>
+nnoremap <space>pa :CtrlPBookmarkDirAdd
+
+" Dirs
+nnoremap <space>dl :lcd %:p:h<CR>
+nnoremap <space>dc :cd %:p:h<CR>
+
+" Search stuff
+nnoremap <space>sl :CtrlPLine<CR>
+nnoremap <space>sp :Ag \"\"<Left>
+nnoremap <space>sa :%s/
+nnoremap <space>sc :noh<CR>
+
+" Files
+nnoremap <space>fr :CtrlPMRUFiles<CR>
+nnoremap <space>ft :NERDTreeFind<CR>
+nnoremap <space>D :CtrlPBookmarkDir<CR>
+nnoremap <space>fs :w<CR>
+
+" Buffers
+nnoremap <space>ls :CtrlPBuffer<CR>
+
+" Toggle features
+nnoremap <space>tl :IndentLinesToggle
+
+" Registers
+nnoremap <space>R :<C-u>Unite -start-insert register<CR>
+
+" Windows
 nnoremap <C-w>m :MaximizerToggle<CR>
 vnoremap <C-w>m :MaximizerToggle<CR>gv
 
-" Look up word under cursor with Dash
-nnoremap gK :Dash<CR>
+" Command-Arrow to resize current buffer by +/- 5
+" :vert res +5 <CR> and then repeat last ex-command with @: @@ @@ @@
+nnoremap <C-w>< 10<C-w><
+nnoremap <C-w>> 10<C-w>>
+nnoremap <C-w>- 10<C-w>-
+nnoremap <C-w>+ 10<C-w>+
 
-" CtrlP
 
-" While in prompt: C-b and C-f switch search modes
-" C-j C-k allow navigation in results list
-" <CR> opens file in current window
-" <C-v> opens file in vertical split
-" <C-s> opens file in horizontal split
-
-" (e)dit
-let g:ctrlp_map = '<C-p>'
-nnoremap <leader>f :FZF<CR>
-" buffe(r)
-nnoremap <leader>r :CtrlPBuffer<CR>
-" (d)efinitions
-nnoremap <leader>d :CtrlPTag<CR>
-
-nnoremap <leader>L :CtrlPLine<CR>
-nnoremap <leader>F :CtrlPMRUFiles<CR>
-nnoremap <leader>D :CtrlPBookmarkDir<CR>
-
-" LateX-Box
-nnoremap ,xv :LatexView<CR>
-nnoremap ,xc :Latexmk<CR>
+" Ctrl-Space for completions.
+inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
+            \ "\<lt>C-n>" :
+            \ "\<lt>C-x>\<lt>C-o><c-r>=pumvisible() ?" .
+            \ "\"\\<lt>c-n>\\<lt>c-p>\\<lt>c-n>\" :" .
+            \ "\" \\<lt>bs>\\<lt>C-n>\"\<CR>"
+imap <C-@> <C-Space>
 
 " NERDTree
 " Open NERDTree at the location of the current file
-nnoremap <F2> :NERDTreeToggle<CR>
-nnoremap <S-F2> :NERDTreeFind<CR>
+" nnoremap <F2> :NERDTreeToggle<CR>
+" nnoremap <S-F2> :NERDTreeFind<CR>
 
 " Tagbar
-nnoremap <F3> :TagbarToggle<CR>
-
-" YankRing
-nnoremap <leader>p :YRShow<CR>
-let g:yankring_replace_n_pkey = '<M-p>'
-let g:yankring_replace_n_nkey = '<M-n>'
+" nnoremap <F3> :TagbarToggle<CR>
 
 " UltiSnips
-nnoremap <leader>ue :UltiSnipsEdit<CR>
+" nnoremap <leader>ue :UltiSnipsEdit<CR>
 " 2}}}
 " 1}}}
 "=======================================================================
@@ -576,31 +528,16 @@ cabbrev stat ~/Dropbox/CBB/StatMethods
 "=======================================================================
 " Plugin settings {{{1
 "=======================================================================
-
-" {{{2 Latex2Unicode
-"-----------------------------------------------------------------------
-let g:unicoder_cancel_normal = 1
-let g:unicoder_cancel_insert = 1
-nmap <C-y> :call unicoder#start(0)<CR>
-imap <C-y> <Esc>:call unicoder#start(1)<CR>
-" 2}}}
-
-" {{{2 Startify
-"-----------------------------------------------------------------------
-let g:startify_change_to_dir = 0
-let g:startify_change_to_vcs_root = 1
-" 2}}}
-
 " {{{2 delimitMate
 "-----------------------------------------------------------------------
 let delimitMate_expand_cr = 1
 " 2}}}
-
-" {{{2 Brolink
+" {{{2 indentLine
 "-----------------------------------------------------------------------
-let g:bl_no_mappings = 1
+" ¦ ┆ ︙ │
+" Enable with :IndentLinesToggle
+let g:indentLine_char = '┆'
 " 2}}}
-
 " {{{2 LaTeX-Box
 "-----------------------------------------------------------------------
 let g:LatexBox_viewer = 'open -a Skim'
@@ -614,6 +551,11 @@ let g:LatexBox_latexmk_options = "-pvc -pdf"
 " {{{2 Maximizer
 "-----------------------------------------------------------------------
 let g:maximizer_set_default_mapping = 0
+" 2}}}
+
+" {{{2 Ag
+"-----------------------------------------------------------------------
+set grepprg=ag\ --column " then navigate qf window with ]q and [q
 " 2}}}
 
 " {{{2 R Plugin
@@ -672,6 +614,7 @@ let g:syntastic_r_lint_styles = 'list(spacing.indentation.notabs, spacing.indent
 let g:syntastic_r_checkers = ["lint", "svTools"]
 let g:syntastic_enable_r_svtools_checker = 1
 let g:syntastic_enable_r_lint_checker = 1
+let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-", " proprietary attribute \"tm-"]
 
 " Remember to actually install all the syntax errors and style checkers"
 " pip install pyflakes pep8 pep257 flake8 pylint etc.
@@ -683,54 +626,6 @@ let g:syntastic_python_checkers = ['pyflakes', 'flake8']
 let g:syntastic_haskell_checkers = ['hlint']
 " 2}}}
 
-" " {{{2 Tagbar
-" "-----------------------------------------------------------------------
-let g:tagbar_type_r = {
-    \ 'ctagstype' : 'r',
-    \ 'kinds'     : [
-        \ 'f:Functions',
-        \ 'g:GlobalVariables',
-        \ 'v:FunctionVariables',
-    \ ]
-\ }
-
-let g:tagbar_type_scala = {
-    \ 'ctagstype' : 'Scala',
-    \ 'kinds'     : [
-        \ 'p:packages:1',
-        \ 'V:values',
-        \ 'v:variables',
-        \ 'T:types',
-        \ 't:traits',
-        \ 'o:objects',
-        \ 'a:aclasses',
-        \ 'c:classes',
-        \ 'r:cclasses',
-        \ 'm:methods'
-    \ ]
-\ }
-
-let g:tagbar_type_markdown = {
-	\ 'ctagstype' : 'markdown',
-	\ 'kinds' : [
-		\ 'h:Heading_L1',
-		\ 'i:Heading_L2',
-		\ 'k:Heading_L3'
-	\ ]
-\ }
-
-let g:tagbar_type_coffee = {
-    \ 'ctagstype' : 'coffee',
-    \ 'kinds'     : [
-        \ 'c:classes',
-        \ 'm:methods',
-        \ 'f:functions',
-        \ 'v:variables',
-        \ 'f:fields',
-    \ ]
-\ }
-" 2}}}
-
 " {{{2 Vim-slime
 "-----------------------------------------------------------------------
 let g:slime_target = "tmux"
@@ -739,10 +634,12 @@ let g:slime_python_ipython = 1
 
 " {{{2 Jedi
 "-----------------------------------------------------------------------
-" let g:jedi#use_tabs_not_buffers = 0
-" " let g:jedi#use_splits_not_buffers = "left"
-" let g:jedi#popup_on_dot = 0
-" let g:jedi#popup_select_first = 0
+" let g:jedi#use_splits_not_buffers = "left"
+let g:jedi#show_call_signatures = 2 " 0 is off, 2 is display in mode line
+let g:jedi#popup_on_dot = 0
+let g:jedi#popup_select_first = 0
+let g:jedi#use_tabs_not_buffers = 0
+let g:jedi#use_splits_not_buffers = "bottom"
 " let g:jedi#goto_assignments_command = ",g"
 " let g:jedi#goto_definitions_command = ",d"
 " let g:jedi#documentation_command = "K"
@@ -765,43 +662,50 @@ let g:netrw_preview = 1 " p previews file in vertical split
 let g:netrw_altv = 0  " Split to the right
 " 2}}} "
 
-" Unite {{{2 "
-"-----------------------------------------------------------------------
-let g:unite_source_history_yank_enable = 1
-noremap <leader>y :<C-u>Unite history/yank<CR>
-" 2}}} "
-
-" EasyTags {{{2 "
-"-----------------------------------------------------------------------
-" let g:easytags_opts = []
-" let g:easytags_async = 1
-" let g:easytags_by_filetype = 1
-
-" let g:easytags_languages = {
-" \   'language': {
-" \     'cmd': g:easytags_cmd,
-" \       'args': ['--exclude=*.min.js'],
-" \       'fileoutput_opt': '-f',
-" \       'stdout_opt': '-f-',
-" \       'recurse_flag': '-R'
-" \   }
-" \}
-" 2}}} "
-
 " Clever-f {{{2 "
 "-----------------------------------------------------------------------
 " Don't search across lines
 let g:clever_f_across_no_line = 1
 " 2}}} "
 
+" Unite {{{2 "
+"-----------------------------------------------------------------------
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_rank'])
+let g:unite_data_directory='~/.vim/.cache/unite'
+
+let g:unite_source_history_yank_enable = 1
+let g:unite_split_rule = 'botright'
+" let g:unite_enable_start_insert=1  " or just use -start-insert
+let g:unite_prompt='» '
+
+" nnoremap <space>o :<C-u>Unite -auto-resize outline<CR>
+" nnoremap <space>f :<C-u>Unite -start-insert -auto-resize file_rec/git<CR>
+" nnoremap <space>e :<C-u>UniteWithBufferDir -start-insert -auto-resize file<CR>
+
+if executable('ag')
+    let g:unite_source_rec_async_command = 'ag --nogroup --nocolor --column --hidden ' .
+       \ '--ignore ".git" ' .
+       \ '--ignore "app/assets/fonts" ' .
+       \ '--ignore "app/assets/images" ' .
+       \ '--ignore "node_modules/" ' .
+       \ '--ignore "bower_components/" ' .
+       \ '--ignore "public/uploads" -g '
+
+    let g:unite_source_grep_command='ag'
+    let g:unite_source_grep_default_opts='--nocolor --nogroup -S -C4'
+    let g:unite_source_grep_recursive_opt=''
+endif
+
+nnoremap <space>m :Unite -auto-resize file file_mru file_rec<cr>
+" 2}}} "
+
 " {{{2 Ctrlp
 "-----------------------------------------------------------------------
-" r: Try to search for a root directory (containing .git, .ctrlp, etc.)
-" and set that dir as the working dir
-" c: working directory
-" let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_map = '<C-p>'
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_show_hidden = 1
+let g:ctrlp_cmdpalette_execute = 1
 
 " While in directory mode:
 " <cr> change the local working directory for CtrlP and keep it open.
@@ -821,81 +725,20 @@ let g:ctrlp_custom_ignore = {
 " Save cache across sessions => much faster. Refresh with F5.
 let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
-
-" {{{2 vim-textobj-user
-call textobj#user#plugin('rchunk', {
-\   'code': {
-\     'select-a': 'ar',
-\     'select-a-function': 'RChunkA',
-\     'select-i': 'ir',
-\     'select-i-function': 'RChunkI',
-\   },
-\ })
-
-function! RChunkA()
-    set noincsearch
-    set nohlsearch
-    execute "norm ?```"
-    let upper_pos = getpos('.')
-    echom upper_pos[1]
-    execute "norm /```"
-    let lower_pos = getpos('.')
-    set nohlsearch
-    set incsearch
-    return ['V', upper_pos, lower_pos]
-endfunction
-
-function! RChunkI()
-    set noincsearch
-    set nohlsearch
-    execute "norm ?```"
-    norm! j
-    let upper_pos = getpos('.')
-    execute "norm /```"
-    norm! k
-    let lower_pos = getpos('.')
-    set nohlsearch
-    set incsearch
-    return ['V', upper_pos, lower_pos]
-endfunction
-" 2}}} "
+" 2}}}
 
 " {{{2 Airline
 " : %3p : %4l : %3c
-if has('gui_running')
-    let g:airline_powerline_fonts = 1
-    let g:airline_theme='dark'
-endif
+let g:airline_powerline_fonts = 1
+let g:airline_theme='dark'
 let g:airline_section_y = airline#section#create(["cwd:%{split(getcwd(), '/')[-1]}% "])
 set noshowmode
-" 2}}}
-
-" {{{2 Markology
- let g:markology_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-" 2}}}
-
-" {{{2 incsearch.vim
-" map /  <Plug>(incsearch-forward)
-" map ?  <Plug>(incsearch-backward)
-" map g/ <Plug>(incsearch-stay)
-
-" Enable mappings below for automatic 'nohlsearch' after hitting the last match:
-
-" set hlsearch
-" let g:incsearch#auto_nohlsearch = 1
-" map n  <Plug>(incsearch-nohl-n)
-" map N  <Plug>(incsearch-nohl-N)
-" map *  <Plug>(incsearch-nohl-*)
-" map #  <Plug>(incsearch-nohl-#)
-" map g* <Plug>(incsearch-nohl-g*)
-" map g# <Plug>(incsearch-nohl-g#)
 " 2}}}
 
 " 1}}}
 "=======================================================================
 " Custom functions and commands {{{
 "=======================================================================
-
 " CLOJURESCRIPT
 " 1) Open vim
 " 2) Back in the terminal, run lein repl
@@ -986,12 +829,6 @@ endfunction
 
 vmap <silent> <expr> p <sid>Repl()
 
-" }}}
-"=======================================================================
-" Colors {{{
-"=======================================================================
-" Conceal background should be the same as seoul256 bg
-hi Conceal guibg=#3f3f3f
 " }}}
 "=======================================================================
 " End {{{

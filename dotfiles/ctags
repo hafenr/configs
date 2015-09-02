@@ -21,6 +21,7 @@
 --exclude=cscope.\*
 --exclude=\*.tar.\*
 
+--python-kinds=-i
 
 --langdef=Clojure
 --langmap=Clojure:.clj

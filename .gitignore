@@ -8,3 +8,6 @@ eclim/
 .VimballRecord
 .netrwhist
 undo/*
+hgrc
+gitconfig
+tags

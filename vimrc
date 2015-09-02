@@ -100,10 +100,10 @@ Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 
 " R
 " Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': 'r' }
-Plug 'vim-pandoc/vim-rmarkdown', { 'for': 'r' }
-Plug 'Vim-R-plugin', { 'for': 'r' }
-Plug 'nelstrom/vim-markdown-folding', { 'for': 'r' }
+" Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': 'r' }
+" Plug 'vim-pandoc/vim-rmarkdown', { 'for': 'r' }
+Plug 'Vim-R-plugin'
+" Plug 'nelstrom/vim-markdown-folding', { 'for': 'r' }
 " Julia
 " Plug 'JuliaLang/julia-vim'
 
@@ -128,7 +128,6 @@ Plug 'groenewege/vim-less'
 " Python
 Plug 'davidhalter/jedi-vim'
 Plug 'lepture/vim-jinja', { 'for': 'html' }
-Plug 'ivanov/vim-ipython'
 Plug 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
 Plug 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, if
 
@@ -136,8 +135,6 @@ Plug 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, i
 Plug 'spiroid/vim-ultisnip-scala', { 'for': 'scala' }
 Plug 'vim-scala', { 'for': 'scala' }
 
-" Matlab
-Plug 'matlab.vim', { 'for': 'matlab' }
 call plug#end()
 " }}}
 "=======================================================================
@@ -186,6 +183,7 @@ set softtabstop=4                   " # spaces that are actually inserted/remove
 set expandtab                       " insert spaces when hitting TAB (with above options)
 set autoindent                      " enable autoindenting
 set relativenumber                  " view line numbers
+set number                          " show current line number (others will still be relative)
 set showmode                        " show current mode
 set ruler                           " always show cursor position
 set showcmd                         " display incomplete commands on lower right
@@ -297,6 +295,8 @@ augroup END
 " Basic {{{2 "
 nnoremap ; :
 xnoremap ; :
+nnoremap , ;
+xnoremap , ;
 nnoremap <space>w :w<CR>
 nnoremap <space>. :source ~/.vimrc<CR>
 cnoremap jk <CR>
@@ -317,12 +317,12 @@ endif
 " Moving lines
 nnoremap <silent> <C-k> :move-2<cr>
 nnoremap <silent> <C-j> :move+<cr>
-nnoremap <silent> <C-h> <<
-nnoremap <silent> <C-l> >>
+" nnoremap <silent> <C-h> <<
+" nnoremap <silent> <C-l> >>
 xnoremap <silent> <C-k> :move-2<cr>gv
 xnoremap <silent> <C-j> :move'>+<cr>gv
-xnoremap <silent> <C-h> <gv
-xnoremap <silent> <C-l> >gv
+" xnoremap <silent> <C-h> <gv
+" xnoremap <silent> <C-l> >gv
 
 nnoremap ,f i=expand('%:t:r')<CR><ESC>
 
@@ -424,7 +424,7 @@ nnoremap ,h1 yypVr=
 nnoremap ,h2 yypVr-
 
 " Emmet
-imap <C-e> <C-y>,
+imap <C-l> <C-y>,
 
 " Git
 nnoremap <space>gg :Gstatus<CR>
@@ -459,28 +459,34 @@ nnoremap <space>pp :CtrlPBookmarkDir<CR>
 nnoremap <space>pf :CtrlP<CR>
 nnoremap <space>pt :NERDTreeToggle<CR>
 nnoremap <space>pa :CtrlPBookmarkDirAdd
+nnoremap <space>ps :Ag ""<Left>
 
 " Dirs
 nnoremap <space>dl :lcd %:p:h<CR>
 nnoremap <space>dc :cd %:p:h<CR>
+nnoremap <space>dd :CtrlPDir<CR>
 
 " Search stuff
+" Search (l)ines
 nnoremap <space>sl :CtrlPLine<CR>
-nnoremap <space>sp :Ag \"\"<Left>
-nnoremap <space>sa :%s/
+" Search (r)ecursively
+nnoremap <space>sr :Ag ""<Left>
+" Search (b)uffer
+nnoremap <space>sb :%s/
+" Search (c)lear
 nnoremap <space>sc :noh<CR>
 
 " Files
 nnoremap <space>fr :CtrlPMRUFiles<CR>
 nnoremap <space>ft :NERDTreeFind<CR>
-nnoremap <space>D :CtrlPBookmarkDir<CR>
 nnoremap <space>fs :w<CR>
 
 " Buffers
+nnoremap <space>r :CtrlPBuffer<CR>
 nnoremap <space>ls :CtrlPBuffer<CR>
 
 " Toggle features
-nnoremap <space>tl :IndentLinesToggle
+nnoremap <space>ti :IndentLinesToggle<CR>
 
 " Registers
 nnoremap <space>R :<C-u>Unite -start-insert register<CR>
@@ -635,6 +641,7 @@ let g:slime_python_ipython = 1
 " {{{2 Jedi
 "-----------------------------------------------------------------------
 " let g:jedi#use_splits_not_buffers = "left"
+let g:jedi#auto_initialization = 0
 let g:jedi#show_call_signatures = 2 " 0 is off, 2 is display in mode line
 let g:jedi#popup_on_dot = 0
 let g:jedi#popup_select_first = 0

@@ -3,3 +3,59 @@ snippet todo "A structured todo comment" !b
 #	- ${2:first bullet point}
 #	`date +"%d.%m.%y"`
 endsnippet
+
+snippet docf "Autodoc block for function" b
+"""${1:Summary line.
+
+Extended description of function.}
+
+Parameters
+----------
+${2:arg1 : type
+	Description of arg1.}
+
+Returns
+-------
+${3:Type of return value
+	Description of return value.}
+
+${4:Raises
+------
+Exception type
+	Reason for exception.
+}
+
+"""
+${0}
+endsnippet
+
+snippet docl "Autodoc block for class" b
+"""${1:Summary line.
+
+Extended description of class.}
+
+Attributes
+----------
+${2:attr1 : type
+	Description of attr1}
+
+"""
+${0}
+endsnippet
+
+snippet docm "Autodoc block for module" b
+"""
+${1:Summary line
+
+Extended description.}
+
+"""
+${0}
+endsnippet
+
+snippet qtpdb "PDB for QT" b
+from PyQt4.QtCore import pyqtRemoveInputHook
+from pdb import set_trace
+pyqtRemoveInputHook()
+set_trace()
+endsnippet

@@ -9,6 +9,7 @@ alias u='cd ..'
 alias uu='cd ../..'
 alias uuu='cd ../../..'
 alias uuuu='cd ../../../..'
+alias co='column -t'
 
 # === programs ===
 # > LaTeX
@@ -29,8 +30,11 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     # Mac OSX
     # === environments ===
-    export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
-    export PYTHONPATH=/Users/robin/Dev:$PYTHONPATH
+    export PYTHONPATH="/usr/local/lib/python2.7/site-packages:/Users/robin/Dev/Jterator/src:$PYTHONPATH"
+    export PYTHONPATH="/Users/robin/Dev/Toolbox:$PYTHONPATH"
+    export PYTHONPATH="/Users/robin/Dev:$PYTHONPATH"
+    export PYTHONPATH="/Users/robin/Dev/pyprophet:$PYTHONPATH"
+
     export WORKON_HOME=~/.virtualenvs
     export R_HOME=/Library/Frameworks/R.framework/Resources
     export JAVA_HOME=$(/usr/libexec/java_home)
@@ -47,7 +51,6 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     alias open_ps='open -a /Applications/Adobe\ Photoshop\ CS6/Adobe\ Photoshop\ CS6.app'
 
     alias vim=nvim
-    alias vi=nvim
 
     # use gnu cmdline utilities instead of bsd ones
     export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/texbin:$PATH:/opt/xpdf"

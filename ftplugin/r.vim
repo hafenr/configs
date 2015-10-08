@@ -24,6 +24,10 @@ setlocal comments=:#',:###,:##,:#
 set tw=79
 set formatoptions+=t
 
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
+
 if has("gui_win32") && !exists("b:browsefilter")
   let b:browsefilter = "R Source Files (*.R)\t*.R\n" .
         \ "Files that include R (*.Rnw *.Rd *.Rmd *.Rrst)\t*.Rnw;*.Rd;*.Rmd;*.Rrst\n" .

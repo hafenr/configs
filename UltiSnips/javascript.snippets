@@ -32,3 +32,21 @@ endsnippet
 snippet l "log statement"
 console.log($0);
 endsnippet
+
+snippet desc "jasmine spec group" b
+describe('${1:the function xy}', function() {
+	$0
+});
+endsnippet
+
+snippet it "jasmine spec" b
+it('should ${1:do something}', function() {
+	$0
+});
+endsnippet
+
+snippet bef "jasmine beforeEach block" b
+beforeEach(function() {
+	$0
+});
+endsnippet

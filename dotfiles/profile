@@ -13,7 +13,7 @@ PATH=/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:/usr/texbin:/usr/loc
 export OPENMS_TOPP_PATH=/Applications/OpenMS-2.0.0
 source $OPENMS_TOPP_PATH/.TOPP_bash_profile
 
-export PATH="$PATH:/Users/robin/Dev/cprophet"
+# export PATH="$PATH:/Users/robin/Dev/cprophet"
 export PATH="$PATH:/Users/robin/Dev/pyprophet"
 export PATH="$PATH:/Users/robin/scripts"
 

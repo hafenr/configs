@@ -10,6 +10,7 @@ alias uu='cd ../..'
 alias uuu='cd ../../..'
 alias uuuu='cd ../../../..'
 alias co='column -t'
+alias crick='ssh crick'
 
 # === programs ===
 # > LaTeX
@@ -32,7 +33,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     # === environments ===
     export PYTHONPATH="/usr/local/lib/python2.7/site-packages:/Users/robin/Dev/Jterator/src:$PYTHONPATH"
     export PYTHONPATH="/Users/robin/Dev/Toolbox:$PYTHONPATH"
-    export PYTHONPATH="/Users/robin/Dev:$PYTHONPATH"
+    # export PYTHONPATH="/Users/robin/Dev:$PYTHONPATH"
     export PYTHONPATH="/Users/robin/Dev/pyprophet:$PYTHONPATH"
 
     export WORKON_HOME=~/.virtualenvs

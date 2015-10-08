@@ -40,8 +40,7 @@ Plug 'tpope/vim-surround'              " Surround motions
 Plug 'mbbill/undotree'                 " Undo history as a tree
 Plug 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
 Plug 'gabesoft/vim-ags'
-Plug 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): yal, yil etc.
-Plug 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
+" Plug 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
 Plug 'szw/vim-maximizer'               " Temporarily maximize window
 Plug 'scrooloose/syntastic'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
@@ -60,6 +59,10 @@ Plug 'fisadev/vim-ctrlp-cmdpalette'
 Plug 'dbakker/vim-projectroot'
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/neomru.vim'
+Plug 'ktonga/vim-follow-my-lead'
+Plug 'mattn/webapi-vim'
+Plug 'benekastah/neomake'
+Plug 'janko-m/vim-test'
 
 " Angular
 Plug 'burnettk/vim-angular', { 'for': 'javascript' }
@@ -79,11 +82,16 @@ Plug 'vim-scripts/IndexedSearch'
 Plug 'junegunn/vim-easy-align'         " :'<,'>EasyAlign [*] DELIM or /regex/
 Plug 'yaifa.vim'
 Plug 'kana/vim-textobj-user'           " Needed for textobj-python
-" Plug 'jeetsukumaran/vim-markology'
-" Plug 'mhinz/vim-startify'
+Plug 'bkad/CamelCaseMotion'
+Plug 'sgur/vim-textobj-parameter'
+Plug 'saihoooooooo/vim-textobj-space'
+Plug 'mattn/vim-textobj-url'
+Plug 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): yal, yil etc.
+Plug 'thinca/vim-textobj-between'
+Plug 'hafenr/vim-textobj-dotseparated'
+Plug 'hafenr/vim-textobj-underscore'
+
 Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make' }
-" Plug 'tpope/vim-obsession'
-" Plug 'tpope/vim-abolish'
 Plug 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
 Plug 'editorconfig/editorconfig-vim'   " read .editorconfig files and set variables
 Plug 'renamer.vim'                     " bulk rename by calling :Renamer
@@ -113,7 +121,7 @@ Plug 'Eckankar/vim-latex-folding', { 'for': 'tex' }
 
 " JavaScript, TypeScript, CoffeeScript
 Plug 'jason0x43/vim-js-indent', { 'for': 'javascript' }
-Plug 'leafgarland/typescript-vim'
+Plug 'hafenr/typescript-vim'
 Plug 'vim-coffee-script', { 'for': 'coffee' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
@@ -175,7 +183,7 @@ set dictionary+=/usr/share/dict/words " Specify the builtin list of words for C-
 set thesaurus+=~/.vim/extra/mthesaur.txt
 set spelllang=en_us
 set nospell
-set encoding=utf-8
+" set encoding="utf-8"
 syntax on                           " enable syntax highlighting
 set shiftwidth=4                    " number of spaces to autoindent
 set tabstop=4                       " # spaces shown for one TAB
@@ -242,6 +250,11 @@ augroup general
     autocmd!
     autocmd BufEnter .vimrc setlocal foldmethod=marker
 augroup END
+
+" augroup typescript
+"     autocmd!
+"     au BufWritePost *.ts Neomake!
+" augroup END
 
 autocmd BufNewFile,BufRead,BufFilePre *.md set filetype=markdown
 autocmd BufNewFile,BufRead,BufFilePre *.ts set filetype=typescript
@@ -673,6 +686,9 @@ let g:netrw_altv = 0  " Split to the right
 "-----------------------------------------------------------------------
 " Don't search across lines
 let g:clever_f_across_no_line = 1
+" let g:clever_f_smart_case = 1
+" Let ; match any sign character, i.e. use f;
+" let g:clever_f_chars_match_any_signs = ';'
 " 2}}} "
 
 " Unite {{{2 "
@@ -739,6 +755,12 @@ let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
 let g:airline_powerline_fonts = 1
 let g:airline_theme='dark'
 let g:airline_section_y = airline#section#create(["cwd:%{split(getcwd(), '/')[-1]}% "])
+set noshowmode
+" 2}}}
+
+" {{{2 Typescript
+" : %3p : %4l : %3c
+let g:typescript_compiler_use_tsconfig = 1
 set noshowmode
 " 2}}}
 

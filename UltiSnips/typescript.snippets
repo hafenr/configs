@@ -11,3 +11,23 @@ it('${2:should....}', () => {
 	$0
 });
 endsnippet
+
+snippet clfac "AngularJS TypeScript factory" b
+class ${1:MyClass}Factory {
+	static $inject = ['$injector'];
+	constructor(private $injector) {}
+	create(${2:arg1: T1, arg2: T2}) {
+		return new $1(this.$injector`!p
+if not t[2]:
+	snip.rv = ''
+else:
+	parts = t[2].split(',')
+	argnames = [part.split(':')[0] for part in parts]
+	argnames = [name.strip() for name in argnames]
+	argnames_separated = ', '.join(argnames)
+	snip.rv = ', ' + argnames_separated
+	`);
+	}
+}
+angular.module('${3:app}').service('${1/\w/\l$0/}', $1Factory);
+endsnippet

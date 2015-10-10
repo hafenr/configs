@@ -42,7 +42,7 @@ Plug 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
 Plug 'gabesoft/vim-ags'
 " Plug 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
 Plug 'szw/vim-maximizer'               " Temporarily maximize window
-Plug 'scrooloose/syntastic'
+" Plug 'scrooloose/syntastic'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'rhysd/clever-f.vim'
 " Plug 'tpope/vim-unimpaired'
@@ -63,6 +63,8 @@ Plug 'ktonga/vim-follow-my-lead'
 Plug 'mattn/webapi-vim'
 Plug 'benekastah/neomake'
 Plug 'janko-m/vim-test'
+Plug 'scrooloose/syntastic'
+Plug 'maxbrunsfeld/vim-yankstack'
 
 " Angular
 Plug 'burnettk/vim-angular', { 'for': 'javascript' }
@@ -87,7 +89,6 @@ Plug 'sgur/vim-textobj-parameter'
 Plug 'saihoooooooo/vim-textobj-space'
 Plug 'mattn/vim-textobj-url'
 Plug 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): yal, yil etc.
-Plug 'thinca/vim-textobj-between'
 Plug 'hafenr/vim-textobj-dotseparated'
 Plug 'hafenr/vim-textobj-underscore'
 
@@ -245,37 +246,42 @@ set list listchars=tab:⇥\ ,nbsp:·,trail:␣,extends:▸,precedes:◂
 "=======================================================================
 " Auto commands {{{
 "=======================================================================
-" Alternative to autotags:
 augroup general
     autocmd!
     autocmd BufEnter .vimrc setlocal foldmethod=marker
 augroup END
 
-" augroup typescript
-"     autocmd!
-"     au BufWritePost *.ts Neomake!
-" augroup END
+augroup neomake_py
+    autocmd!
+    au BufWritePost *.py Neomake
+augroup END
 
-autocmd BufNewFile,BufRead,BufFilePre *.md set filetype=markdown
-autocmd BufNewFile,BufRead,BufFilePre *.ts set filetype=typescript
-autocmd QuickFixCmdPost [^l]* nested cwindow
-autocmd QuickFixCmdPost    l* nested lwindow
-"-----------------------------------------------------------------------
-" Default
-"-----------------------------------------------------------------------
-" Automatically delete trailing whitespace
-autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
-"-----------------------------------------------------------------------
-" Python
-"-----------------------------------------------------------------------
+augroup neomake_ts
+    autocmd!
+    au BufWritePost *.ts Neomake!
+augroup END
+
+augroup filetypes
+    autocmd!
+    autocmd BufNewFile,BufRead,BufFilePre *.md set filetype=markdown
+    autocmd BufNewFile,BufRead,BufFilePre *.ts set filetype=typescript
+augroup END
+
+augroup misc
+    autocmd!
+    " Automatically open qfix list
+    autocmd QuickFixCmdPost [^l]* nested cwindow
+    autocmd QuickFixCmdPost    l* nested lwindow
+    " Automatically delete trailing whitespace
+    autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+augroup END
+
 augroup Python
     autocmd!
     autocmd FileType python setlocal foldmethod=indent foldnestmax=2
     autocmd FileType python setlocal shiftwidth=4 tabstop=4
 augroup END
-"-----------------------------------------------------------------------
-" Clojure
-"-----------------------------------------------------------------------
+
 function! SetClojureSettings()
     nnoremap <silent> <M-l> :<C-u>call PareditMoveRight()<CR>
     nnoremap <silent> <M-h> :<C-u>call PareditMoveLeft()<CR>
@@ -293,9 +299,7 @@ augroup Clojure
     au Syntax   *.clj,*.el RainbowParenthesesLoadChevrons " <>
     " au BufWritePost *.cljs :BLReloadPage
 augroup END
-"-----------------------------------------------------------------------
-" Latex
-"-----------------------------------------------------------------------
+
 augroup Autex
     autocmd!
     au FileType tex let b:delimitMate_matchpairs = "\(:\)"
@@ -314,6 +318,7 @@ nnoremap <space>w :w<CR>
 nnoremap <space>. :source ~/.vimrc<CR>
 cnoremap jk <CR>
 
+nnoremap <silent> <space>e :Neomake!<CR>
 nmap <space>j <Plug>(easymotion-prefix)j
 nmap <space>k <Plug>(easymotion-prefix)k
 " Mappings for neovim
@@ -543,6 +548,7 @@ imap <C-@> <C-Space>
 " :e r/filename
 " cabbrev r ./**
 cabbrev stat ~/Dropbox/CBB/StatMethods
+iab ipdb import ipdb; ipdb.set_trace()
 " }}}
 "=======================================================================
 " Plugin settings {{{1
@@ -634,6 +640,9 @@ let g:syntastic_r_checkers = ["lint", "svTools"]
 let g:syntastic_enable_r_svtools_checker = 1
 let g:syntastic_enable_r_lint_checker = 1
 let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-", " proprietary attribute \"tm-"]
+" Disable syntastic for filetypes that use Neomake
+" let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
+let g:syntastic_mode_map = { 'passive_filetypes': ['python', 'typescript'] }
 
 " Remember to actually install all the syntax errors and style checkers"
 " pip install pyflakes pep8 pep257 flake8 pylint etc.
@@ -667,6 +676,18 @@ let g:jedi#use_splits_not_buffers = "bottom"
 " let g:jedi#completions_command = "<C-Space>"
 " let g:jedi#rename_command = ",r"
 " let g:jedi#show_call_signatures = "1"
+let g:jedi#auto_vim_configuration = 0
+let g:jedi#popup_on_dot = 0
+let g:jedi#popup_select_first = 0
+let g:jedi#completions_enabled = 0
+let g:jedi#completions_command = ""
+let g:jedi#show_call_signatures = "1"
+
+let g:jedi#goto_assignments_command = "<leader>ja"
+let g:jedi#goto_definitions_command = "<leader>jd"
+let g:jedi#documentation_command = "<leader>jk"
+let g:jedi#usages_command = "<leader>ju"
+let g:jedi#rename_command = "<leader>jr"
 " 2}}}
 
 " {{{2 EasyAlign
@@ -706,21 +727,7 @@ let g:unite_prompt='» '
 " nnoremap <space>f :<C-u>Unite -start-insert -auto-resize file_rec/git<CR>
 " nnoremap <space>e :<C-u>UniteWithBufferDir -start-insert -auto-resize file<CR>
 
-if executable('ag')
-    let g:unite_source_rec_async_command = 'ag --nogroup --nocolor --column --hidden ' .
-       \ '--ignore ".git" ' .
-       \ '--ignore "app/assets/fonts" ' .
-       \ '--ignore "app/assets/images" ' .
-       \ '--ignore "node_modules/" ' .
-       \ '--ignore "bower_components/" ' .
-       \ '--ignore "public/uploads" -g '
-
-    let g:unite_source_grep_command='ag'
-    let g:unite_source_grep_default_opts='--nocolor --nogroup -S -C4'
-    let g:unite_source_grep_recursive_opt=''
-endif
-
-nnoremap <space>m :Unite -auto-resize file file_mru file_rec<cr>
+" nnoremap <space>m :Unite -auto-resize file file_mru file_rec<cr>
 " 2}}} "
 
 " {{{2 Ctrlp
@@ -750,6 +757,13 @@ let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
 " 2}}}
 
+" {{{2 Neomake
+let g:neomake_python_enabled_makers = ['flake8', 'pep8']
+" E501 is line length of 80 characters
+" let g:neomake_python_flake8_maker = { 'args': ['--ignore=E501'], }
+" let g:neomake_python_pep8_maker = { 'args': ['--max-line-length=105'], }
+" 2}}}
+"
 " {{{2 Airline
 " : %3p : %4l : %3c
 let g:airline_powerline_fonts = 1

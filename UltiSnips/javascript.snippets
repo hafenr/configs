@@ -50,3 +50,17 @@ beforeEach(function() {
 	$0
 });
 endsnippet
+
+snippet spec "AngularJS spec skeleton" b
+var $injector;
+
+describe('${1:In class XY}', function() {
+	beforeEach(module('${2:app}'));
+
+	beforeEach(inject(function(_$injector_) {
+		$injector = _$injector_;
+	}));
+
+	$0
+});
+endsnippet

@@ -15,7 +15,7 @@ endsnippet
 snippet clfac "AngularJS TypeScript factory" b
 class ${1:MyClass}Factory {
 	static $inject = ['$injector'];
-	constructor(private $injector) {}
+	constructor(private $injector: ng.auto.IInjectorService) {}
 	create(${2:arg1: T1, arg2: T2}) {
 		return new $1(this.$injector`!p
 if not t[2]:
@@ -29,5 +29,5 @@ else:
 	`);
 	}
 }
-angular.module('${3:app}').service('${1/\w/\l$0/}', $1Factory);
+angular.module('${3:app}').service('${1/\w/\l$0/}Factory', $1Factory);
 endsnippet

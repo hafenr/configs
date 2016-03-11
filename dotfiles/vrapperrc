@@ -11,3 +11,5 @@ set smartcase                       " if a search contains a upper case char, ma
 set gvimpath=/usr/bin/mvim
 nnoremap ; :
 nnoremap : ;
+vnoremap ; :
+vnoremap : ;

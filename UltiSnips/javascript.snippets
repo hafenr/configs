@@ -41,24 +41,53 @@ endsnippet
 
 snippet it "jasmine spec" b
 it('should ${1:do something}', function() {
-	$0
+	${2:pending();}
 });
+
+$0
 endsnippet
 
 snippet bef "jasmine beforeEach block" b
 beforeEach(function() {
-	$0
+	$1
 });
+
+$0
 endsnippet
 
-snippet spec "AngularJS spec skeleton" b
-var $injector;
+snippet spec "AngularJS spec skeleton (JS)" b
+`!p
+import re
+def extract_injectable_names(declaration_string):
+	inj_str = re.sub(r'var\s*', '', declaration_string).replace(';', '')
+	inj = [s.strip() for s in inj_str.split(',')]
+	return inj
 
-describe('${1:In class XY}', function() {
+def create_injectable_args_list(snip, declaration_string):
+	if not declaration_string:
+		return ''
+	else:
+		inj = extract_injectable_names(declaration_string)
+		arg_string = ', '.join(['_%s_' % s for s in inj])
+		snip.rv = arg_string
+
+def create_injectable_assignments(snip, declaration_string):
+	if not declaration_string:
+		return ''
+	else:
+		inj = extract_injectable_names(declaration_string)
+		lines = ['%s = _%s_;' % (name, name) for name in inj]
+		snip.rv = lines[0]
+		for l in lines[1:]:
+			snip >> 2
+			snip += l
+`describe('${1:In class XY}', function() {
 	beforeEach(module('${2:app}'));
 
-	beforeEach(inject(function(_$injector_) {
-		$injector = _$injector_;
+	${3:var $httpBackend, $rootScope, $q;}
+
+	beforeEach(inject(function(`!p create_injectable_args_list(snip, t[3])`) {
+		`!p create_injectable_assignments(snip, t[3])`
 	}));
 
 	$0

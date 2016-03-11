@@ -15,7 +15,7 @@
 "|                   -=:: SETTINGS & MAPPINGS ::=-                     |
 "|                               *`*`*                                 |
 "=======================================================================
-" General {{{
+" Variables {{{
 "=======================================================================
 let os = substitute(system('uname'), "\n", "", "")
 let vimdir = '$HOME/.vim'
@@ -23,6 +23,13 @@ let vimdir = '$HOME/.vim'
 "=======================================================================
 " Plugins {{{
 "=======================================================================
+" Autoinstall vim-plug {{{2
+if empty(glob('~/.nvim/autoload/plug.vim'))
+  silent !curl -fLo ~/.nvim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall
+endif
+" 2}}}
 call plug#begin('~/.vim/plugged')
 " Essential
 Plug 'gmarik/Vundle.vim'               " Let Vundle manage Vundle
@@ -37,6 +44,7 @@ Plug 'bling/vim-airline'               " Fancy status bar
 Plug 'tpope/vim-fugitive'              " Git plugin
 Plug 'tpope/vim-repeat'                " Repeat all kinds of stuff
 Plug 'tpope/vim-surround'              " Surround motions
+Plug 'tpope/vim-abolish'               " Add :S/repl/ace
 Plug 'mbbill/undotree'                 " Undo history as a tree
 Plug 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
 Plug 'gabesoft/vim-ags'
@@ -44,6 +52,7 @@ Plug 'gabesoft/vim-ags'
 Plug 'szw/vim-maximizer'               " Temporarily maximize window
 " Plug 'scrooloose/syntastic'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+Plug 'hafenr/fzf.vim'
 Plug 'rhysd/clever-f.vim'
 " Plug 'tpope/vim-unimpaired'
 Plug 'Lokaltog/vim-easymotion'
@@ -57,14 +66,17 @@ Plug 'ivyl/vim-bling'                  " blink on / n N
 Plug 'bfredl/nvim-ipy'
 Plug 'fisadev/vim-ctrlp-cmdpalette'
 Plug 'dbakker/vim-projectroot'
-Plug 'Shougo/unite.vim'
 Plug 'Shougo/neomru.vim'
 Plug 'ktonga/vim-follow-my-lead'
 Plug 'mattn/webapi-vim'
 Plug 'benekastah/neomake'
 Plug 'janko-m/vim-test'
 Plug 'scrooloose/syntastic'
-Plug 'maxbrunsfeld/vim-yankstack'
+" Plug 'maxbrunsfeld/vim-yankstack'
+Plug 'junegunn/vim-peekaboo'
+Plug 'jalvesaq/Nvim-R'
+Plug 'Vim-R-plugin'
+Plug 'zenorocha/dracula-theme', {'rtp': 'vim/'}
 
 " Angular
 Plug 'burnettk/vim-angular', { 'for': 'javascript' }
@@ -89,12 +101,13 @@ Plug 'sgur/vim-textobj-parameter'
 Plug 'saihoooooooo/vim-textobj-space'
 Plug 'mattn/vim-textobj-url'
 Plug 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): yal, yil etc.
+Plug 'thinca/vim-textobj-between'
 Plug 'hafenr/vim-textobj-dotseparated'
 Plug 'hafenr/vim-textobj-underscore'
 
 Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make' }
 Plug 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
-Plug 'editorconfig/editorconfig-vim'   " read .editorconfig files and set variables
+" Plug 'editorconfig/editorconfig-vim'   " read .editorconfig files and set variables
 Plug 'renamer.vim'                     " bulk rename by calling :Renamer
 
 " By language
@@ -111,7 +124,7 @@ Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 " Plug 'vim-pandoc/vim-pandoc'
 " Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': 'r' }
 " Plug 'vim-pandoc/vim-rmarkdown', { 'for': 'r' }
-Plug 'Vim-R-plugin'
+" Plug 'Vim-R-plugin'
 " Plug 'nelstrom/vim-markdown-folding', { 'for': 'r' }
 " Julia
 " Plug 'JuliaLang/julia-vim'
@@ -142,8 +155,7 @@ Plug 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, i
 
 " Scala
 Plug 'spiroid/vim-ultisnip-scala', { 'for': 'scala' }
-Plug 'vim-scala', { 'for': 'scala' }
-
+Plug 'vim-scala'
 call plug#end()
 " }}}
 "=======================================================================
@@ -186,14 +198,17 @@ set spelllang=en_us
 set nospell
 " set encoding="utf-8"
 syntax on                           " enable syntax highlighting
+filetype plugin on
+filetype indent on
 set shiftwidth=4                    " number of spaces to autoindent
+" set cryptmethod=blowfish2
 set tabstop=4                       " # spaces shown for one TAB
 set softtabstop=4                   " # spaces that are actually inserted/removed for a tab
 set expandtab                       " insert spaces when hitting TAB (with above options)
 set autoindent                      " enable autoindenting
 set relativenumber                  " view line numbers
 set number                          " show current line number (others will still be relative)
-set showmode                        " show current mode
+set noshowmode
 set ruler                           " always show cursor position
 set showcmd                         " display incomplete commands on lower right
 set complete-=t
@@ -253,12 +268,17 @@ augroup END
 
 augroup neomake_py
     autocmd!
-    au BufWritePost *.py Neomake
+    " au BufWritePost *.py Neomake
 augroup END
 
 augroup neomake_ts
     autocmd!
     au BufWritePost *.ts Neomake!
+augroup END
+
+augroup terminal
+    autocmd BufWinEnter,WinEnter term://* startinsert
+    autocmd BufLeave term://* stopinsert
 augroup END
 
 augroup filetypes
@@ -273,7 +293,11 @@ augroup misc
     autocmd QuickFixCmdPost [^l]* nested cwindow
     autocmd QuickFixCmdPost    l* nested lwindow
     " Automatically delete trailing whitespace
-    autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+    " autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+    autocmd FileType qf
+          \ nnoremap <buffer> <silent> q :close<CR> |
+          \ map <buffer> <silent> <F4> :close<CR> |
+          \ map <buffer> <silent> <F8> :close<CR>
 augroup END
 
 augroup Python
@@ -310,6 +334,9 @@ augroup END
 " Mappings {{{1
 "=======================================================================
 " Basic {{{2 "
+let mapleader='\<space>'
+let maplocalleader = ","
+
 nnoremap ; :
 xnoremap ; :
 nnoremap , ;
@@ -321,40 +348,17 @@ cnoremap jk <CR>
 nnoremap <silent> <space>e :Neomake!<CR>
 nmap <space>j <Plug>(easymotion-prefix)j
 nmap <space>k <Plug>(easymotion-prefix)k
-" Mappings for neovim
-if has('nvim')
-    " ESC escapes :term (can't send ESC to terminal
-    " processes anymore)
-    tnoremap <C-[> <C-\><C-n>
-    " Select something visually and then CR
-    " sends it to the next window which should be
-    " :term
-    :xnoremap <CR> y<C-w>wpA<CR><C-\><C-n><C-w>w
-endif
-
 " Moving lines
 nnoremap <silent> <C-k> :move-2<cr>
 nnoremap <silent> <C-j> :move+<cr>
-" nnoremap <silent> <C-h> <<
-" nnoremap <silent> <C-l> >>
 xnoremap <silent> <C-k> :move-2<cr>gv
 xnoremap <silent> <C-j> :move'>+<cr>gv
-" xnoremap <silent> <C-h> <gv
-" xnoremap <silent> <C-l> >gv
 
+" Insert file name
 nnoremap ,f i=expand('%:t:r')<CR><ESC>
-
-let mapleader='<space>'
-let maplocalleader = ","
-" map <space> <leader>
-
-" nnoremap <silent> <C-right> :<C-u>call PareditMoveRight()<CR>
-" nnoremap <silent> <C-left> :<C-u>call PareditMoveLeft()<CR>
 
 " Select most recently pasted text
 nnoremap gV `[v`]
-
-" nnoremap <space>b :<C-u>Unite -start-insert -auto-resize buffer<CR>
 
 " Append a comment
 nnoremap <C-a> A  <C-r>=&comments[1]<CR>
@@ -397,9 +401,7 @@ nnoremap <silent> gm :call cursor(0, virtcol('$')/2)<cr>
 " its meta-mappings messed with my keyboard layout
 " BEGIN vim-rsi snippet
 inoremap        <C-A> <C-O>^
-inoremap   <C-X><C-A> <C-A>
 cnoremap        <C-A> <Home>
-cnoremap   <C-X><C-A> <C-A>
 
 inoremap <expr> <C-B> getline('.')=~'^\s*$'&&col('.')>strlen(getline('.'))?"0\<Lt>C-D>\<Lt>Esc>kJs":"\<Lt>Left>"
 cnoremap        <C-B> <Left>
@@ -424,6 +426,17 @@ nnoremap <leader>k O<ESC>j
 nnoremap <M-j> zj
 nnoremap <M-k> zk
 
+" Tabs
+nmap ,1 1gt
+nmap ,2 2gt
+nmap ,3 3gt
+nmap ,4 4gt
+nmap ,5 5gt
+nmap ,6 6gt
+nmap ,7 7gt
+nmap ,8 8gt
+nmap ,9 9gt
+
 " Navigate quickfix list
 " nnoremap ]q :cnext<CR>
 " nnoremap [q :cprevious<CR>
@@ -444,6 +457,9 @@ nnoremap ,h2 yypVr-
 " Emmet
 imap <C-l> <C-y>,
 
+" EasyAlign
+vnoremap <silent> <Enter> :EasyAlign<cr>
+
 " Git
 nnoremap <space>gg :Gstatus<CR>
 nnoremap <space>gs :Gstatus<CR>
@@ -453,7 +469,7 @@ nnoremap <space>gp :Git push<CR>
 nnoremap <F4> :UndotreeToggle<CR>
 
 " Quickfix
-nmap <script> <silent> <space>l :call ToggleLocationList()<CR>
+nmap <script> <silent> <space>a :call ToggleLocationList()<CR>
 nmap <script> <silent> <space>q :call ToggleQuickfixList()<CR>
 " Navigating quickfix list (gets populated by e.g. vimgrep/ag)
 nnoremap ]q     :cnext<CR>
@@ -461,53 +477,55 @@ nnoremap ]Q     :cfirst<CR>
 nnoremap [q     :cprevious<CR>
 nnoremap [Q     :clast<CR>
 " Navigating the location list (gets populated by e.g. Syntastic)
-nnoremap ]w     :lnext<CR>
-nnoremap ]W     :lfirst<CR>
-nnoremap [w     :lprevious<CR>
-nnoremap [W     :llast<CR>
+nnoremap ]a     :lnext<CR>
+nnoremap ]A     :lfirst<CR>
+nnoremap [a     :lprevious<CR>
+nnoremap [A     :llast<CR>
 
+" Buffers
+nnoremap <space>r :CtrlPBuffer<CR>
 " Ex
 nnoremap <space>; :CtrlPCmdPalette<CR>
-
-" Tags
-nnoremap <space>ta :CtrlPTag<CR>
-
-" Projects
+" Commands that operate on project level
+nnoremap <space>pg :CtrlPTag<CR>
 nnoremap <space>pp :CtrlPBookmarkDir<CR>
 nnoremap <space>pf :CtrlP<CR>
+nnoremap <space>pa :CtrlPBookmarkDirAdd<CR>
 nnoremap <space>pt :NERDTreeToggle<CR>
-nnoremap <space>pa :CtrlPBookmarkDirAdd
-nnoremap <space>ps :Ag ""<Left>
-
+nnoremap <space>pl :NERDTreeFind<CR>
+nnoremap <space>ps :LAg ""<Left>
+nnoremap <space>pr :CtrlPMRUFiles<CR>
 " Dirs
 nnoremap <space>dl :lcd %:p:h<CR>
 nnoremap <space>dc :cd %:p:h<CR>
 nnoremap <space>dd :CtrlPDir<CR>
-
 " Search stuff
-" Search (l)ines
 nnoremap <space>sl :CtrlPLine<CR>
-" Search (r)ecursively
-nnoremap <space>sr :Ag ""<Left>
-" Search (b)uffer
-nnoremap <space>sb :%s/
-" Search (c)lear
+nnoremap <space>sp :LAg ""<Left>
+nnoremap <space>sa :%s//g<Left><Left>
 nnoremap <space>sc :noh<CR>
-
-" Files
-nnoremap <space>fr :CtrlPMRUFiles<CR>
-nnoremap <space>ft :NERDTreeFind<CR>
-nnoremap <space>fs :w<CR>
-
-" Buffers
-nnoremap <space>r :CtrlPBuffer<CR>
-nnoremap <space>ls :CtrlPBuffer<CR>
+" Replace word under cursor
+nnoremap <space>su :%s///g<Left><Left>
 
 " Toggle features
 nnoremap <space>ti :IndentLinesToggle<CR>
 
-" Registers
-nnoremap <space>R :<C-u>Unite -start-insert register<CR>
+" Similar stuff with FZF (async):
+" nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <space>f :CtrlP<CR>
+" nnoremap <silent> <space>; :Commands<CR>
+nnoremap <silent> <space>o :CtrlPTag<CR>
+" nnoremap <silent> <space>O :Tags<CR>
+nnoremap <silent> <space>? :History<CR>
+nnoremap <silent> <space>/ :execute 'AgFZF ' . input('Ag/')<CR>
+" nnoremap <silent> <space>l :BLines<CR>
+" nnoremap <silent> <space>L :Lines<CR>
+" nnoremap <silent> <space>r :Buffers<CR>
+" nnoremap <silent> K :call SearchWordWithAg()<CR>
+" vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
+
+" imap <C-x><C-f> <plug>(fzf-complete-file-ag)
+" imap <C-x><C-l> <plug>(fzf-complete-line)
 
 " Windows
 nnoremap <C-w>m :MaximizerToggle<CR>
@@ -520,27 +538,42 @@ nnoremap <C-w>> 10<C-w>>
 nnoremap <C-w>- 10<C-w>-
 nnoremap <C-w>+ 10<C-w>+
 
-
-" Ctrl-Space for completions.
-inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
-            \ "\<lt>C-n>" :
-            \ "\<lt>C-x>\<lt>C-o><c-r>=pumvisible() ?" .
-            \ "\"\\<lt>c-n>\\<lt>c-p>\\<lt>c-n>\" :" .
-            \ "\" \\<lt>bs>\\<lt>C-n>\"\<CR>"
-imap <C-@> <C-Space>
-
-" NERDTree
-" Open NERDTree at the location of the current file
-" nnoremap <F2> :NERDTreeToggle<CR>
-" nnoremap <S-F2> :NERDTreeFind<CR>
-
-" Tagbar
-" nnoremap <F3> :TagbarToggle<CR>
-
-" UltiSnips
-" nnoremap <leader>ue :UltiSnipsEdit<CR>
+" Clojure
+nnoremap <silent> <C-right> :<C-u>call PareditMoveRight()<CR>
+nnoremap <silent> <C-left> :<C-u>call PareditMoveLeft()<CR>
 " 2}}}
 " 1}}}
+"=======================================================================
+" Terminal settings {{{
+"=======================================================================
+" Mappings for neovim
+if has('nvim')
+    " ESC escapes :term (can't send ESC to terminal
+    " processes anymore)
+    " tnoremap <C-[> <C-\><C-n>
+    " Select something visually and then t
+    " sends it to the next window which should be
+    " :term
+    :xnoremap t y<C-w>wpA<CR><C-\><C-n><C-w>w
+    nnoremap <silent> <space>tt :tabnew<CR>:terminal<CR>
+    nnoremap <space><F1> :execute 'terminal ranger ' . expand('%:p:h')<CR>
+    nnoremap <space><F2> :terminal ranger<CR>
+    " Opening splits with terminal in all directions
+    nnoremap <space>th :leftabove  vnew<CR>:terminal<CR>
+    nnoremap <space>tl :rightbelow vnew<CR>:terminal<CR>
+    nnoremap <space>tk :leftabove  new<CR>:terminal<CR>
+    nnoremap <space>tj :rightbelow new<CR>:terminal<CR>
+    tnoremap <F1> <C-\><C-n>
+    tnoremap <C-\><C-\> <C-\><C-n>:bd!<CR>
+
+    tnoremap <C-w>h <C-\><C-n><C-w>h
+    tnoremap <C-w>j <C-\><C-n><C-w>j
+    tnoremap <C-w>k <C-\><C-n><C-w>k
+    tnoremap <C-w>l <C-\><C-n><C-w>l
+    tnoremap <C-w><C-w> <C-\><C-n><C-w><C-w>
+endif
+" }}}
+"=======================================================================
 "=======================================================================
 " Abbreviations {{{
 "=======================================================================
@@ -559,7 +592,6 @@ let delimitMate_expand_cr = 1
 " 2}}}
 " {{{2 indentLine
 "-----------------------------------------------------------------------
-" ¦ ┆ ︙ │
 " Enable with :IndentLinesToggle
 let g:indentLine_char = '┆'
 " 2}}}
@@ -583,10 +615,10 @@ let g:maximizer_set_default_mapping = 0
 set grepprg=ag\ --column " then navigate qf window with ]q and [q
 " 2}}}
 
-" {{{2 R Plugin
+" {{{2 Vim-R-Plugin
 "-----------------------------------------------------------------------
-let g:vimrplugin_assign='<'
-let vimrplugin_assign_map = "<M-->"
+" let g:vimrplugin_assign='<'
+" let vimrplugin_assign_map = "<M-->"
 
 let r_syntax_folding = 1
 if !has('gui_running')
@@ -594,7 +626,6 @@ if !has('gui_running')
     let vimrplugin_term_cmd =  "/Applications/iTerm.app/Contents/MacOS/iTerm"
     let vimrplugin_applescript = 0
     let g:ScreenImpl = 'Tmux'
-    let vimrplugin_vsplit = 1 " For vertical tmux split"
     let g:ScreenShellInitialFocus = 'shell'
     " instruct to use your own .screenrc file
     " For integration of r-plugin with screen.vim
@@ -602,23 +633,31 @@ if !has('gui_running')
     let vimrplugin_conqueplugin = 0
     " see R documentation in a Vim buffer
     let vimrplugin_vimpager = 'no'
+
+    let vimrplugin_notmuxconf = 1
+    let vimrplugin_vsplit = 1 " For vertical tmux split"
 endif
+
+let R_assign=0
+let vimrplugin_show_args = 1
+let vimrplugin_args_in_stline = 1
+let r_syntax_folding = 1
 " 2}}}
 
 " {{{2 YouCompleteMe
 "-----------------------------------------------------------------------
-" Removed TAB form list of select_completion keys since UltiSnips uses that key.
-" Select elemens by <C-n>, <C-p>
-let g:ycm_auto_trigger = 0
-let g:ycm_key_list_select_completion = ['<Down>'] " Tab removed
-let g:ycm_key_list_previous_completion = ['<Up>'] " S-Tab removed
-" let g:ycm_key_invoke_completion = '<C-Space>'
-let g:ycm_min_num_of_chars_for_completion = 2 " default 2
-let g:ycm_min_num_identifier_candidate_chars = 0 " default 0
-" Can make vim slower if tags file is on a network dir
-let g:ycm_collect_identifiers_from_tags_files = 1
-let g:pymode_rope_complete_on_dot = 0
-let g:ycm_seed_identifiers_with_syntax = 1
+" " Removed TAB form list of select_completion keys since UltiSnips uses that key.
+" " Select elemens by <C-n>, <C-p>
+" let g:ycm_auto_trigger = 0
+" let g:ycm_key_list_select_completion = ['<Down>'] " Tab removed
+" let g:ycm_key_list_previous_completion = ['<Up>'] " S-Tab removed
+" " let g:ycm_key_invoke_completion = '<C-Space>'
+" let g:ycm_min_num_of_chars_for_completion = 2 " default 2
+" let g:ycm_min_num_identifier_candidate_chars = 0 " default 0
+" " Can make vim slower if tags file is on a network dir
+" let g:ycm_collect_identifiers_from_tags_files = 1
+" let g:pymode_rope_complete_on_dot = 0
+" let g:ycm_seed_identifiers_with_syntax = 1
 " 2}}}
 
 " {{{2 UltiSnips
@@ -633,16 +672,19 @@ let g:snips_github="https://github.com/hafenr"
 
 " {{{2 Syntastic
 "-----------------------------------------------------------------------
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_check_on_open = 1
 let g:syntastic_warning_symbol='⚠'
 let g:syntastic_error_symbol='✗'
 let g:syntastic_r_lint_styles = 'list(spacing.indentation.notabs, spacing.indentation.evenindent)'
 let g:syntastic_r_checkers = ["lint", "svTools"]
+let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_enable_r_svtools_checker = 1
 let g:syntastic_enable_r_lint_checker = 1
 let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-", " proprietary attribute \"tm-"]
 " Disable syntastic for filetypes that use Neomake
 " let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
-let g:syntastic_mode_map = { 'passive_filetypes': ['python', 'typescript'] }
+let g:syntastic_mode_map = { 'passive_filetypes': ['typescript'] }
 
 " Remember to actually install all the syntax errors and style checkers"
 " pip install pyflakes pep8 pep257 flake8 pylint etc.
@@ -663,38 +705,38 @@ let g:slime_python_ipython = 1
 " {{{2 Jedi
 "-----------------------------------------------------------------------
 " let g:jedi#use_splits_not_buffers = "left"
-let g:jedi#auto_initialization = 0
-let g:jedi#show_call_signatures = 2 " 0 is off, 2 is display in mode line
+" let g:jedi#auto_initialization = 0
+" let g:jedi#show_call_signatures = 2 " 0 is off, 2 is display in mode line
 let g:jedi#popup_on_dot = 0
-let g:jedi#popup_select_first = 0
-let g:jedi#use_tabs_not_buffers = 0
-let g:jedi#use_splits_not_buffers = "bottom"
+" let g:jedi#popup_select_first = 0
+" let g:jedi#use_tabs_not_buffers = 0
+" let g:jedi#use_splits_not_buffers = "bottom"
 " let g:jedi#goto_assignments_command = ",g"
 " let g:jedi#goto_definitions_command = ",d"
-" let g:jedi#documentation_command = "K"
+let g:jedi#documentation_command = "K"
 " let g:jedi#usages_command = ",n"
 " let g:jedi#completions_command = "<C-Space>"
 " let g:jedi#rename_command = ",r"
 " let g:jedi#show_call_signatures = "1"
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#popup_on_dot = 0
-let g:jedi#popup_select_first = 0
-let g:jedi#completions_enabled = 0
-let g:jedi#completions_command = ""
-let g:jedi#show_call_signatures = "1"
+" let g:jedi#auto_vim_configuration = 0
+" let g:jedi#popup_on_dot = 0
+" let g:jedi#popup_select_first = 0
+" let g:jedi#completions_enabled = 0
+" let g:jedi#completions_command = ""
+let g:jedi#show_call_signatures = "2"
+let g:jedi#show_call_signatures_delay = 0
 
-let g:jedi#goto_assignments_command = "<leader>ja"
-let g:jedi#goto_definitions_command = "<leader>jd"
-let g:jedi#documentation_command = "<leader>jk"
-let g:jedi#usages_command = "<leader>ju"
-let g:jedi#rename_command = "<leader>jr"
+let g:jedi#goto_assignments_command = ",pa"
+let g:jedi#goto_definitions_command = ",pd"
+let g:jedi#documentation_command = ",pk"
+let g:jedi#usages_command = ",pu"
+let g:jedi#rename_command = ",pr"
 " 2}}}
 
 " {{{2 EasyAlign
 "-----------------------------------------------------------------------
 " Start interactive EasyAlign in visual mode
 " :EasyAlign */regex aligns on all matches of regex, 2/regex on every second etc.
-vmap ,al <Plug>(EasyAlign)
 " 2}}}
 
 " Netrw {{{2 "
@@ -705,29 +747,7 @@ let g:netrw_altv = 0  " Split to the right
 
 " Clever-f {{{2 "
 "-----------------------------------------------------------------------
-" Don't search across lines
 let g:clever_f_across_no_line = 1
-" let g:clever_f_smart_case = 1
-" Let ; match any sign character, i.e. use f;
-" let g:clever_f_chars_match_any_signs = ';'
-" 2}}} "
-
-" Unite {{{2 "
-"-----------------------------------------------------------------------
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#filters#sorter_default#use(['sorter_rank'])
-let g:unite_data_directory='~/.vim/.cache/unite'
-
-let g:unite_source_history_yank_enable = 1
-let g:unite_split_rule = 'botright'
-" let g:unite_enable_start_insert=1  " or just use -start-insert
-let g:unite_prompt='» '
-
-" nnoremap <space>o :<C-u>Unite -auto-resize outline<CR>
-" nnoremap <space>f :<C-u>Unite -start-insert -auto-resize file_rec/git<CR>
-" nnoremap <space>e :<C-u>UniteWithBufferDir -start-insert -auto-resize file<CR>
-
-" nnoremap <space>m :Unite -auto-resize file file_mru file_rec<cr>
 " 2}}} "
 
 " {{{2 Ctrlp
@@ -736,13 +756,6 @@ let g:ctrlp_map = '<C-p>'
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_cmdpalette_execute = 1
-
-" While in directory mode:
-" <cr> change the local working directory for CtrlP and keep it open.
-" <c-t> change the global working directory (exit).
-" <c-v> change the local working directory for the current window (exit).
-" <c-x> change the global working directory to CtrlP's current local
-
 " Default is search by full path. Switch with CTRL-d while in CtrlP prompt.
 " let g:ctrlp_by_filename = 0
 let g:ctrlp_root_markers = ['.ctrlp']
@@ -769,13 +782,14 @@ let g:neomake_python_enabled_makers = ['flake8', 'pep8']
 let g:airline_powerline_fonts = 1
 let g:airline_theme='dark'
 let g:airline_section_y = airline#section#create(["cwd:%{split(getcwd(), '/')[-1]}% "])
-set noshowmode
-" 2}}}
+let g:airline_section_z = '%2p%% %2l/%L:%2v'
+let g:airline#extensions#syntastic#enabled = 0
+let g:airline#extensions#whitespace#enabled = 0
+let g:airline_exclude_preview = 1
 
 " {{{2 Typescript
 " : %3p : %4l : %3c
 let g:typescript_compiler_use_tsconfig = 1
-set noshowmode
 " 2}}}
 
 " 1}}}
@@ -839,9 +853,9 @@ command! Rc e ~/.vimrc
 
 " Change between tab sizes
 function! SetTabSize(number)
-    exec "set expandtab tabstop=" . a:number
-    exec "set shiftwidth=" . a:number
-    exec "set softtabstop=" . a:number
+    exec "setlocal expandtab tabstop=" . a:number
+    exec "setlocal shiftwidth=" . a:number
+    exec "setlocal softtabstop=" . a:number
 endfunc
 
 command! -nargs=1 Tab call SetTabSize(<f-args>)
@@ -870,13 +884,27 @@ function! s:Repl()
   return "p@=RestoreRegister()\<cr>"
 endfunction
 
-vmap <silent> <expr> p <sid>Repl()
+function! SearchWordWithAg()
+  execute 'Ag' expand('<cword>')
+endfunction
 
+function! SearchVisualSelectionWithAg() range
+  let old_reg = getreg('"')
+  let old_regtype = getregtype('"')
+  let old_clipboard = &clipboard
+  set clipboard&
+  normal! ""gvy
+  let selection = getreg('"')
+  call setreg('"', old_reg, old_regtype)
+  let &clipboard = old_clipboard
+  execute 'Ag' selection
+endfunction
 " }}}
 "=======================================================================
-" End {{{
+" Cursor config {{{
 "=======================================================================
 " Show insert cursor as yellow and normal mode cursor as light green.
+
 highlight Cursor guifg=black guibg=#00ff1e
 highlight iCursor guifg=black guibg=cyan
 set guicursor=n-v-c:block-Cursor

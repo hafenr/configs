@@ -17,10 +17,10 @@ source $OPENMS_TOPP_PATH/.TOPP_bash_profile
 export PATH="$PATH:/Users/robin/Dev/pyprophet"
 export PATH="$PATH:/Users/robin/scripts"
 
-export PYTHONPATH="$PYTHONPATH:/Users/robin/Dev/msproteomicstools"
-export PYTHONPATH="/Users/robin/Dev/TmLibrary:$PYTHONPATH"
-export PYTHONPATH="/Users/robin/Dev/image_toolbox/tmt/:$PYTHONPATH"
-export PYTHONPATH="/Users/robin/Dev/image_toolbox/:$PYTHONPATH"
+# export PYTHONPATH="$PYTHONPATH:/Users/robin/Dev/msproteomicstools"
+# export PYTHONPATH="/Users/robin/Dev/TmLibrary:$PYTHONPATH"
+# export PYTHONPATH="/Users/robin/Dev/image_toolbox/tmt/:$PYTHONPATH"
+# export PYTHONPATH="/Users/robin/Dev/image_toolbox/:$PYTHONPATH"
 export CFLAGS=-I/usr/local/lib/python2.7/site-packages/numpy/core/include/
 
 

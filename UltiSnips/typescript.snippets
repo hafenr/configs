@@ -31,3 +31,27 @@ else:
 }
 angular.module('${3:app}').service('${1/\w/\l$0/}Factory', $1Factory);
 endsnippet
+
+snippet spec "AngularJS spec skeleton (TS)" b
+var $injector;
+
+describe('${1:In class XY}', function() {
+	beforeEach(module('${2:app}'));
+
+	beforeEach(inject(function(_$injector_) {
+		$injector = _$injector_;
+	}));
+
+	$0
+});
+endsnippet
+
+snippet tsctrl "TypeScript angular controller" b
+classs ${1:Something}Ctrl {
+	static $inject = ['$scope'];
+
+	constructor(private $scope: ng.IScope) {
+		$0
+	}
+}
+endsnippet

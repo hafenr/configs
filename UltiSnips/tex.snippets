@@ -7,3 +7,45 @@ snippet skeleton "Skeleton for some article" !b
 ${1:\lipsum}
 \end{document}
 endsnippet
+
+snippet gls "glossaries reference"
+\gls{${1:key}} $0
+endsnippet
+
+snippet glspl "glossaries reference (plural)"
+\glspl{${1:key}} $0
+endsnippet
+
+snippet code "Listing using lstlisting" b
+\begin{lstlisting}[language=${1:Python}]
+${2:code}
+\end{lstlisting}
+
+$0
+endsnippet
+
+snippet alg "Algorithm" b
+\begin{algorithm}
+\caption{${1:caption}}
+\label{alg:${2:label}}
+\begin{algorithmic}[1]
+${3:code}
+\end{algorithmic}
+\end{algorithm}
+
+$0
+endsnippet
+
+snippet todoi "ToDo block inline" b
+\todo[inline]{%
+	${1:content}
+}
+$0
+endsnippet
+
+snippet todo "ToDo block inline" b
+\todo{%
+	{1:content}
+}
+$0
+endsnippet

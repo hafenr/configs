@@ -32,7 +32,6 @@ endif
 " 2}}}
 call plug#begin('~/.vim/plugged')
 " Essential
-Plug 'gmarik/Vundle.vim'               " Let Vundle manage Vundle
 Plug 'tpope/vim-commentary'            " Commenting operator gc
 Plug 'SirVer/ultisnips'                " Snippet system
 Plug 'honza/vim-snippets'              " Snippets
@@ -53,7 +52,7 @@ Plug 'szw/vim-maximizer'               " Temporarily maximize window
 " Plug 'scrooloose/syntastic'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'hafenr/fzf.vim'
-Plug 'rhysd/clever-f.vim'
+" Plug 'rhysd/clever-f.vim'
 " Plug 'tpope/vim-unimpaired'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'jwhitley/vim-matchit'            " More jumps for %
@@ -339,8 +338,8 @@ let maplocalleader = ","
 
 nnoremap ; :
 xnoremap ; :
-nnoremap , ;
-xnoremap , ;
+nnoremap : ;
+xnoremap : ;
 nnoremap <space>w :w<CR>
 nnoremap <space>. :source ~/.vimrc<CR>
 cnoremap jk <CR>
@@ -348,6 +347,7 @@ cnoremap jk <CR>
 nnoremap <silent> <space>e :Neomake!<CR>
 nmap <space>j <Plug>(easymotion-prefix)j
 nmap <space>k <Plug>(easymotion-prefix)k
+
 " Moving lines
 nnoremap <silent> <C-k> :move-2<cr>
 nnoremap <silent> <C-j> :move+<cr>
@@ -362,6 +362,20 @@ nnoremap gV `[v`]
 
 " Append a comment
 nnoremap <C-a> A  <C-r>=&comments[1]<CR>
+
+
+" asdf0
+" asdf1
+" asdf2
+" asdf3
+" asdf4
+" asdf5
+" asdf6
+" asdf7
+" asdf8
+" asdf9
+
+noremap <S-F4> :s/ASDF/\=line('.')-line("'<")"<CR>
 
 " Insert an empty space
 " nnoremap <S-space> i <ESC>
@@ -494,6 +508,7 @@ nnoremap <space>pa :CtrlPBookmarkDirAdd<CR>
 nnoremap <space>pt :NERDTreeToggle<CR>
 nnoremap <space>pl :NERDTreeFind<CR>
 nnoremap <space>ps :LAg ""<Left>
+nnoremap <space>pa :Ag ""<Left>
 nnoremap <space>pr :CtrlPMRUFiles<CR>
 " Dirs
 nnoremap <space>dl :lcd %:p:h<CR>

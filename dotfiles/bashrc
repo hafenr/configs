@@ -36,7 +36,8 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     # export PYTHONPATH="/Users/robin/Dev/Toolbox:$PYTHONPATH"
     # export PYTHONPATH="/Users/robin/Dev:$PYTHONPATH"
     # export PYTHONPATH="/Users/robin/Dev/pyprophet:$PYTHONPATH"
-
+    export SPARK_HOME=/opt/spark-2.1.0-bin-hadoop2.7
+    export SCALA_HOME=/usr/local/opt/scala/idea
     export WORKON_HOME=~/.virtualenvs
     export R_HOME=/Library/Frameworks/R.framework/Resources
     export JAVA_HOME=$(/usr/libexec/java_home)
@@ -56,11 +57,11 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
 
     alias open_ps='open -a /Applications/Adobe\ Photoshop\ CS6/Adobe\ Photoshop\ CS6.app'
 
-    alias vim=nvim
+    # alias vim=nvim
 
     # use gnu cmdline utilities instead of bsd ones
     export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/texbin:$PATH:/opt/xpdf"
-    export PATH="/Users/robin/Dev/TissueMAPS/util/:$PATH"
+    export PATH="/usr/lobal/bin/:/Users/robin/Dev/TissueMAPS/util/:$PATH"
 elif [[ "$OSTYPE" == "cygwin" ]]; then
     # POSIX compatibility layer and Linux environment emulation for Windows
     :
@@ -128,37 +129,6 @@ fk() {
 
 }
 
-cat <<'EOF'
-                      __gggrgM**M#mggg__
-                 __wgNN@"B*P""mp""@d#"@N#Nw__
-               _g#@0F_a*F#  _*F9m_ ,F9*__9NG#g_
-            _mN#F  aM"    #p"    !q@    9NL "9#Qu_
-           g#MF _pP"L  _g@"9L_  _g""#__  g"9w_ 0N#p
-         _0F jL*"   7_wF     #_gF     9gjF   "bJ  9h_
-        j#  gAF    _@NL     _g@#_      J@u_    2#_  #_
-       ,FF_#" 9_ _#"  "b_  g@   "hg  _#"  !q_ jF "*_09_
-       F N"    #p"      Ng@       `#g"      "w@    "# t
-      j p#    g"9_     g@"9_      gP"#_     gF"q    Pb L
-      0J  k _@   9g_ j#"   "b_  j#"   "b_ _d"   q_ g  ##
-      #F  `NF     "#g"       "Md"       5N#      9W"  j#
-      #k  jFb_    g@"q_     _*"9m_     _*"R_    _#Np  J#
-      tApjF  9g  J"   9M_ _m"    9%_ _*"   "#  gF  9_jNF
-       k`N    "q#       9g@        #gF       ##"    #"j
-       `_0q_   #"q_    _&"9p_    _g"`L_    _*"#   jAF,'
-        9# "b_j   "b_ g"    *g _gF    9_ g#"  "L_*"qNF
-         "b_ "#_    "NL      _B#      _I@     j#" _#"
-           NM_0"*g_ j""9u_  gP  q_  _w@ ]_ _g*"F_g@
-            "NNh_ !w#_   9#g"    "m*"   _#*" _dN@"
-               9##g_0@q__ #"4_  j*"k __*NF_g#@P"
-                 "9NN#gIPNL_ "b@" _2M"Lg#N@F"
-                     ""P@*NN#gEZgNN@#@P""
-
-                       ~~ WELCOME TO ~~
-                 ~~===::: DEEPTHOUGHT :::===~~
-                             ~~~~
-
-EOF
-
 
 # if [[ ! $TERM =~ screen ]]; then
 #     exec tmux
@@ -176,3 +146,9 @@ function mnt-tmaps-storage {
 function umnt-tmaps-storage {
     sudo umount /share/nas/tmaps-share1
 }
+export TMAPS_DB_URI=postgresql://robin:phelot95@localhost:5432/tissuemaps_test
+TMAPS_SETTINGS_TEST=tmaps/config/tmaps_settings_test.py
+export TMAPS_SETTINGS_TEST=tmaps/config/tmaps_settings_test.py
+export TMAPS_SETTINGS=tmaps/config/tmaps_settings_dev.py
+
+export OMP_NUM_THREADS=2

@@ -54,3 +54,6 @@ export DIRSTACKSIZE=8
 alias dh='dirs -v' # show the cd history
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+
+export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin

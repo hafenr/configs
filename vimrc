@@ -68,7 +68,7 @@ Plug 'dbakker/vim-projectroot'
 Plug 'Shougo/neomru.vim'
 Plug 'ktonga/vim-follow-my-lead'
 Plug 'mattn/webapi-vim'
-Plug 'benekastah/neomake'
+" Plug 'benekastah/neomake'
 Plug 'janko-m/vim-test'
 Plug 'scrooloose/syntastic'
 " Plug 'maxbrunsfeld/vim-yankstack'
@@ -153,8 +153,8 @@ Plug 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
 Plug 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, if
 
 " Scala
-Plug 'spiroid/vim-ultisnip-scala', { 'for': 'scala' }
-Plug 'vim-scala'
+Plug 'spiroid/vim-ultisnip-scala'
+Plug 'derekwyatt/vim-scala'
 call plug#end()
 " }}}
 "=======================================================================
@@ -199,12 +199,24 @@ set nospell
 syntax on                           " enable syntax highlighting
 filetype plugin on
 filetype indent on
+
+" Whitespace
 set shiftwidth=4                    " number of spaces to autoindent
 " set cryptmethod=blowfish2
 set tabstop=4                       " # spaces shown for one TAB
 set softtabstop=4                   " # spaces that are actually inserted/removed for a tab
 set expandtab                       " insert spaces when hitting TAB (with above options)
 set autoindent                      " enable autoindenting
+set linebreak                       " vim will break lines at the chars given in 'set brakeat'
+set shiftround
+set backspace=indent,eol,start
+set list
+" set list listchars=tab:\ ,nbsp:·,trail:␣,extends:▸,precedes:◂
+" set list listchars=tab:»·,trail:·,extends:$,nbsp:= " Display tabs and trailing whitespace
+set listchars=tab:⇥\ ,nbsp:·,trail:•,extends:❯,precedes:❮
+" set showbreak=......\|\             " show linebreaks with: ......| wrapped text
+set textwidth=0                     " don't insert EOLs at linebreak
+
 set relativenumber                  " view line numbers
 set number                          " show current line number (others will still be relative)
 set noshowmode
@@ -224,17 +236,17 @@ set guioptions-=r                   " remove right scrollbar
 set guioptions-=R                   " remove right scrollbar
 set guioptions-=l                   " remove left scrollbar
 set guioptions-=L                   " remove left scrollbar
+
+" Search
 set hlsearch                        " highlight search results, C-/ to clear the highlighting
 set incsearch                       " incremental search: search as you type the query string
 set ignorecase                      " ignores case while searching
 set smartcase                       " if a search contains a upper case char, make search case sensitive
+
 set diffopt=vertical                " always split vertical with :diffsplit otherfile
 set tags=./tags;/
 set wildignore+=*.o,*.obj,.git,*.class,target,project,build " ignore files for command-t
 set wrap                            " wrap whole words
-set linebreak                       " vim will break lines at the chars given in 'set brakeat'
-set showbreak=......\|\             " show linebreaks with: ......| wrapped text
-set textwidth=0                     " don't insert EOLs at linebreak
 set noswapfile                      " don't use swapfile
 set nobackup                        " don't create backup files
 set splitright                      " split vertical windows right to the current windows
@@ -250,12 +262,9 @@ set foldmethod=expr
 " set colorcolumn=80                  " highlight the 80th col
 set history=1000                    " set the command line history
 set cmdwinheight=10                 " window height for cmd/search history q: q/ resp. C-h (C-f default)
-" set relativenumber
 set cursorline                      " Highlight current line
 let grepprg="ag\ --nocolor\ --nogroup\ --silent"
 set showmatch                       " Highlight (blinking) matching [{( when inserting the closing )}]
-" set list listchars=tab:»·,trail:·,extends:$,nbsp:= " Display tabs and trailing whitespace
-set list listchars=tab:⇥\ ,nbsp:·,trail:␣,extends:▸,precedes:◂
 " }}}
 "=======================================================================
 " Auto commands {{{
@@ -265,15 +274,15 @@ augroup general
     autocmd BufEnter .vimrc setlocal foldmethod=marker
 augroup END
 
-augroup neomake_py
-    autocmd!
+" augroup neomake_py
+    " autocmd!
     " au BufWritePost *.py Neomake
-augroup END
+" augroup END
 
-augroup neomake_ts
-    autocmd!
-    au BufWritePost *.ts Neomake!
-augroup END
+" augroup neomake_ts
+    " autocmd!
+    " au BufWritePost *.ts Neomake!
+" augroup END
 
 augroup terminal
     autocmd BufWinEnter,WinEnter term://* startinsert
@@ -284,6 +293,7 @@ augroup filetypes
     autocmd!
     autocmd BufNewFile,BufRead,BufFilePre *.md set filetype=markdown
     autocmd BufNewFile,BufRead,BufFilePre *.ts set filetype=typescript
+    " autocmd BufWritePost *.scala silent :EnTypeCheck
 augroup END
 
 augroup misc
@@ -328,6 +338,9 @@ augroup Autex
     au FileType tex let b:delimitMate_matchpairs = "\(:\)"
     autocmd FileType tex setlocal spell
 augroup END
+
+" Auto-remove trailing whitespace on save
+autocmd BufWritePre *.py :%s/\s\+$//e
 " }}}
 "======================================================================
 " Mappings {{{1
@@ -344,7 +357,7 @@ nnoremap <space>w :w<CR>
 nnoremap <space>. :source ~/.vimrc<CR>
 cnoremap jk <CR>
 
-nnoremap <silent> <space>e :Neomake!<CR>
+" nnoremap <silent> <space>e :Neomake!<CR>
 nmap <space>j <Plug>(easymotion-prefix)j
 nmap <space>k <Plug>(easymotion-prefix)k
 
@@ -363,6 +376,8 @@ nnoremap gV `[v`]
 " Append a comment
 nnoremap <C-a> A  <C-r>=&comments[1]<CR>
 
+nmap K i<CR><Esc>d^==kg_lD
+
 
 " asdf0
 " asdf1
@@ -374,6 +389,9 @@ nnoremap <C-a> A  <C-r>=&comments[1]<CR>
 " asdf7
 " asdf8
 " asdf9
+
+nnoremap <localleader>t :EnTypeCheck<CR>
+nnoremap <localleader>df :EnDeclaration<CR>
 
 noremap <S-F4> :s/ASDF/\=line('.')-line("'<")"<CR>
 
@@ -455,10 +473,6 @@ nmap ,9 9gt
 " nnoremap ]q :cnext<CR>
 " nnoremap [q :cprevious<CR>
 
-" Scroll by visual lines
-nnoremap j gj
-nnoremap k gk
-
 " Create a file of the same name with _test appended.
 nnoremap ,te :e =expand('%:r') . '_test.' . expand('%:e')<CR><CR>
 
@@ -482,6 +496,9 @@ nnoremap <space>gp :Git push<CR>
 " Undotree
 nnoremap <F4> :UndotreeToggle<CR>
 
+nnoremap j gj
+nnoremap k gk
+
 " Quickfix
 nmap <script> <silent> <space>a :call ToggleLocationList()<CR>
 nmap <script> <silent> <space>q :call ToggleQuickfixList()<CR>
@@ -503,10 +520,9 @@ nnoremap <space>; :CtrlPCmdPalette<CR>
 " Commands that operate on project level
 nnoremap <space>pg :CtrlPTag<CR>
 nnoremap <space>pp :CtrlPBookmarkDir<CR>
-nnoremap <space>pf :CtrlP<CR>
 nnoremap <space>pa :CtrlPBookmarkDirAdd<CR>
 nnoremap <space>pt :NERDTreeToggle<CR>
-nnoremap <space>pl :NERDTreeFind<CR>
+nnoremap <space>pf :NERDTreeFind<CR>
 nnoremap <space>ps :LAg ""<Left>
 nnoremap <space>pa :Ag ""<Left>
 nnoremap <space>pr :CtrlPMRUFiles<CR>
@@ -688,7 +704,7 @@ let g:snips_github="https://github.com/hafenr"
 " {{{2 Syntastic
 "-----------------------------------------------------------------------
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 let g:syntastic_warning_symbol='⚠'
 let g:syntastic_error_symbol='✗'
 let g:syntastic_r_lint_styles = 'list(spacing.indentation.notabs, spacing.indentation.evenindent)'
@@ -699,7 +715,7 @@ let g:syntastic_enable_r_lint_checker = 1
 let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-", " proprietary attribute \"tm-"]
 " Disable syntastic for filetypes that use Neomake
 " let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
-let g:syntastic_mode_map = { 'passive_filetypes': ['typescript'] }
+let g:syntastic_mode_map = { 'passive_filetypes': ['typescript','scala'] }
 
 " Remember to actually install all the syntax errors and style checkers"
 " pip install pyflakes pep8 pep257 flake8 pylint etc.
@@ -919,7 +935,6 @@ endfunction
 " Cursor config {{{
 "=======================================================================
 " Show insert cursor as yellow and normal mode cursor as light green.
-
 highlight Cursor guifg=black guibg=#00ff1e
 highlight iCursor guifg=black guibg=cyan
 set guicursor=n-v-c:block-Cursor

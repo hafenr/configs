@@ -21,8 +21,8 @@ if options.create:
     # For each file in the directory where this script is located
     for f in os.listdir(dir_abspath):
         # Skip this script
-        if f != os.path.basename(__file__):
-            source = os.path.expanduser("~/." + f)
+        if f != os.path.basename(__file__) and f.startswith('_'):
+            source = os.path.expanduser("~/" + f.replace("_", ".", 1))
             target = os.path.join(dir_abspath, f)
 
             if os.path.exists(source) and options.overwrite:

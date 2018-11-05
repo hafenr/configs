@@ -12,7 +12,7 @@
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
     if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
+        . "$HOME/.bashrc"
     fi
 fi
 
@@ -25,6 +25,19 @@ fi
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
+
+EDITOR=vim
+
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+PATH="$PATH:/opt/hadoop-3.0.3/bin:/opt/spark-2.3.2-bin-hadoop2.7/bin"
+
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+export JAVA_HOME="/usr/lib/jvm/java-8-oracle/jre"
+export TERM=xterm-color
+export JAVA_OPTS="-Xms2048m -Xmx2048m"
+export SBT_OPTS="-Xmx6G -Xss4M"
 
 setxkbmap -option 'caps:ctrl_modifier'
 xcape -e 'Caps_Lock=Escape;Control_L=Escape;Control_R=Escape'

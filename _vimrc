@@ -74,7 +74,7 @@ Plug 'scrooloose/syntastic'
 " Plug 'maxbrunsfeld/vim-yankstack'
 Plug 'junegunn/vim-peekaboo'
 Plug 'jalvesaq/Nvim-R'
-Plug 'Vim-R-plugin'
+Plug 'vim-scripts/Vim-R-plugin'
 Plug 'zenorocha/dracula-theme', {'rtp': 'vim/'}
 
 " Angular
@@ -93,7 +93,7 @@ Plug 'junegunn/seoul256.vim'           " Nice color scheme
 " Nice to have
 Plug 'vim-scripts/IndexedSearch'
 Plug 'junegunn/vim-easy-align'         " :'<,'>EasyAlign [*] DELIM or /regex/
-Plug 'yaifa.vim'
+Plug 'vim-scripts/yaifa.vim'
 Plug 'kana/vim-textobj-user'           " Needed for textobj-python
 Plug 'bkad/CamelCaseMotion'
 Plug 'sgur/vim-textobj-parameter'
@@ -107,7 +107,7 @@ Plug 'hafenr/vim-textobj-underscore'
 Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make' }
 Plug 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
 " Plug 'editorconfig/editorconfig-vim'   " read .editorconfig files and set variables
-Plug 'renamer.vim'                     " bulk rename by calling :Renamer
+Plug 'vim-scripts/renamer.vim'                     " bulk rename by calling :Renamer
 
 " By language
 " Clojure
@@ -135,7 +135,6 @@ Plug 'Eckankar/vim-latex-folding', { 'for': 'tex' }
 " JavaScript, TypeScript, CoffeeScript
 Plug 'jason0x43/vim-js-indent', { 'for': 'javascript' }
 Plug 'hafenr/typescript-vim'
-Plug 'vim-coffee-script', { 'for': 'coffee' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
 
@@ -167,7 +166,8 @@ if has('gui_running')               " gvim options
         " but won't allow typing special characaters anymore.
         " set macmeta
     elseif os == "Linux"
-        set guifont=Deja\ Vu\ Sans\ Mono\ 10
+        " set guifont=Deja\ Vu\ Sans\ Mono\ 10
+        set guifont=Ubuntu\ Mono\ derivative\ Powerline
     endif
     colorscheme mustang
 else                                " terminal

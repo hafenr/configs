@@ -5,7 +5,7 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="lambda"
+ZSH_THEME="robbyrussell"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -52,8 +52,3 @@ setopt autopushd    # make cd push directories onto stack
 setopt pushdminus  # invert meanings of +N and -N arguments to pushd
 export DIRSTACKSIZE=8
 alias dh='dirs -v' # show the cd history
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-
-export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin

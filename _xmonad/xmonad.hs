@@ -1,8 +1,18 @@
 import XMonad
+import XMonad.Config
 import XMonad.Config.Desktop
 import XMonad.Hooks.ManageDocks
 import XMonad.Layout
 import XMonad.Layout.NoBorders
+import qualified Data.Map as M
+
+
+keybindings :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
+keybindings conf@(XConfig {XMonad.modMask = modMask}) = updatedKeys
+  where
+      defaultKeys = keys desktopConfig $ conf
+      removeKeys = [(modMask .|. shiftMask, xK_q), (modMask, xK_q)]
+      updatedKeys = foldl (flip M.delete) defaultKeys removeKeys
 
 myManageHook = composeAll
     [ className =? "Do"                 --> doIgnore
@@ -26,6 +36,7 @@ myConfig = desktopConfig
        , terminal = "xfce4-terminal"
        , manageHook = manageHook desktopConfig <+> myManageHook
        , layoutHook = desktopLayoutModifiers $ myLayoutHook
+       , keys = keybindings
        }
 
 main = xmonad myConfig

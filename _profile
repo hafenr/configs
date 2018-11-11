@@ -37,7 +37,7 @@ export LC_ALL=en_US.UTF-8
 export JAVA_HOME="/usr/lib/jvm/java-8-oracle/jre"
 export TERM=xterm-color
 export JAVA_OPTS="-Xms2048m -Xmx2048m"
-export SBT_OPTS="-Xmx6G -Xss4M"
+export SBT_OPTS="-Xmx8G -Xss4M"
 
 setxkbmap -option 'caps:ctrl_modifier'
 xcape -e 'Caps_Lock=Escape;Control_L=Escape;Control_R=Escape'

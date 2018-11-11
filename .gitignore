@@ -21,3 +21,4 @@ _xmonad/xmonad.hs
 _xmonad/xmonad.o
 _xmonad/xmonad.errors
 _xmonad/xmonad-x86_64-linux
+_xmonad/xmonad.state

@@ -16,12 +16,16 @@ keybindings conf@(XConfig {XMonad.modMask = modMask}) = updatedKeys
       -- insert the value at k1 with key k2 and delete the old key
       remapKey m (k1, k2) = M.delete k1 (M.insert k2 (m ! k1) m)
       keyRemappings =
-        [ ((modMask .|. shiftMask, xK_q), (modMask .|. shiftMask, xK_l))
-        , ((modMask, xK_q), (modMask, xK_l))
-        , ((modMask .|. shiftMask, xK_w), (modMask .|. shiftMask, xK_q))
-        , ((modMask, xK_w), (modMask, xK_q))
-        , ((modMask .|. shiftMask, xK_r), (modMask .|. shiftMask, xK_s))
-        , ((modMask, xK_r), (modMask, xK_s))
+        [
+        -- reload
+          ((modMask .|. shiftMask, xK_q), (modMask .|. shiftMask, xK_m))
+        , ((modMask, xK_q), (modMask, xK_m))
+        -- bottom
+        , ((modMask .|. shiftMask, xK_w), (modMask .|. shiftMask, xK_s))
+        , ((modMask, xK_w), (modMask, xK_s))
+        -- top-left
+        , ((modMask .|. shiftMask, xK_r), (modMask .|. shiftMask, xK_q))
+        , ((modMask, xK_r), (modMask, xK_q))
         ]
 
 myManageHook = composeAll
@@ -42,7 +46,7 @@ myLayoutHook = tiled ||| Mirror tiled ||| noBorders Full
 
 myConfig = desktopConfig
        { modMask = mod4Mask
-       , borderWidth = 3
+       , borderWidth = 2
        , terminal = "xfce4-terminal"
        , manageHook = manageHook desktopConfig <+> myManageHook
        , layoutHook = desktopLayoutModifiers $ myLayoutHook

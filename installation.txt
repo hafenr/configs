@@ -1,10 +1,17 @@
 ### Install common software
 
 ```
-sudo apt install rofi xclip xfce4-volumed curl xfce4-clipman zsh fonts-powerline
-
-
+sudo apt install rofi xclip xfce4-volumed curl xfce4-clipman zsh fonts-powerline i3 i3blocks
 ```
+
+### Enable session management
+
+- Enable session management in the XFCE session chooser settings
+- Select 'choose session on startup'
+- Add i3-wm as a startup task in 'Session and startup'
+- Kill xfwm4 and xfdesktop, save session
+- Logout and back in
+
 
 ### Install ohmyzsh
 

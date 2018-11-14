@@ -1,8 +1,15 @@
 ### Install common software
 
 ```
-sudo apt install rofi xclip xfce4-volumed curl xfce4-clipman
+sudo apt install rofi xclip xfce4-volumed curl xfce4-clipman zsh
 
+```
+
+### Install ohmyzsh
+
+```
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+chsh -s /bin/zsh
 ```
 
 ### Get dotfiles

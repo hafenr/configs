@@ -1,7 +1,8 @@
 ### Install common software
 
 ```
-sudo apt install rofi xclip xfce4-volumed curl xfce4-clipman zsh
+sudo apt install rofi xclip xfce4-volumed curl xfce4-clipman zsh fonts-powerline
+
 
 ```
 

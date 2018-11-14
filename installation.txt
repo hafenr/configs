@@ -1,0 +1,82 @@
+### Install common software
+
+```
+sudo apt install rofi xclip xfce4-volumed curl xfce4-clipman
+
+```
+
+### Get dotfiles
+
+```
+git clone git@github.com:hafenr/configs.git
+cd configs
+rm ~/.profile
+python create_links -c
+```
+
+### Install Java
+
+```
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt update; sudo apt install oracle-java8-installer
+sudo update-alternatives --config java
+```
+
+
+### Disable WIFI power saving mode
+
+```
+sudo vim /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf
+```
+
+Change the following line to 2:
+
+```
+wifi.powersave = 3
+```
+
+
+### Install SBT & Scala
+
+```
+sudo apt-get install scala
+```
+
+
+```
+echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
+sudo apt-get update
+sudo apt-get install sbt
+```
+
+
+### Install VimPlug
+
+```
+sudo apt install curl
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+```
+
+
+### Install hadoop
+
+```
+cd Downloads
+wget http://mirror.easyname.ch/apache/hadoop/common/hadoop-3.0.3/hadoop-3.0.3.tar.gz
+tar xvzt hadoop*
+chown -R rhafen:rhafen /opt
+mv hadoop-3.0.3 /opt/
+```
+
+
+### Install Spark
+
+```
+cd Downloads
+wget http://www.pirbot.com/mirrors/apache/spark/spark-2.3.2/spark-2.3.2-bin-hadoop2.7.tgz
+tar xvzt spark*.tar.gz
+mv spark-2.3.2-bin-hadoop2.7 /opt/
+```

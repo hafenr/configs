@@ -1,7 +1,7 @@
 ### Install common software
 
 ```
-sudo apt install rofi xclip xfce4-volumed curl xfce4-clipman zsh fonts-powerline i3 i3blocks
+sudo apt install rofi xclip xfce4-volumed curl xfce4-clipman zsh fonts-powerline i3 i3blocks volumeicon-alsa
 ```
 
 ### Enable session management
@@ -9,7 +9,7 @@ sudo apt install rofi xclip xfce4-volumed curl xfce4-clipman zsh fonts-powerline
 - Enable session management in the XFCE session chooser settings
 - Select 'choose session on startup'
 - Add i3-wm as a startup task in 'Session and startup'
-- Kill xfwm4 and xfdesktop, save session
+- Kill xfwm4 and xfdesktop (and possibly xfce4-panel). On the right side of each entry choose that it won't restart if killed. Save session
 - Logout and back in
 
 
@@ -20,9 +20,19 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 chsh -s /bin/zsh
 ```
 
+### Get rid off blank screen after closing lid/suspend
+
+- Install xscreensaver
+- Go to power options and set the behavior on lid close
+
 ### Get dotfiles
 
+First add/generate a key to Github:
+
+https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+
 ```
+
 git clone git@github.com:hafenr/configs.git
 cd configs
 rm ~/.profile

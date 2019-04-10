@@ -37,7 +37,7 @@ bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
 # bindsym $mod+d exec dmenu_run
-bindsym $mod+o exec "rofi -show run"
+bindsym $mod+d exec "rofi -show run"
 bindsym $mod+i exec "rofi -show window"
 bindsym $mod+backslash exec "rofi -show ssh"
 # There also is the (new) i3-dmenu-desktop which only displays applications
@@ -173,3 +173,7 @@ bar {
         mode hide
         status_command i3blocks
 }
+
+exec nm-applet
+exec blueman-applet
+exec volumeicon

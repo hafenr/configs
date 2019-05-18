@@ -357,6 +357,10 @@ nnoremap <space>w :w<CR>
 nnoremap <space>. :source ~/.vimrc<CR>
 cnoremap jk <CR>
 
+if exists(':tnoremap')
+    tnoremap <Esc> <C-\><C-n>
+endif
+
 " nnoremap <silent> <space>e :Neomake!<CR>
 nmap <space>j <Plug>(easymotion-prefix)j
 nmap <space>k <Plug>(easymotion-prefix)k

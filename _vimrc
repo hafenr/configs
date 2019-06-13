@@ -45,14 +45,13 @@ Plug 'tpope/vim-repeat'                " Repeat all kinds of stuff
 Plug 'tpope/vim-surround'              " Surround motions
 Plug 'tpope/vim-abolish'               " Add :S/repl/ace
 Plug 'mbbill/undotree'                 " Undo history as a tree
-Plug 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
+" Plug 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
 Plug 'gabesoft/vim-ags'
 " Plug 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
 Plug 'szw/vim-maximizer'               " Temporarily maximize window
 " Plug 'scrooloose/syntastic'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
-Plug 'hafenr/fzf.vim'
-" Plug 'rhysd/clever-f.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 " Plug 'tpope/vim-unimpaired'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'jwhitley/vim-matchit'            " More jumps for %
@@ -536,7 +535,8 @@ nnoremap [a     :lprevious<CR>
 nnoremap [A     :llast<CR>
 
 " Buffers
-nnoremap <space>r :CtrlPBuffer<CR>
+"nnoremap <space>r :CtrlPBuffer<CR>
+nnoremap <space>r :Buffers<CR>
 " Ex
 nnoremap <space>; :CtrlPCmdPalette<CR>
 " Commands that operate on project level
@@ -564,8 +564,8 @@ nnoremap <space>su :%s///g<Left><Left>
 nnoremap <space>ti :IndentLinesToggle<CR>
 
 " Similar stuff with FZF (async):
-" nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> <space>f :CtrlP<CR>
+ nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <space>f :Files<CR>
 " nnoremap <silent> <space>; :Commands<CR>
 nnoremap <silent> <space>o :CtrlPTag<CR>
 " nnoremap <silent> <space>O :Tags<CR>

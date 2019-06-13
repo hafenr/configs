@@ -1,3 +1,13 @@
+UNAME_OUT="$(uname -s)"
+case "${UNAME_OUT}" in
+    Linux*)     OS=Linux;;
+    Darwin*)    OS=Mac;;
+    CYGWIN*)    OS=Cygwin;;
+    MINGW*)     OS=MinGw;;
+    *)          OS="UNKNOWN:${UNAME_OUT}"
+esac
+echo ${OS}
+
 # === config ===
 export EDITOR=vim
 export LANG=en_US.UTF-8
@@ -12,3 +22,12 @@ alias uuuu='cd ../../../..'
 alias co='column -t'
 
 alias tmux="TERM=screen-256color tmux"
+
+# Remap CapsLock to be both ESC and CTRL (install xcape first!)
+if [ "$OS" == "Linux" ]; then
+    setxkbmap -option ctrl:nocaps
+    xcape -e 'Control_L=Escape'
+fi
+
+# For fzf.vim and fzf in general
+export FZF_DEFAULT_COMMAND='ag --nocolor --ignore node_modules -g ""'

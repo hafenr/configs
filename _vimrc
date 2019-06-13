@@ -134,9 +134,9 @@ Plug 'Eckankar/vim-latex-folding', { 'for': 'tex' }
 
 " JavaScript, TypeScript, CoffeeScript
 Plug 'jason0x43/vim-js-indent', { 'for': 'javascript' }
-Plug 'hafenr/typescript-vim'
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
-Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
+Plug 'leafgarland/typescript-vim'
+Plug 'neoclide/coc.nvim', {'do': './install.sh nightly'}
 
 " HTML, CSS/LESS
 " Plug 'ap/vim-css-color'
@@ -188,7 +188,7 @@ endif
 "=======================================================================
 " Basic settings {{{
 "=======================================================================
-set clipboard=unnamed
+set clipboard+=unnamedplus
 
 set nocompatible
 set dictionary+=/usr/share/dict/words " Specify the builtin list of words for C-X C-K completion
@@ -293,6 +293,7 @@ augroup filetypes
     autocmd!
     autocmd BufNewFile,BufRead,BufFilePre *.md set filetype=markdown
     autocmd BufNewFile,BufRead,BufFilePre *.ts set filetype=typescript
+    autocmd BufNewFile,BufRead,BufFilePre *.tsx set filetype=typescript.tsx
     " autocmd BufWritePost *.scala silent :EnTypeCheck
 augroup END
 
@@ -360,6 +361,23 @@ cnoremap jk <CR>
 if exists(':tnoremap')
     tnoremap <Esc> <C-\><C-n>
 endif
+
+autocmd FileType typescript,typescript.tsx nnoremap <buffer><silent> K :call <SID>show_documentation()<CR>
+autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <C-]> <Plug>(coc-definition)
+autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>id <Plug>(coc-definition)
+autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>if <Plug>(coc-references)
+autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>im <Plug>(coc-implementation)
+autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>ii <Plug>(coc-diagnostic-info)
+autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>ir <Plug>(coc-rename)
+autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>it <Plug>(coc-type-definition)
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocActionAsync('doHover')
+  endif
+endfunction
 
 " nnoremap <silent> <space>e :Neomake!<CR>
 nmap <space>j <Plug>(easymotion-prefix)j

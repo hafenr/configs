@@ -33,7 +33,7 @@ endif
 call plug#begin('~/.vim/plugged')
 " Essential
 Plug 'tpope/vim-commentary'            " Commenting operator gc
-Plug 'SirVer/ultisnips'                " Snippet system
+"jjPlug 'SirVer/ultisnips'                " Snippet system
 Plug 'honza/vim-snippets'              " Snippets
 Plug 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
 Plug 'tpope/vim-vinegar'
@@ -55,6 +55,8 @@ Plug 'hafenr/fzf.vim'
 " Plug 'rhysd/clever-f.vim'
 " Plug 'tpope/vim-unimpaired'
 Plug 'Lokaltog/vim-easymotion'
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-easytags'
 Plug 'jwhitley/vim-matchit'            " More jumps for %
 Plug 'jpalardy/vim-slime'              " REPL interaction
 " Plug 'Valloric/YouCompleteMe', { 'do': 'cd ~/.vim/plugged/YouCompleteMe/ && sh install.sh'
@@ -70,12 +72,12 @@ Plug 'ktonga/vim-follow-my-lead'
 Plug 'mattn/webapi-vim'
 " Plug 'benekastah/neomake'
 Plug 'janko-m/vim-test'
-Plug 'scrooloose/syntastic'
 " Plug 'maxbrunsfeld/vim-yankstack'
 Plug 'junegunn/vim-peekaboo'
 Plug 'jalvesaq/Nvim-R'
-Plug 'Vim-R-plugin'
+" Plug 'Vim-R-plugin'
 Plug 'zenorocha/dracula-theme', {'rtp': 'vim/'}
+Plug 'chrisbra/csv.vim'
 
 " Angular
 Plug 'burnettk/vim-angular', { 'for': 'javascript' }
@@ -106,7 +108,7 @@ Plug 'hafenr/vim-textobj-underscore'
 
 Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make' }
 Plug 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
-" Plug 'editorconfig/editorconfig-vim'   " read .editorconfig files and set variables
+Plug 'editorconfig/editorconfig-vim'   " read .editorconfig files and set variables
 Plug 'renamer.vim'                     " bulk rename by calling :Renamer
 
 " By language
@@ -120,6 +122,7 @@ Plug 'vim-scripts/paredit.vim', { 'for': ['clojure', 'lisp', 'scheme'] }
 Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 
 " R
+Plug 'jalvesaq/Nvim-R'
 " Plug 'vim-pandoc/vim-pandoc'
 " Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': 'r' }
 " Plug 'vim-pandoc/vim-rmarkdown', { 'for': 'r' }
@@ -134,10 +137,16 @@ Plug 'Eckankar/vim-latex-folding', { 'for': 'tex' }
 
 " JavaScript, TypeScript, CoffeeScript
 Plug 'jason0x43/vim-js-indent', { 'for': 'javascript' }
-Plug 'hafenr/typescript-vim'
-Plug 'vim-coffee-script', { 'for': 'coffee' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
+Plug 'leafgarland/typescript-vim'
+" Plug 'Quramy/tsuquyomi'
+" Install nightly build, replace ./install.sh with install.cmd on windows
+Plug 'neoclide/coc.nvim', {'do': './install.sh nightly'}
+" " Or install latest release tag
+" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+" " Or build from source code
+" Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 " HTML, CSS/LESS
 " Plug 'ap/vim-css-color'
@@ -147,8 +156,8 @@ Plug 'othree/html5.vim', { 'for': 'html' }
 Plug 'groenewege/vim-less'
 
 " Python
-Plug 'davidhalter/jedi-vim'
-Plug 'lepture/vim-jinja', { 'for': 'html' }
+"Plug 'davidhalter/jedi-vim'
+"Plug 'lepture/vim-jinja', { 'for': 'html' }
 Plug 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
 Plug 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, if
 
@@ -162,7 +171,8 @@ call plug#end()
 "=======================================================================
 if has('gui_running')               " gvim options
     if os == "Darwin"
-        set guifont=Monaco\ for\ Powerline:h16
+        set clipboard=unnamed
+        set guifont=Droid\ Sans\ Mono\ for\ Powerline:h14
         " Send option presses to macvim. Allows binding <M-x>
         " but won't allow typing special characaters anymore.
         " set macmeta
@@ -188,8 +198,6 @@ endif
 "=======================================================================
 " Basic settings {{{
 "=======================================================================
-set clipboard=unnamed
-
 set nocompatible
 set dictionary+=/usr/share/dict/words " Specify the builtin list of words for C-X C-K completion
 set thesaurus+=~/.vim/extra/mthesaur.txt
@@ -213,7 +221,8 @@ set backspace=indent,eol,start
 set list
 " set list listchars=tab:\ ,nbsp:·,trail:␣,extends:▸,precedes:◂
 " set list listchars=tab:»·,trail:·,extends:$,nbsp:= " Display tabs and trailing whitespace
-set listchars=tab:⇥\ ,nbsp:·,trail:•,extends:❯,precedes:❮
+"set listchars=tab:⇥\ ,nbsp:·,trail:•,extends:❯,precedes:❮
+set listchars=tab:·\ ,nbsp:·,trail:•,extends:❯,precedes:❮
 " set showbreak=......\|\             " show linebreaks with: ......| wrapped text
 set textwidth=0                     " don't insert EOLs at linebreak
 
@@ -244,7 +253,7 @@ set ignorecase                      " ignores case while searching
 set smartcase                       " if a search contains a upper case char, make search case sensitive
 
 set diffopt=vertical                " always split vertical with :diffsplit otherfile
-set tags=./tags;/
+set tags=./.tags,.tags,./tags,tags
 set wildignore+=*.o,*.obj,.git,*.class,target,project,build " ignore files for command-t
 set wrap                            " wrap whole words
 set noswapfile                      " don't use swapfile
@@ -293,8 +302,12 @@ augroup filetypes
     autocmd!
     autocmd BufNewFile,BufRead,BufFilePre *.md set filetype=markdown
     autocmd BufNewFile,BufRead,BufFilePre *.ts set filetype=typescript
+    autocmd BufNewFile,BufRead,BufFilePre *.tsx set filetype=typescript.tsx
+    autocmd BufNewFile,BufRead,BufFilePre *.jsx set filetype=javascript.jsx
     " autocmd BufWritePost *.scala silent :EnTypeCheck
 augroup END
+
+autocmd FileType typescript,typescript.tsx nnoremap <buffer> <C-]> :call CocActionAsync('jumpDefinition')<CR>
 
 augroup misc
     autocmd!
@@ -476,9 +489,12 @@ nmap ,9 9gt
 " Create a file of the same name with _test appended.
 nnoremap ,te :e =expand('%:r') . '_test.' . expand('%:e')<CR><CR>
 
+inoremap jk <ESC>
+
 " Markdown
 inoremap <C-h>1 <ESC>yypVr=o
 inoremap <C-h>2 <ESC>yypVr-o
+
 nnoremap ,h1 yypVr=
 nnoremap ,h2 yypVr-
 
@@ -519,6 +535,7 @@ nnoremap <space>r :CtrlPBuffer<CR>
 nnoremap <space>; :CtrlPCmdPalette<CR>
 " Commands that operate on project level
 nnoremap <space>pg :CtrlPTag<CR>
+nnoremap <space>f :CtrlPTag<CR>
 nnoremap <space>pp :CtrlPBookmarkDir<CR>
 nnoremap <space>pa :CtrlPBookmarkDirAdd<CR>
 nnoremap <space>pt :NERDTreeToggle<CR>
@@ -543,7 +560,6 @@ nnoremap <space>ti :IndentLinesToggle<CR>
 
 " Similar stuff with FZF (async):
 " nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> <space>f :CtrlP<CR>
 " nnoremap <silent> <space>; :Commands<CR>
 nnoremap <silent> <space>o :CtrlPTag<CR>
 " nnoremap <silent> <space>O :Tags<CR>
@@ -650,11 +666,14 @@ set grepprg=ag\ --column " then navigate qf window with ]q and [q
 "-----------------------------------------------------------------------
 " let g:vimrplugin_assign='<'
 " let vimrplugin_assign_map = "<M-->"
+" let R_path = "/usr/local/Cellar/r/3.4.0/bin"
+let R_path = "/Applications/R.app/Contents/MacOS"
 
 let r_syntax_folding = 1
 if !has('gui_running')
-    let vimrplugin_term = "/Applications/iTerm.app/Contents/MacOS/iTerm"
-    let vimrplugin_term_cmd =  "/Applications/iTerm.app/Contents/MacOS/iTerm"
+
+    let vimrplugin_term = "/Applications/iTerm.app/Contents/MacOS/iTerm2"
+    let vimrplugin_term_cmd =  "/Applications/iTerm.app/Contents/MacOS/iTerm2"
     let vimrplugin_applescript = 0
     let g:ScreenImpl = 'Tmux'
     let g:ScreenShellInitialFocus = 'shell'
@@ -781,6 +800,13 @@ let g:netrw_altv = 0  " Split to the right
 let g:clever_f_across_no_line = 1
 " 2}}} "
 
+" easytags {{{2 "
+"-----------------------------------------------------------------------
+let g:easytags_async = 1
+let g:easytags_dynamic_files = 1
+" ctags -R --languages=typescript --exclude=node_modules .
+" 2}}} "
+
 " {{{2 Ctrlp
 "-----------------------------------------------------------------------
 let g:ctrlp_map = '<C-p>'
@@ -792,17 +818,18 @@ let g:ctrlp_cmdpalette_execute = 1
 let g:ctrlp_root_markers = ['.ctrlp']
 
 let g:ctrlp_custom_ignore = {
-\   'dir':  '\v(\.git|\.hg|\.svn|\.yardoc|public/images|public/system|data|tmp|resources/public/js|node_modules|bower_components)$',
+\   'dir':  '\v(\.git|\.hg|\.svn|\.yardoc|public/images|public/system|resources/public/js|node_modules|bower_components)$',
 \   'file': '\v\.(o|m4a|pdf|swp|pyc|wav|mp3|ogg|blend|dvi|fls|aux|blg|bbl|log|loa|lof|toc|fdb_latexmk|lot|js.map|min.js|min.css|)$|\~$'
 \   }
 
 " Save cache across sessions => much faster. Refresh with F5.
 let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
+let g:ctrl_user_command = 'ag %s -l --nocolor --hidden -g ""'
 " 2}}}
 
 " {{{2 Neomake
-let g:neomake_python_enabled_makers = ['flake8', 'pep8']
+" let g:neomake_python_enabled_makers = ['flake8', 'pep8']
 " E501 is line length of 80 characters
 " let g:neomake_python_flake8_maker = { 'args': ['--ignore=E501'], }
 " let g:neomake_python_pep8_maker = { 'args': ['--max-line-length=105'], }

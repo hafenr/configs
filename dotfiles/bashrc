@@ -11,73 +11,68 @@ alias uuu='cd ../../..'
 alias uuuu='cd ../../../..'
 alias co='column -t'
 alias crick='ssh crick'
+alias split-csv="column -s'|' -t | less -#2 -N -S"
+
+alias tl="ssh tlap01"
+
+alias gch='git checkout'
+alias gs='git status'
+alias gco='git commit'
+alias gpl='git pull'
+alias gps='git pull'
+
+alias hls='hdfs dfs -ls'
+alias hget='hdfs dfs -get'
+alias hput='hdfs dfs -put'
+alias hcat='hdfs dfs -cat'
 
 # === programs ===
-# > LaTeX
-alias latexmk_='latexmk -pdf -pvc'
-function pdflatex-watch() { while true; do inotifywait -e modify "$1"; pdflatex "$1"; done;}
-# > tmux
 alias tmux="TERM=screen-256color tmux"
 
-# === os specific config ===
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    # Linux
-    xmodmap ~/.xmodmappings
-    xmodmap -e 'keycode 66 = Control_L'
-    xmodmap -e 'clear Lock'
-    xmodmap -e 'add Control = Control_L'
-    /opt/xcape/xcape -e 'Control_L=Escape'
-    :
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-    # Mac OSX
-    # === environments ===
-    # export PYTHONPATH="/usr/local/lib/python2.7/site-packages"
-    # export PYTHONPATH="/Users/robin/Dev/Jterator/src:$PYTHONPATH"
-    # export PYTHONPATH="/Users/robin/Dev/Toolbox:$PYTHONPATH"
-    # export PYTHONPATH="/Users/robin/Dev:$PYTHONPATH"
-    # export PYTHONPATH="/Users/robin/Dev/pyprophet:$PYTHONPATH"
-    export SPARK_HOME=/opt/spark-2.1.0-bin-hadoop2.7
-    export SCALA_HOME=/usr/local/opt/scala/idea
-    export WORKON_HOME=~/.virtualenvs
-    export R_HOME=/Library/Frameworks/R.framework/Resources
-    export JAVA_HOME=$(/usr/libexec/java_home)
-    export JAVA_OPTS='-Xms2048m -Xmx2048m'
+# === other settings ===
+export JAVA_OPTS='-Xms2048m -Xmx2048m'
+export SBT_OPTS="-Xmx8G -Xss4M"
+export NODE_OPTIONS="–max-old-space-size=3048".
 
-    # SPARK
-    export IPYTHON=1
+export NPM_TOKEN=cm9iaW4uaGFmZW5AdGVyYWx5dGljczo1YjBiMmQ0MzMxNTg0NDhlMTQwZDllZjdmZWY3ZDk0YTgwMDczMThi
+export NPM_EMAIL=robin.hafen@gmail.com
+export NPM_USER=robin.hafen
+
+# SPARK
+export IPYTHON=1
+export SPARK_LOCAL_IP="localhost"
+
+export SCALA_HOME=/usr/local/Cellar/scala/2.12.1
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home
+
+# PATH
+export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+export PATH="/opt/spark/spark-2.3.3-bin-hadoop2.7/bin:$PATH"
+#export PATH="/opt/spark/spark-2.1.0-bin-hadoop2.7/bin:$PATH"
+export PATH="/opt/hadoop-2.8.0/bin:$PATH"
+export PATH="/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH"
+export PATH="$HOME/scripts:$PATH"
+export PATH="$HOME/bin:$PATH"
+export PATH="/opt/copy-od-results:$PATH"
+export PATH="/usr/local/Cellar/python3/3.7.3/bin:$PATH"
+export PATH="/usr/local/Cellar/ipython/7.5.0/bin:$PATH"
+
+#export HADOOP_HOME=/opt/hadoop-2.8.0
+#export HADOOP_PREFIX=/opt/hadoop-2.8.0
+#export HADOOP_CONF_DIR=/opt/hadoop-2.8.0/etc/hadoop
+#export HADOOP_LIBEXEC_DIR=/opt/hadoop-2.8.0/libexec
+export HADOOP_OPTS="-XX:-UseGCOverheadLimit"
+export HADOOP_CLIENT_OPTS="-XX:-UseGCOverheadLimit -Xmx4096m"
+
+# Other stuff
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 
-    # autostart virtual env
-    export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python
-    source /usr/local/bin/virtualenvwrapper.sh
-
-    alias ipy="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
-    alias cded='cd ~/Dropbox/CBB/EvolutionaryDynamics'
-    alias man='_() { echo $1; man -M $(brew --prefix)/opt/coreutils/libexec/gnuman $1 1>/dev/null 2>&1;  if [ "$?" -eq 0 ]; then man -M $(brew --prefix)/opt/coreutils/libexec/gnuman $1; else man $1; fi }; _'
-
-    alias open_ps='open -a /Applications/Adobe\ Photoshop\ CS6/Adobe\ Photoshop\ CS6.app'
-
-    # alias vim=nvim
-
-    # use gnu cmdline utilities instead of bsd ones
-    export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/texbin:$PATH:/opt/xpdf"
-    export PATH="/usr/lobal/bin/:/Users/robin/Dev/TissueMAPS/util/:$PATH"
-elif [[ "$OSTYPE" == "cygwin" ]]; then
-    # POSIX compatibility layer and Linux environment emulation for Windows
-    :
-elif [[ "$OSTYPE" == "msys" ]]; then
-    # Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
-    :
-elif [[ "$OSTYPE" == "win32" ]]; then
-    # I'm not sure this can happen.
-    :
-elif [[ "$OSTYPE" == "freebsd"* ]]; then
-    # FreeBSD
-    :
-else
-    echo "[error] uknown OS: $OSTYPE"
-    echo "can't initialize properly"
-fi
+# autostart virtual env
+export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python
+source /usr/local/bin/virtualenvwrapper.sh
 
 # fe [FUZZY PATTERN] - Open the selected file with the default editor
 #   - Bypass fuzzy finder if there's only one match (--select-1)
@@ -129,26 +124,6 @@ fk() {
 
 }
 
-
-# if [[ ! $TERM =~ screen ]]; then
-#     exec tmux
-# fi
 [ -f ~/.fzf.bash ] && source ~/.fzf.zsh
 
-
-function mnt-tmaps-storage {
-    local IP
-    IP=storage.tissuemap.com
-    local PASS
-    PASS=cVztQ46iuuPzJ3ld
-    sudo mount -t cifs //${IP}/tmaps-share-1 /share/nas/tmaps-share1 -o uid=yy,username=storage,password=${PASS},iocharset=utf8,file_mode=0664,dir_mode=0770
-}
-function umnt-tmaps-storage {
-    sudo umount /share/nas/tmaps-share1
-}
-export TMAPS_DB_URI=postgresql://robin:phelot95@localhost:5432/tissuemaps_test
-TMAPS_SETTINGS_TEST=tmaps/config/tmaps_settings_test.py
-export TMAPS_SETTINGS_TEST=tmaps/config/tmaps_settings_test.py
-export TMAPS_SETTINGS=tmaps/config/tmaps_settings_dev.py
-
-export OMP_NUM_THREADS=2
+export HISTTIMEFORMAT="%d/%m/%y %T "

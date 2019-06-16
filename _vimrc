@@ -31,52 +31,42 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 " 2}}}
 call plug#begin('~/.vim/plugged')
-" Essential
+" General
 Plug 'tpope/vim-commentary'            " Commenting operator gc
-"Plug 'SirVer/ultisnips'                " Snippet system
-Plug 'honza/vim-snippets'              " Snippets
 Plug 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
-Plug 'tpope/vim-vinegar'
-Plug 'Raimondi/delimitMate'
-Plug 'kien/ctrlp.vim'                  " Fuzzy file finder
+Plug 'Raimondi/delimitMate'            " Smart auto-completion of ([' etc.
 Plug 'bling/vim-airline'               " Fancy status bar
 Plug 'tpope/vim-fugitive'              " Git plugin
 Plug 'tpope/vim-repeat'                " Repeat all kinds of stuff
 Plug 'tpope/vim-surround'              " Surround motions
 Plug 'tpope/vim-abolish'               " Add :S/repl/ace
-Plug 'mbbill/undotree'                 " Undo history as a tree
-Plug 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
-Plug 'gabesoft/vim-ags'
-" Plug 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
 Plug 'szw/vim-maximizer'               " Temporarily maximize window
-" Plug 'scrooloose/syntastic'
+Plug 'kien/ctrlp.vim'                  " Fuzzy file finder
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-" Plug 'tpope/vim-unimpaired'
+Plug 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
+Plug 'jwhitley/vim-matchit'            " More jumps for %
+Plug 'mbbill/undotree'                 " Undo history as a tree
+Plug 'ivyl/vim-bling'                  " blink on / n N
+Plug 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
+Plug 'gabesoft/vim-ags'
+
+"Plug 'SirVer/ultisnips'                " Snippet system
+Plug 'honza/vim-snippets'              " Snippets
+" Plug 'scrooloose/syntastic'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-easytags'
-Plug 'jwhitley/vim-matchit'            " More jumps for %
 Plug 'jpalardy/vim-slime'              " REPL interaction
-Plug 'Yggdroot/indentLine'
+Plug 'Yggdroot/indentLine'             " Insert vertical lines to show indentation levels
 Plug 'airblade/vim-gitgutter'          " ]c [c
 Plug 'mattn/gist-vim'                  " buffer or selection to gist with :Gist
-Plug 'ivyl/vim-bling'                  " blink on / n N
 Plug 'fisadev/vim-ctrlp-cmdpalette'
 Plug 'dbakker/vim-projectroot'
-Plug 'Shougo/neomru.vim'
 Plug 'ktonga/vim-follow-my-lead'
 Plug 'mattn/webapi-vim'
 Plug 'janko-m/vim-test'
 Plug 'junegunn/vim-peekaboo'
-Plug 'jalvesaq/Nvim-R'
-Plug 'vim-scripts/Vim-R-plugin'
-Plug 'zenorocha/dracula-theme', {'rtp': 'vim/'}
-
-" Angular
-Plug 'burnettk/vim-angular', { 'for': 'javascript' }
-Plug 'matthewsimo/angular-vim-snippets', { 'for': 'javascript' }
-Plug 'claco/jasmine.vim', { 'for': 'javascript' }
 
 " Colors
 Plug 'https://github.com/freeo/vim-kalisi'
@@ -84,7 +74,7 @@ Plug 'jonathanfilip/vim-lucius'
 Plug 'croaker/mustang-vim'
 Plug 'noahfrederick/vim-hemisu'
 Plug 'tomasr/molokai'
-Plug 'junegunn/seoul256.vim'           " Nice color scheme
+Plug 'junegunn/seoul256.vim'
 
 " Nice to have
 Plug 'vim-scripts/IndexedSearch'
@@ -99,11 +89,9 @@ Plug 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): yal
 Plug 'thinca/vim-textobj-between'
 Plug 'hafenr/vim-textobj-dotseparated'
 Plug 'hafenr/vim-textobj-underscore'
-
-Plug 'Shougo/vimproc.vim', { 'do': 'cd ~/.vim/plugged/vimproc.vim && make' }
-Plug 'milkypostman/vim-togglelist'     " Toggle quickfix and location list
+Plug 'milkypostman/vim-togglelist'     " toggle quickfix and location list
 Plug 'editorconfig/editorconfig-vim'   " read .editorconfig files and set variables
-Plug 'vim-scripts/renamer.vim'                     " bulk rename by calling :Renamer
+Plug 'vim-scripts/renamer.vim'         " bulk rename by calling :Renamer
 
 " By language
 " Clojure
@@ -113,17 +101,17 @@ Plug 'tpope/vim-fireplace', { 'for': ['clojure', 'lisp', 'scheme'] }
 Plug 'vim-scripts/paredit.vim', { 'for': ['clojure', 'lisp', 'scheme'] }
 
 " R
+Plug 'vim-scripts/Vim-R-plugin', { 'for': 'r' }
+" Plug 'jalvesaq/Nvim-R'
 " Plug 'vim-pandoc/vim-pandoc'
 " Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': 'r' }
 " Plug 'vim-pandoc/vim-rmarkdown', { 'for': 'r' }
-" Plug 'Vim-R-plugin'
 " Plug 'nelstrom/vim-markdown-folding', { 'for': 'r' }
-" Julia
-" Plug 'JuliaLang/julia-vim'
 
 " LaTeX
 Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' }
 Plug 'Eckankar/vim-latex-folding', { 'for': 'tex' }
+Plug 'ervandew/screen', { 'for': 'tex' }
 
 " JavaScript, TypeScript
 Plug 'jason0x43/vim-js-indent', { 'for': 'javascript' }
@@ -133,14 +121,13 @@ Plug 'neoclide/coc.nvim', {'do': './install.sh nightly'}
 
 " HTML, CSS/LESS
 " Plug 'ap/vim-css-color'
-Plug 'mattn/emmet-vim'                 " Zencoding successor
-Plug 'ervandew/screen', { 'for': 'tex' }
+Plug 'mattn/emmet-vim'                 " Expand html: ul>li*3<C-l>
 Plug 'othree/html5.vim', { 'for': 'html' }
-Plug 'groenewege/vim-less'
+Plug 'groenewege/vim-less', { 'for': 'less' }
 
 " Python
-Plug 'michaeljsmith/vim-indent-object' " Indent-level as text obj.
-Plug 'bps/vim-textobj-python'          " Provides class: ac, ic; Function: af, if
+Plug 'michaeljsmith/vim-indent-object', { 'for': 'python' } " Indent-level as text obj.
+Plug 'bps/vim-textobj-python', { 'for': 'python' }          " Provides class: ac, ic; Function: af, if
 
 " Scala
 Plug 'spiroid/vim-ultisnip-scala'
@@ -279,7 +266,18 @@ augroup filetypes
     " autocmd BufWritePost *.scala silent :EnTypeCheck
 augroup END
 
-autocmd FileType typescript,typescript.tsx nnoremap <buffer> <C-]> :call CocActionAsync('jumpDefinition')<CR>
+augroup typescript_mappings
+    autocmd!
+    autocmd FileType typescript,typescript.tsx nnoremap <buffer><silent> <C-]> :call CocActionAsync('jumpDefinition')<CR>
+    autocmd FileType typescript,typescript.tsx nnoremap <buffer><silent> K :call <SID>show_documentation()<CR>
+    autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <C-]> <Plug>(coc-definition)
+    autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>id <Plug>(coc-definition)
+    autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>if <Plug>(coc-references)
+    autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>im <Plug>(coc-implementation)
+    autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>ii <Plug>(coc-diagnostic-info)
+    autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>ir <Plug>(coc-rename)
+    autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>it <Plug>(coc-type-definition)
+augroup END
 
 augroup misc
     autocmd!
@@ -289,24 +287,26 @@ augroup misc
     " Automatically delete trailing whitespace
     " autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
     autocmd FileType qf
-          \ nnoremap <buffer> <silent> q :close<CR> |
-          \ map <buffer> <silent> <F4> :close<CR> |
-          \ map <buffer> <silent> <F8> :close<CR>
+          \ nnoremap <buffer><silent> q :close<CR> |
+          \ map <buffer><silent> <F4> :close<CR> |
+          \ map <buffer><silent> <F8> :close<CR>
 augroup END
 
-augroup Python
+augroup python_settings
     autocmd!
     autocmd FileType python setlocal foldmethod=indent foldnestmax=2
     autocmd FileType python setlocal shiftwidth=4 tabstop=4
 augroup END
 
 function! SetClojureSettings()
-    nnoremap <silent> <M-l> :<C-u>call PareditMoveRight()<CR>
-    nnoremap <silent> <M-h> :<C-u>call PareditMoveLeft()<CR>
-    nnoremap <silent> <C-l> :<C-u>call PareditMoveRight()<CR>
-    nnoremap <silent> <C-h> :<C-u>call PareditMoveLeft()<CR>
+    nnoremap <silent><buffer> <M-l> :<C-u>call PareditMoveRight()<CR>
+    nnoremap <silent><buffer> <M-h> :<C-u>call PareditMoveLeft()<CR>
+    nnoremap <silent><buffer> <C-l> :<C-u>call PareditMoveRight()<CR>
+    nnoremap <silent><buffer> <C-h> :<C-u>call PareditMoveLeft()<CR>
+    nnoremap <silent><buffer> <C-right> :<C-u>call PareditMoveRight()<CR>
+    nnoremap <silent><buffer> <C-left> :<C-u>call PareditMoveLeft()<CR>
 endfunction
-augroup Clojure
+augroup clojure_settings
     autocmd!
     autocmd FileType clojure call SetClojureSettings()
     au BufEnter *.clj,*.cljs setlocal macmeta
@@ -315,10 +315,9 @@ augroup Clojure
     au Syntax   *.clj,*.el RainbowParenthesesLoadSquare " []
     au Syntax   *.clj,*.el RainbowParenthesesLoadBraces " {}
     au Syntax   *.clj,*.el RainbowParenthesesLoadChevrons " <>
-    " au BufWritePost *.cljs :BLReloadPage
 augroup END
 
-augroup Autex
+augroup autex_settings
     autocmd!
     au FileType tex let b:delimitMate_matchpairs = "\(:\)"
     autocmd FileType tex setlocal spell
@@ -342,23 +341,6 @@ nnoremap <space>w :w<CR>
 nnoremap <space>. :source ~/.vimrc<CR>
 cnoremap jk <CR>
 
-autocmd FileType typescript,typescript.tsx nnoremap <buffer><silent> K :call <SID>show_documentation()<CR>
-autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <C-]> <Plug>(coc-definition)
-autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>id <Plug>(coc-definition)
-autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>if <Plug>(coc-references)
-autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>im <Plug>(coc-implementation)
-autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>ii <Plug>(coc-diagnostic-info)
-autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>ir <Plug>(coc-rename)
-autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>it <Plug>(coc-type-definition)
-
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocActionAsync('doHover')
-  endif
-endfunction
 
 " nnoremap <silent> <space>e :Neomake!<CR>
 nmap <space>j <Plug>(easymotion-prefix)j
@@ -563,10 +545,6 @@ nnoremap <C-w>< 10<C-w><
 nnoremap <C-w>> 10<C-w>>
 nnoremap <C-w>- 10<C-w>-
 nnoremap <C-w>+ 10<C-w>+
-
-" Clojure
-nnoremap <silent> <C-right> :<C-u>call PareditMoveRight()<CR>
-nnoremap <silent> <C-left> :<C-u>call PareditMoveLeft()<CR>
 " 2}}}
 " 1}}}
 "=======================================================================
@@ -652,7 +630,6 @@ let R_path = "/Applications/R.app/Contents/MacOS"
 
 let r_syntax_folding = 1
 if !has('gui_running')
-
     let vimrplugin_term = "/Applications/iTerm.app/Contents/MacOS/iTerm2"
     let vimrplugin_term_cmd =  "/Applications/iTerm.app/Contents/MacOS/iTerm2"
     let vimrplugin_applescript = 0
@@ -756,7 +733,6 @@ let g:jedi#documentation_command = "K"
 " let g:jedi#completions_command = ""
 let g:jedi#show_call_signatures = "2"
 let g:jedi#show_call_signatures_delay = 0
-
 let g:jedi#goto_assignments_command = ",pa"
 let g:jedi#goto_definitions_command = ",pd"
 let g:jedi#documentation_command = ",pk"
@@ -774,11 +750,6 @@ let g:jedi#rename_command = ",pr"
 "-----------------------------------------------------------------------
 let g:netrw_preview = 1 " p previews file in vertical split
 let g:netrw_altv = 0  " Split to the right
-" 2}}} "
-
-" Clever-f {{{2 "
-"-----------------------------------------------------------------------
-let g:clever_f_across_no_line = 1
 " 2}}} "
 
 " easytags {{{2 "
@@ -810,6 +781,7 @@ let g:ctrl_user_command = 'ag %s -l --nocolor --hidden -g ""'
 " 2}}}
 
 " {{{2 Airline
+"-----------------------------------------------------------------------
 " : %3p : %4l : %3c
 let g:airline_powerline_fonts = 1
 let g:airline_theme='dark'
@@ -818,8 +790,10 @@ let g:airline_section_z = '%2p%% %2l/%L:%2v'
 let g:airline#extensions#syntastic#enabled = 0
 let g:airline#extensions#whitespace#enabled = 0
 let g:airline_exclude_preview = 1
+" 2}}}
 
 " {{{2 Typescript
+"-----------------------------------------------------------------------
 " : %3p : %4l : %3c
 let g:typescript_compiler_use_tsconfig = 1
 " 2}}}
@@ -930,6 +904,14 @@ function! SearchVisualSelectionWithAg() range
   call setreg('"', old_reg, old_regtype)
   let &clipboard = old_clipboard
   execute 'Ag' selection
+endfunction
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocActionAsync('doHover')
+  endif
 endfunction
 " }}}
 "=======================================================================

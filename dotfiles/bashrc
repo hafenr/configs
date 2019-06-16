@@ -124,6 +124,9 @@ fk() {
 
 }
 
+export FZF_DEFAULT_COMMAND='ag --nocolor --ignore node_modules -g ""'
 [ -f ~/.fzf.bash ] && source ~/.fzf.zsh
 
 export HISTTIMEFORMAT="%d/%m/%y %T "
+
+

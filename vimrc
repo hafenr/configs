@@ -370,6 +370,24 @@ nnoremap <space>w :w<CR>
 nnoremap <space>. :source ~/.vimrc<CR>
 cnoremap jk <CR>
 
+autocmd FileType typescript,typescript.tsx nnoremap <buffer><silent> K :call <SID>show_documentation()<CR>
+autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <C-]> <Plug>(coc-definition)
+autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>id <Plug>(coc-definition)
+autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>if <Plug>(coc-references)
+autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>im <Plug>(coc-implementation)
+autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>ii <Plug>(coc-diagnostic-info)
+autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>ir <Plug>(coc-rename)
+autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>it <Plug>(coc-type-definition)
+
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocActionAsync('doHover')
+  endif
+endfunction
+
 " nnoremap <silent> <space>e :Neomake!<CR>
 nmap <space>j <Plug>(easymotion-prefix)j
 nmap <space>k <Plug>(easymotion-prefix)k
@@ -535,7 +553,7 @@ nnoremap <space>r :CtrlPBuffer<CR>
 nnoremap <space>; :CtrlPCmdPalette<CR>
 " Commands that operate on project level
 nnoremap <space>pg :CtrlPTag<CR>
-nnoremap <space>f :CtrlPTag<CR>
+nnoremap <space>f :Files<CR>
 nnoremap <space>pp :CtrlPBookmarkDir<CR>
 nnoremap <space>pa :CtrlPBookmarkDirAdd<CR>
 nnoremap <space>pt :NERDTreeToggle<CR>
@@ -610,9 +628,11 @@ if has('nvim')
     nnoremap <space>tl :rightbelow vnew<CR>:terminal<CR>
     nnoremap <space>tk :leftabove  new<CR>:terminal<CR>
     nnoremap <space>tj :rightbelow new<CR>:terminal<CR>
+
     tnoremap <F1> <C-\><C-n>
     tnoremap <C-\><C-\> <C-\><C-n>:bd!<CR>
 
+    tnoremap <Esc> <C-\><C-n>
     tnoremap <C-w>h <C-\><C-n><C-w>h
     tnoremap <C-w>j <C-\><C-n><C-w>j
     tnoremap <C-w>k <C-\><C-n><C-w>k
@@ -802,9 +822,9 @@ let g:clever_f_across_no_line = 1
 
 " easytags {{{2 "
 "-----------------------------------------------------------------------
+" ctags -R --languages=typescript --exclude=node_modules .
 let g:easytags_async = 1
 let g:easytags_dynamic_files = 1
-" ctags -R --languages=typescript --exclude=node_modules .
 " 2}}} "
 
 " {{{2 Ctrlp

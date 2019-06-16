@@ -24,6 +24,7 @@
 --exclude=cscope.\*
 --exclude=\*.tar.\*
 --exclude=target
+--exclude=node_modules
 
 --langdef=scala
 --langmap=scala:.scala

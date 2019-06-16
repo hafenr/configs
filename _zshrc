@@ -32,7 +32,7 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-#plugins=(git zshmarks)
+plugins=(git zshmarks)
 
 # ====== init ======
 source $ZSH/oh-my-zsh.sh
@@ -54,3 +54,6 @@ export DIRSTACKSIZE=8
 alias dh='dirs -v' # show the cd history
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export PATH=$PATH:~/bin
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

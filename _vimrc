@@ -45,7 +45,7 @@ Plug 'kien/ctrlp.vim'                  " Fuzzy file finder
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
-Plug 'jwhitley/vim-matchit'            " More jumps for %
+Plug 'andymass/vim-matchup'            " More jumps for % (e.g. <Tag> or if/endif), text objs: a%, i%
 Plug 'mbbill/undotree'                 " Undo history as a tree
 Plug 'ivyl/vim-bling'                  " blink on / n N
 Plug 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:

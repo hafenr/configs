@@ -1,9 +1,26 @@
-# === config ===
+# === setup ===
+UNAME_OUT="$(uname -s)"
+case "${UNAME_OUT}" in
+    Linux*)     OS=Linux;;
+    Darwin*)    OS=Mac;;
+    CYGWIN*)    OS=Cygwin;;
+    MINGW*)     OS=MinGw;;
+    *)          OS="UNKNOWN:${UNAME_OUT}"
+esac
+
+# Remap CapsLock to be both ESC and CTRL (install xcape first!)
+if [ "$OS" = "Linux" ]; then
+    setxkbmap -option ctrl:nocaps
+    xcape -e 'Control_L=Escape'
+fi
+
+# === general settings ===
 export EDITOR=vim
 export LANG=en_US.UTF-8
 stty -ixon
 
-# === aliases ===
+export HISTTIMEFORMAT="%d/%m/%y %T "
+
 alias l='ls -alh'
 alias u='cd ..'
 alias uu='cd ../..'
@@ -12,8 +29,7 @@ alias uuuu='cd ../../../..'
 alias co='column -t'
 alias crick='ssh crick'
 alias split-csv="column -s'|' -t | less -#2 -N -S"
-
-alias tl="ssh tlap01"
+alias dh='dirs -v' # show the cd history
 
 alias gch='git checkout'
 alias gs='git status'
@@ -21,43 +37,46 @@ alias gco='git commit'
 alias gpl='git pull'
 alias gps='git pull'
 
-alias hls='hdfs dfs -ls'
-alias hget='hdfs dfs -get'
-alias hput='hdfs dfs -put'
-alias hcat='hdfs dfs -cat'
-
-# === programs ===
-alias tmux="TERM=screen-256color tmux"
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # === other settings ===
-export JAVA_OPTS='-Xms2048m -Xmx2048m'
-export SBT_OPTS="-Xmx8G -Xss4M"
-export NODE_OPTIONS="–max-old-space-size=3048".
+# tl-specific settings
+export DELI_SECRETS_FILE=/Users/rhafen/deli-secrets.conf
 
+# tmux
+alias tmux="TERM=screen-256color tmux"
+
+# java/scala
+export JAVA_OPTS='-Xms2048m -Xmx2048m'
+export SBT_OPTS="-Xmx6G -Xss4M"
+export SCALA_HOME=/usr/local/Cellar/scala/2.12.1
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home
+
+# node
+export NODE_OPTIONS="–max-old-space-size=3048".
 export NPM_TOKEN=cm9iaW4uaGFmZW5AdGVyYWx5dGljczo1YjBiMmQ0MzMxNTg0NDhlMTQwZDllZjdmZWY3ZDk0YTgwMDczMThi
 export NPM_EMAIL=robin.hafen@gmail.com
 export NPM_USER=robin.hafen
 
-# SPARK
+# python
+export WORKON_HOME=$HOME/.virtualenvs
+. ~/.pyenv/versions/3.9.0/bin/virtualenvwrapper.sh
+
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+
+# kubectl
+alias kx=kubectx
+alias ks=kubens
+alias kbuild='kustomize build --enable_alpha_plugins --load_restrictor none'
+PROMPT=$PROMPT'$(kube_ps1) '
+KUBE_PS1_ENABLED="false"
+
+# spark/hadoop
 export IPYTHON=1
 export SPARK_LOCAL_IP="localhost"
-
-export SCALA_HOME=/usr/local/Cellar/scala/2.12.1
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home
-
-# PATH
-export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
-export PATH="/opt/spark/spark-2.3.3-bin-hadoop2.7/bin:$PATH"
-#export PATH="/opt/spark/spark-2.1.0-bin-hadoop2.7/bin:$PATH"
-export PATH="/opt/hadoop-2.8.0/bin:$PATH"
-export PATH="/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH"
-export PATH="$HOME/scripts:$PATH"
-export PATH="$HOME/bin:$PATH"
-export PATH="/opt/copy-od-results:$PATH"
-export PATH="/usr/local/Cellar/python3/3.7.3/bin:$PATH"
-export PATH="/usr/local/Cellar/ipython/7.5.0/bin:$PATH"
-
 #export HADOOP_HOME=/opt/hadoop-2.8.0
 #export HADOOP_PREFIX=/opt/hadoop-2.8.0
 #export HADOOP_CONF_DIR=/opt/hadoop-2.8.0/etc/hadoop
@@ -65,14 +84,29 @@ export PATH="/usr/local/Cellar/ipython/7.5.0/bin:$PATH"
 export HADOOP_OPTS="-XX:-UseGCOverheadLimit"
 export HADOOP_CLIENT_OPTS="-XX:-UseGCOverheadLimit -Xmx4096m"
 
-# Other stuff
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
+alias hls='hdfs dfs -ls'
+alias hget='hdfs dfs -get'
+alias hput='hdfs dfs -put'
+alias hcat='hdfs dfs -cat'
 
+# path extensions
+export PATH="/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin:$PATH"
+export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+export PATH="/opt/spark/spark-2.3.3-bin-hadoop2.7/bin:$PATH"
+export PATH="/opt/hadoop-3.1.4/bin:$PATH"
+export PATH="/usr/local/Cellar/yarn/1.17.0/bin/:$PATH"
+export PATH="/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH"
+export PATH="$HOME/scripts:$PATH"
+export PATH="$HOME/bin:$PATH"
+export PATH="/opt/copy-od-results:$PATH"
+export PATH="/opt/google-cloud-sdk/bin:$PATH"
+export PATH="/opt/kustomize:$PATH"
+export PATH=$PATH:~/bin
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
-# autostart virtual env
-export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python
-source /usr/local/bin/virtualenvwrapper.sh
+# === fzf ===
+export FZF_DEFAULT_COMMAND='ag --nocolor --ignore node_modules --ignore target -g ""'
 
 # fe [FUZZY PATTERN] - Open the selected file with the default editor
 #   - Bypass fuzzy finder if there's only one match (--select-1)
@@ -124,9 +158,4 @@ fk() {
 
 }
 
-export FZF_DEFAULT_COMMAND='ag --nocolor --ignore node_modules -g ""'
 [ -f ~/.fzf.bash ] && source ~/.fzf.zsh
-
-export HISTTIMEFORMAT="%d/%m/%y %T "
-
-

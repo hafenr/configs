@@ -1,3 +1,4 @@
+# === setup ===
 UNAME_OUT="$(uname -s)"
 case "${UNAME_OUT}" in
     Linux*)     OS=Linux;;
@@ -6,28 +7,155 @@ case "${UNAME_OUT}" in
     MINGW*)     OS=MinGw;;
     *)          OS="UNKNOWN:${UNAME_OUT}"
 esac
-echo ${OS}
 
-# === config ===
+# Remap CapsLock to be both ESC and CTRL (install xcape first!)
+if [ "$OS" = "Linux" ]; then
+    setxkbmap -option ctrl:nocaps
+    xcape -e 'Control_L=Escape'
+fi
+
+# === general settings ===
 export EDITOR=vim
 export LANG=en_US.UTF-8
 stty -ixon
 
-# === aliases ===
+export HISTTIMEFORMAT="%d/%m/%y %T "
+
 alias l='ls -alh'
 alias u='cd ..'
 alias uu='cd ../..'
 alias uuu='cd ../../..'
 alias uuuu='cd ../../../..'
 alias co='column -t'
+alias crick='ssh crick'
+alias split-csv="column -s'|' -t | less -#2 -N -S"
+alias dh='dirs -v' # show the cd history
 
+alias gch='git checkout'
+alias gs='git status'
+alias gco='git commit'
+alias gpl='git pull'
+alias gps='git pull'
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# === other settings ===
+# tl-specific settings
+export DELI_SECRETS_FILE=/Users/rhafen/deli-secrets.conf
+
+# tmux
 alias tmux="TERM=screen-256color tmux"
 
-# Remap CapsLock to be both ESC and CTRL (install xcape first!)
-if [ "$OS" == "Linux" ]; then
-    setxkbmap -option ctrl:nocaps
-    xcape -e 'Control_L=Escape'
+# java/scala
+export JAVA_OPTS='-Xms2048m -Xmx2048m'
+export SBT_OPTS="-Xmx6G -Xss4M"
+export SCALA_HOME=/usr/local/Cellar/scala/2.12.1
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home
+
+# node
+export NODE_OPTIONS="–max-old-space-size=3048".
+export NPM_TOKEN=cm9iaW4uaGFmZW5AdGVyYWx5dGljczo1YjBiMmQ0MzMxNTg0NDhlMTQwZDllZjdmZWY3ZDk0YTgwMDczMThi
+export NPM_EMAIL=robin.hafen@gmail.com
+export NPM_USER=robin.hafen
+
+# python
+export WORKON_HOME=$HOME/.virtualenvs
+. ~/.pyenv/versions/3.9.0/bin/virtualenvwrapper.sh
+
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
 fi
 
-# For fzf.vim and fzf in general
-export FZF_DEFAULT_COMMAND='ag --nocolor --ignore node_modules -g ""'
+# kubectl
+alias kx=kubectx
+alias ks=kubens
+alias kbuild='kustomize build --enable_alpha_plugins --load_restrictor none'
+PROMPT=$PROMPT'$(kube_ps1) '
+KUBE_PS1_ENABLED="false"
+
+# spark/hadoop
+export IPYTHON=1
+export SPARK_LOCAL_IP="localhost"
+#export HADOOP_HOME=/opt/hadoop-2.8.0
+#export HADOOP_PREFIX=/opt/hadoop-2.8.0
+#export HADOOP_CONF_DIR=/opt/hadoop-2.8.0/etc/hadoop
+#export HADOOP_LIBEXEC_DIR=/opt/hadoop-2.8.0/libexec
+export HADOOP_OPTS="-XX:-UseGCOverheadLimit"
+export HADOOP_CLIENT_OPTS="-XX:-UseGCOverheadLimit -Xmx4096m"
+
+alias hls='hdfs dfs -ls'
+alias hget='hdfs dfs -get'
+alias hput='hdfs dfs -put'
+alias hcat='hdfs dfs -cat'
+
+# path extensions
+export PATH="/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin:$PATH"
+export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+export PATH="/opt/spark/spark-2.3.3-bin-hadoop2.7/bin:$PATH"
+export PATH="/opt/hadoop-3.1.4/bin:$PATH"
+export PATH="/usr/local/Cellar/yarn/1.17.0/bin/:$PATH"
+export PATH="/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH"
+export PATH="$HOME/scripts:$PATH"
+export PATH="$HOME/bin:$PATH"
+export PATH="/opt/copy-od-results:$PATH"
+export PATH="/opt/google-cloud-sdk/bin:$PATH"
+export PATH="/opt/kustomize:$PATH"
+export PATH=$PATH:~/bin
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# === fzf ===
+export FZF_DEFAULT_COMMAND='ag --nocolor --ignore node_modules --ignore target -g ""'
+
+# fe [FUZZY PATTERN] - Open the selected file with the default editor
+#   - Bypass fuzzy finder if there's only one match (--select-1)
+#   - Exit if there's no match (--exit-0)
+fe() {
+  local file
+  file=$(fzf --query="$1" --select-1 --exit-0)
+  [ -n "$file" ] && ${EDITOR:-vim} "$file"
+}
+
+# Equivalent to above, but opens it with `open` command
+fo() {
+  local file
+  file=$(fzf --query="$1" --select-1 --exit-0)
+  [ -n "$file" ] && open "$file"
+}
+
+# fd - cd to selected directory
+fd() {
+  local dir
+  dir=$(find ${1:-*} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+
+# fda - including hidden directories
+fda() {
+  local dir
+  dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
+}
+
+cdf() {
+   local file
+   local dir
+   file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
+}
+
+fh() {
+      eval $(([ -n "$ZSH_NAME"  ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+}
+
+fk() {
+    pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+
+    if [ "x$pid" != "x"  ]
+    then
+        kill -${1:-9} $pid
+    fi
+
+}
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.zsh

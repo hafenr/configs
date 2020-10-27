@@ -56,7 +56,7 @@ Plug 'honza/vim-snippets'              " Snippets
 " Plug 'scrooloose/syntastic'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'xolox/vim-misc'
-Plug 'xolox/vim-easytags'
+" Plug 'xolox/vim-easytags'
 Plug 'jpalardy/vim-slime'              " REPL interaction
 Plug 'Yggdroot/indentLine'             " Insert vertical lines to show indentation levels
 Plug 'airblade/vim-gitgutter'          " ]c [c
@@ -101,8 +101,8 @@ Plug 'tpope/vim-fireplace', { 'for': ['clojure', 'lisp', 'scheme'] }
 Plug 'vim-scripts/paredit.vim', { 'for': ['clojure', 'lisp', 'scheme'] }
 
 " R
-Plug 'vim-scripts/Vim-R-plugin', { 'for': 'r' }
-" Plug 'jalvesaq/Nvim-R'
+" Plug 'vim-scripts/Vim-R-plugin', { 'for': 'r' }
+Plug 'jalvesaq/Nvim-R'
 " Plug 'vim-pandoc/vim-pandoc'
 " Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': 'r' }
 " Plug 'vim-pandoc/vim-rmarkdown', { 'for': 'r' }
@@ -117,7 +117,7 @@ Plug 'ervandew/screen', { 'for': 'tex' }
 Plug 'jason0x43/vim-js-indent', { 'for': 'javascript' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'leafgarland/typescript-vim'
-Plug 'neoclide/coc.nvim', {'do': './install.sh nightly'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " HTML, CSS/LESS
 " Plug 'ap/vim-css-color'
@@ -166,7 +166,7 @@ endif
 "=======================================================================
 " Basic settings {{{
 "=======================================================================
-" set clipboard+=unnamedplus
+set clipboard^=unnamed
 
 set nocompatible
 set dictionary+=/usr/share/dict/words " Specify the builtin list of words for C-X C-K completion
@@ -243,6 +243,8 @@ set cmdwinheight=10                 " window height for cmd/search history q: q/
 set cursorline                      " Highlight current line
 let grepprg="ag\ --nocolor\ --nogroup\ --silent"
 set showmatch                       " Highlight (blinking) matching [{( when inserting the closing )}]
+
+let g:vim_json_conceal=0
 " }}}
 "=======================================================================
 " Auto commands {{{
@@ -346,12 +348,6 @@ cnoremap jk <CR>
 nmap <space>j <Plug>(easymotion-prefix)j
 nmap <space>k <Plug>(easymotion-prefix)k
 
-" Moving lines
-nnoremap <silent> <C-k> :move-2<cr>
-nnoremap <silent> <C-j> :move+<cr>
-xnoremap <silent> <C-k> :move-2<cr>gv
-xnoremap <silent> <C-j> :move'>+<cr>gv
-
 " Insert file name
 nnoremap ,f i=expand('%:t:r')<CR><ESC>
 
@@ -362,10 +358,6 @@ nnoremap gV `[v`]
 nnoremap <C-a> A  <C-r>=&comments[1]<CR>
 
 nmap K i<CR><Esc>d^==kg_lD
-
-
-nnoremap <localleader>t :EnTypeCheck<CR>
-nnoremap <localleader>df :EnDeclaration<CR>
 
 noremap <S-F4> :s/ASDF/\=line('.')-line("'<")"<CR>
 
@@ -429,8 +421,8 @@ nnoremap <leader>j o<ESC>k
 nnoremap <leader>k O<ESC>j
 
 " Go to next fold
-nnoremap <M-j> zj
-nnoremap <M-k> zk
+" nnoremap <M-j> zj
+" nnoremap <M-k> zk
 
 " Tabs
 nmap ,1 1gt
@@ -491,12 +483,15 @@ nnoremap [a     :lprevious<CR>
 nnoremap [A     :llast<CR>
 
 " Buffers
-nnoremap <space>r :CtrlPBuffer<CR>
+" nnoremap <space>r :CtrlPBuffer<CR>
+nnoremap <space>r :Buffers<CR>
 " Ex
 nnoremap <space>; :CtrlPCmdPalette<CR>
 " Commands that operate on project level
 nnoremap <space>pg :CtrlPTag<CR>
 nnoremap <space>f :Files<CR>
+nnoremap <C-p> :Files<CR>
+nnoremap <space>g :Tags<CR>
 nnoremap <space>pp :CtrlPBookmarkDir<CR>
 nnoremap <space>pa :CtrlPBookmarkDirAdd<CR>
 nnoremap <space>pt :NERDTreeToggle<CR>
@@ -545,6 +540,19 @@ nnoremap <C-w>< 10<C-w><
 nnoremap <C-w>> 10<C-w>>
 nnoremap <C-w>- 10<C-w>-
 nnoremap <C-w>+ 10<C-w>+
+
+" Ctrl-j/k deletes blank line below/above, and Alt-j/k inserts.
+" From https://vim.fandom.com/wiki/Quickly_adding_and_deleting_empty_lines
+" nnoremap <silent><C-j> m`:silent +g/\m^\s*$/d<CR>``:noh<CR>
+" nnoremap <silent><C-k> m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
+" nnoremap <silent> <M-k> :set paste<CR>m`o<Esc>``:set nopaste<CR>
+" nnoremap <silent> <M-j> :set paste<CR>m`O<Esc>``:set nopaste<CR>
+" Moving lines
+" nnoremap <silent> <C-k> :move-2<cr>
+" nnoremap <silent> <C-j> :move+<cr>
+" xnoremap <silent> <C-k> :move-2<cr>gv
+" xnoremap <silent> <C-j> :move'>+<cr>gv
+
 " 2}}}
 " 1}}}
 "=======================================================================
@@ -568,10 +576,11 @@ if has('nvim')
     nnoremap <space>tk :leftabove  new<CR>:terminal<CR>
     nnoremap <space>tj :rightbelow new<CR>:terminal<CR>
 
-    tnoremap <F1> <C-\><C-n>
+    au TermOpen * tnoremap <Esc> <C-\><C-n>
+    au FileType fzf tunmap <Esc>
+
     tnoremap <C-\><C-\> <C-\><C-n>:bd!<CR>
 
-    tnoremap <Esc> <C-\><C-n>
     tnoremap <C-w>h <C-\><C-n><C-w>h
     tnoremap <C-w>j <C-\><C-n><C-w>j
     tnoremap <C-w>k <C-\><C-n><C-w>k
@@ -623,33 +632,33 @@ set grepprg=ag\ --column " then navigate qf window with ]q and [q
 
 " {{{2 Vim-R-Plugin
 "-----------------------------------------------------------------------
-" let g:vimrplugin_assign='<'
+" " let g:vimrplugin_assign='<'
 " let vimrplugin_assign_map = "<M-->"
-" let R_path = "/usr/local/Cellar/r/3.4.0/bin"
-let R_path = "/Applications/R.app/Contents/MacOS"
+" " let R_path = "/usr/local/Cellar/r/3.4.0/bin"
+" let R_path = "/Applications/R.app/Contents/MacOS"
 
-let r_syntax_folding = 1
-if !has('gui_running')
-    let vimrplugin_term = "/Applications/iTerm.app/Contents/MacOS/iTerm2"
-    let vimrplugin_term_cmd =  "/Applications/iTerm.app/Contents/MacOS/iTerm2"
-    let vimrplugin_applescript = 0
-    let g:ScreenImpl = 'Tmux'
-    let g:ScreenShellInitialFocus = 'shell'
-    " instruct to use your own .screenrc file
-    " For integration of r-plugin with screen.vim
-    " Don't use conque shell if installed
-    let vimrplugin_conqueplugin = 0
-    " see R documentation in a Vim buffer
-    let vimrplugin_vimpager = 'no'
+" let r_syntax_folding = 1
+" if !has('gui_running')
+"     let vimrplugin_term = "/Applications/iTerm.app/Contents/MacOS/iTerm2"
+"     let vimrplugin_term_cmd =  "/Applications/iTerm.app/Contents/MacOS/iTerm2"
+"     let vimrplugin_applescript = 0
+"     let g:ScreenImpl = 'Tmux'
+"     let g:ScreenShellInitialFocus = 'shell'
+"     " instruct to use your own .screenrc file
+"     " For integration of r-plugin with screen.vim
+"     " Don't use conque shell if installed
+"     let vimrplugin_conqueplugin = 0
+"     " see R documentation in a Vim buffer
+"     let vimrplugin_vimpager = 'no'
 
-    let vimrplugin_notmuxconf = 1
-    let vimrplugin_vsplit = 1 " For vertical tmux split"
-endif
+"     let vimrplugin_notmuxconf = 1
+"     let vimrplugin_vsplit = 1 " For vertical tmux split"
+" endif
 
-let R_assign=0
-let vimrplugin_show_args = 1
-let vimrplugin_args_in_stline = 1
-let r_syntax_folding = 1
+" let R_assign=0
+" let vimrplugin_show_args = 1
+" let vimrplugin_args_in_stline = 1
+" let r_syntax_folding = 1
 " 2}}}
 
 " {{{2 YouCompleteMe
@@ -761,7 +770,7 @@ let g:easytags_dynamic_files = 1
 
 " {{{2 Ctrlp
 "-----------------------------------------------------------------------
-let g:ctrlp_map = '<C-p>'
+let g:ctrlp_map = '<space>pl'
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_cmdpalette_execute = 1
@@ -770,7 +779,7 @@ let g:ctrlp_cmdpalette_execute = 1
 let g:ctrlp_root_markers = ['.ctrlp']
 
 let g:ctrlp_custom_ignore = {
-\   'dir':  '\v(\.git|\.hg|\.svn|\.yardoc|public/images|public/system|resources/public/js|node_modules|bower_components)$',
+\   'dir':  '\v(\.git|\.hg|\.svn|\.yardoc|public/images|public/system|resources/public/js|target|node_modules|bower_components)$',
 \   'file': '\v\.(o|m4a|pdf|swp|pyc|wav|mp3|ogg|blend|dvi|fls|aux|blg|bbl|log|loa|lof|toc|fdb_latexmk|lot|js.map|min.js|min.css|)$|\~$'
 \   }
 

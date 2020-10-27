@@ -60,12 +60,13 @@ export NPM_EMAIL=robin.hafen@gmail.com
 export NPM_USER=robin.hafen
 
 # python
-export WORKON_HOME=$HOME/.virtualenvs
-. ~/.pyenv/versions/3.9.0/bin/virtualenvwrapper.sh
-
+## pyenv
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
+## virtualenv
+export WORKON_HOME=$HOME/.virtualenvs
+. ~/.pyenv/versions/3.9.0/bin/virtualenvwrapper.sh
 
 # kubectl
 alias kx=kubectx

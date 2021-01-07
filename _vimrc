@@ -79,6 +79,7 @@ Plug 'junegunn/seoul256.vim'
 " Nice to have
 Plug 'vim-scripts/IndexedSearch'
 Plug 'junegunn/vim-easy-align'         " :'<,'>EasyAlign [*] DELIM or /regex/
+Plug 'godlygeek/tabular'               " :'<,'>Tabularize /regex"
 Plug 'vim-scripts/yaifa.vim'
 Plug 'kana/vim-textobj-user'           " Needed for textobj-python
 Plug 'bkad/CamelCaseMotion'
@@ -217,7 +218,7 @@ set guioptions-=L                   " remove left scrollbar
 
 " Search
 set hlsearch                        " highlight search results, C-/ to clear the highlighting
-set incsearch                       " incremental search: search as you type the query string
+set noincsearch                       " incremental search: search as you type the query string
 set ignorecase                      " ignores case while searching
 set smartcase                       " if a search contains a upper case char, make search case sensitive
 
@@ -343,6 +344,7 @@ nnoremap <space>w :w<CR>
 nnoremap <space>. :source ~/.vimrc<CR>
 cnoremap jk <CR>
 
+nnoremap ,r :%s/<C-r><C-w>//g<Left><Left>
 
 " nnoremap <silent> <space>e :Neomake!<CR>
 nmap <space>j <Plug>(easymotion-prefix)j

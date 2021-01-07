@@ -37,6 +37,7 @@ plugins=(git zshmarks)
 # ====== init ======
 source $ZSH/oh-my-zsh.sh
 source ~/.bashrc
+source ~/.profile
 
 # ====== config ======
 unsetopt correct_all # don't try to guess corrections when mistyping
@@ -54,6 +55,6 @@ alias dh='dirs -v' # show the cd history
 
 export PATH=$PATH:~/bin
 
-# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

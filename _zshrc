@@ -35,8 +35,6 @@ COMPLETION_WAITING_DOTS="true"
 plugins=(
     git
     osx
-    kube-ps1
-    kubectl
 )
 
 # ====== init ======

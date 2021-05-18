@@ -49,7 +49,7 @@ Plug 'andymass/vim-matchup'            " More jumps for % (e.g. <Tag> or if/endi
 Plug 'mbbill/undotree'                 " Undo history as a tree
 Plug 'ivyl/vim-bling'                  " blink on / n N
 Plug 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
-Plug 'gabesoft/vim-ags'
+" Plug 'gabesoft/vim-ags'
 
 "Plug 'SirVer/ultisnips'                " Snippet system
 Plug 'honza/vim-snippets'              " Snippets
@@ -118,7 +118,7 @@ Plug 'ervandew/screen', { 'for': 'tex' }
 Plug 'jason0x43/vim-js-indent', { 'for': 'javascript' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'leafgarland/typescript-vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " HTML, CSS/LESS
 " Plug 'ap/vim-css-color'

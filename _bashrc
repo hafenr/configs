@@ -63,7 +63,6 @@ if command -v pyenv 1>/dev/null 2>&1; then
 fi
 ## virtualenv
 export WORKON_HOME=$HOME/.virtualenvs
-. ~/.pyenv/versions/3.9.0/bin/virtualenvwrapper.sh
 
 # kubectl
 alias kx=kubectx

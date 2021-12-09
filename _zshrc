@@ -34,12 +34,11 @@ COMPLETION_WAITING_DOTS="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(
     git
-    osx
+    macos
 )
 
 # ====== init ======
 source $ZSH/oh-my-zsh.sh
-source ~/.bashrc
 
 # ====== config ======
 unsetopt correct_all # don't try to guess corrections when mistyping
@@ -55,3 +54,29 @@ setopt pushdminus  # invert meanings of +N and -N arguments to pushd
 export DIRSTACKSIZE=8
 
 bindkey \^U backward-kill-line
+
+export EDITOR=vim
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# aliases
+alias l='ls -alh'
+alias gch='git checkout'
+alias gs='git status'
+alias gco='git commit'
+alias gpl='git pull'
+alias gps='git pull'
+
+# scala
+## for intellj integration
+SCALA_HOME=/opt/homebrew/opt/scala/idea
+
+# pyenv
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+
+# fzf
+## remember to run the following command after installing fzf via brew
+##   $(brew --prefix)/opt/fzf/install
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

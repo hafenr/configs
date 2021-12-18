@@ -268,6 +268,12 @@ augroup typescript_mappings
     autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>it <Plug>(coc-type-definition)
 augroup END
 
+" ftplugin ignored for some reason
+augroup rust_mappings
+    autocmd!
+    autocmd FileType rust nnoremap <buffer><silent> <space>id :CocCommand rust-analyzer.openDocs<CR>
+augroup END
+
 augroup misc
     autocmd!
     " Automatically open qfix list
@@ -304,6 +310,7 @@ xnoremap : ;
 nnoremap <space>w :w<CR>
 nnoremap <space>. :source ~/.vimrc<CR>
 cnoremap jk <CR>
+nnoremap <C-u> <C-o>
 
 nnoremap ,r :%s/<C-r><C-w>//g<Left><Left>
 
@@ -567,7 +574,7 @@ iab ipdb import ipdb; ipdb.set_trace()
 " {{{2 COC
 "-----------------------------------------------------------------------
 " Give more space for displaying messages.
-set cmdheight=2
+" set cmdheight=2
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
@@ -606,10 +613,10 @@ else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
 
-" Use `[g` and `]g` to navigate diagnostics
+" Use `[d` and `]d` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nmap <silent> [d <Plug>(coc-diagnostic-prev)
+nmap <silent> ]d <Plug>(coc-diagnostic-next)
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
@@ -655,6 +662,19 @@ nnoremap <silent><nowait> <space>ij  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>ik  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>ip  :<C-u>CocListResume<CR>
+" Apply AutoFix to problem on the current line.
+nnoremap <space>if  <Plug>(coc-fix-current)
+
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
 
 " Add `:Format` command to format current buffer.
 command! -nargs=0 Format :call CocAction('format')
@@ -724,22 +744,6 @@ set grepprg=ag\ --column " then navigate qf window with ]q and [q
 " let vimrplugin_show_args = 1
 " let vimrplugin_args_in_stline = 1
 " let r_syntax_folding = 1
-" 2}}}
-
-" {{{2 YouCompleteMe
-"-----------------------------------------------------------------------
-" " Removed TAB form list of select_completion keys since UltiSnips uses that key.
-" " Select elemens by <C-n>, <C-p>
-" let g:ycm_auto_trigger = 0
-" let g:ycm_key_list_select_completion = ['<Down>'] " Tab removed
-" let g:ycm_key_list_previous_completion = ['<Up>'] " S-Tab removed
-" " let g:ycm_key_invoke_completion = '<C-Space>'
-" let g:ycm_min_num_of_chars_for_completion = 2 " default 2
-" let g:ycm_min_num_identifier_candidate_chars = 0 " default 0
-" " Can make vim slower if tags file is on a network dir
-" let g:ycm_collect_identifiers_from_tags_files = 1
-" let g:pymode_rope_complete_on_dot = 0
-" let g:ycm_seed_identifiers_with_syntax = 1
 " 2}}}
 
 " {{{2 UltiSnips

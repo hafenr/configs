@@ -66,6 +66,7 @@ alias gs='git status'
 alias gco='git commit'
 alias gpl='git pull'
 alias gps='git pull'
+alias ibrew='/usr/local/bin/brew'
 
 # scala
 ## for intellj integration

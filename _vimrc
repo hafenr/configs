@@ -55,6 +55,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall
 endif
 call plug#begin('~/.vim/plugged')
+
 " General
 Plug 'tpope/vim-commentary'            " Commenting operator gc
 Plug 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
@@ -65,12 +66,10 @@ Plug 'tpope/vim-repeat'                " Repeat all kinds of stuff
 Plug 'tpope/vim-surround'              " Surround motions
 Plug 'tpope/vim-abolish'               " Add :S/repl/ace
 Plug 'szw/vim-maximizer'               " Temporarily maximize window
-Plug 'kien/ctrlp.vim'                  " Fuzzy file finder
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
 Plug 'andymass/vim-matchup'            " More jumps for % (e.g. <Tag> or if/endif), text objs: a%, i%
-Plug 'mbbill/undotree'                 " Undo history as a tree
 Plug 'ivyl/vim-bling'                  " blink on / n N
 Plug 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
@@ -116,7 +115,6 @@ Plug 'vim-scripts/renamer.vim'         " bulk rename by calling :Renamer
 " R
 Plug 'jalvesaq/Nvim-R', { 'for': 'r' }
 " JavaScript, TypeScript
-Plug 'jason0x43/vim-js-indent'
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
 Plug 'maxmellon/vim-jsx-pretty'
@@ -235,9 +233,15 @@ augroup filetypes
 augroup END
 
 " ftplugin ignored for some reason
+function CargoFmt()
+  !cargo fmt
+  :bufdo e
+endfunction
 augroup rust_mappings
     autocmd!
     autocmd FileType rust nnoremap <buffer><silent> <space>id :CocCommand rust-analyzer.openDocs<CR>
+    autocmd BufNewFile,BufRead,BufFilePre *.jsx set filetype=javascript.jsx
+    autocmd BufWritePost *.rs silent call CargoFmt()
 augroup END
 
 augroup misc
@@ -350,9 +354,9 @@ nnoremap [A     :llast<CR>
 
 " Buffers, files, tags
 nnoremap <C-p>    :Files<CR>
+nnoremap <space>g :GFiles<CR>
 nnoremap <space>r :Buffers<CR>
 nnoremap <space>; :Commands<CR>
-nnoremap <space>g :Tags<CR>
 
 " Searching
 nnoremap <space>ps :LAg ""<Left>

@@ -22,14 +22,14 @@ let vimdir = '$HOME/.vim'
 if has('gui_running')               " gvim options
     set clipboard=unnamed
     if os == "Darwin"
-        set guifont=Droid\ Sans\ Mono\ for\ Powerline:h14
+        set guifont=MesloLGSDZ\ Nerd\ Font\ Mono:h16
         " Send option presses to macvim. Allows binding <M-x>
         " but won't allow typing special characaters anymore.
         " set macmeta
     elseif os == "Linux"
         set guifont=Ubuntu\ Mono\ derivative\ Powerline
     endif
-    colorscheme mustang
+    colorscheme muon
 else                                " terminal
     " set term=screen-256color
     set t_Co=256                    " set 256 colors for terminal
@@ -86,6 +86,7 @@ Plug 'ktonga/vim-follow-my-lead'
 Plug 'mattn/webapi-vim'
 Plug 'janko-m/vim-test'
 Plug 'junegunn/vim-peekaboo'
+Plug 'change-case.vim'
 
 " Colors
 Plug 'https://github.com/freeo/vim-kalisi'
@@ -241,7 +242,7 @@ augroup rust_mappings
     autocmd!
     autocmd FileType rust nnoremap <buffer><silent> <space>id :CocCommand rust-analyzer.openDocs<CR>
     autocmd BufNewFile,BufRead,BufFilePre *.jsx set filetype=javascript.jsx
-    autocmd BufWritePost *.rs silent call CargoFmt()
+    " autocmd BufWritePost *.rs silent call CargoFmt()
 augroup END
 
 augroup misc
@@ -329,6 +330,7 @@ cnoremap <expr> <C-F> getcmdpos()>strlen(getcmdline())?&cedit:"\<Lt>Right>"
 " END vim-rsi snippet
 " EasyAlign
 vnoremap <silent> <Enter> :EasyAlign<cr>
+nmap ga <Plug>(EasyAlign)
 " Git
 nnoremap <space>gg :Git<CR>
 nnoremap <space>gs :Git<CR>

@@ -29,12 +29,10 @@ if has('gui_running')               " gvim options
     elseif os == "Linux"
         set guifont=Ubuntu\ Mono\ derivative\ Powerline
     endif
-    colorscheme muon
 else                                " terminal
     " set term=screen-256color
     set t_Co=256                    " set 256 colors for terminal
     set background=dark
-    colorscheme muon
 endif
 " Keep undo history across sessions by storing it in a file
 if has('persistent_undo')
@@ -135,6 +133,8 @@ Plug 'LnL7/vim-nix'
 
 call plug#end()
 
+colorscheme mustang
+
 "=======================================================================
 " Basic settings 
 "=======================================================================
@@ -214,16 +214,6 @@ let g:vim_json_conceal=0
 "=======================================================================
 " Auto commands 
 "=======================================================================
-augroup general
-    autocmd!
-    autocmd BufEnter .vimrc setlocal foldmethod=marker
-augroup END
-
-augroup terminal
-    autocmd BufWinEnter,WinEnter term://* startinsert
-    autocmd BufLeave term://* stopinsert
-augroup END
-
 augroup filetypes
     autocmd!
     autocmd BufNewFile,BufRead,BufFilePre *.md set filetype=markdown
@@ -430,9 +420,8 @@ endif
 " recursive search with :e
 " :e r/filename
 " cabbrev r ./**
-cabbrev stat ~/Dropbox/CBB/StatMethods
 iab ipdb import ipdb; ipdb.set_trace()
-" 
+
 "=======================================================================
 " Plugin settings 
 "=======================================================================
@@ -644,6 +633,8 @@ let g:typescript_compiler_use_tsconfig = 1
 "  FZF
 "-----------------------------------------------------------------------
 let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+let g:fzf_layout = { 'down': '~40%' }
+let g:fzf_preview_window = []
 
 "=======================================================================
 " Custom functions and commands 

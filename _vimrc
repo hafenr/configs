@@ -72,19 +72,17 @@ Plug 'ivyl/vim-bling'                  " blink on / n N
 Plug 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'honza/vim-snippets'              " Snippets
-Plug 'Lokaltog/vim-easymotion'
 Plug 'xolox/vim-misc'
 Plug 'jpalardy/vim-slime'              " REPL interaction
 Plug 'Yggdroot/indentLine'             " Insert vertical lines to show indentation levels
 Plug 'airblade/vim-gitgutter'          " ]c [c
-Plug 'mattn/gist-vim'                  " buffer or selection to gist with :Gist
-Plug 'fisadev/vim-ctrlp-cmdpalette'
 Plug 'dbakker/vim-projectroot'
 Plug 'ktonga/vim-follow-my-lead'
-Plug 'mattn/webapi-vim'
-Plug 'janko-m/vim-test'
 Plug 'junegunn/vim-peekaboo'
 Plug 'change-case.vim'
+Plug 'vim-scripts/IndexedSearch'
+Plug 'junegunn/vim-easy-align'         " :'<,'>EasyAlign [*] DELIM or /regex/
+Plug 'godlygeek/tabular'               " :'<,'>Tabularize /regex"
 
 " Colors
 Plug 'https://github.com/freeo/vim-kalisi'
@@ -95,9 +93,6 @@ Plug 'tomasr/molokai'
 Plug 'junegunn/seoul256.vim'
 
 " Additional functionality
-Plug 'vim-scripts/IndexedSearch'
-Plug 'junegunn/vim-easy-align'         " :'<,'>EasyAlign [*] DELIM or /regex/
-Plug 'godlygeek/tabular'               " :'<,'>Tabularize /regex"
 Plug 'vim-scripts/yaifa.vim'
 Plug 'kana/vim-textobj-user'           " Needed for textobj-python
 Plug 'bkad/CamelCaseMotion'
@@ -106,7 +101,6 @@ Plug 'saihoooooooo/vim-textobj-space'
 Plug 'mattn/vim-textobj-url'
 Plug 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): yal, yil etc.
 Plug 'thinca/vim-textobj-between'
-Plug 'hafenr/vim-textobj-dotseparated'
 Plug 'hafenr/vim-textobj-underscore'
 Plug 'milkypostman/vim-togglelist'     " toggle quickfix and location list
 Plug 'editorconfig/editorconfig-vim'   " read .editorconfig files and set variables
@@ -220,19 +214,11 @@ augroup filetypes
     autocmd BufNewFile,BufRead,BufFilePre *.ts set filetype=typescript
     autocmd BufNewFile,BufRead,BufFilePre *.tsx set filetype=typescript.tsx
     autocmd BufNewFile,BufRead,BufFilePre *.jsx set filetype=javascript.jsx
-    " autocmd BufWritePost *.scala silent :EnTypeCheck
 augroup END
 
-" ftplugin ignored for some reason
-function CargoFmt()
-  !cargo fmt
-  :bufdo e
-endfunction
 augroup rust_mappings
     autocmd!
     autocmd FileType rust nnoremap <buffer><silent> <space>id :CocCommand rust-analyzer.openDocs<CR>
-    autocmd BufNewFile,BufRead,BufFilePre *.jsx set filetype=javascript.jsx
-    " autocmd BufWritePost *.rs silent call CargoFmt()
 augroup END
 
 augroup misc
@@ -256,7 +242,6 @@ augroup END
 
 " Auto-remove trailing whitespace on save
 autocmd BufWritePre *.py :%s/\s\+$//e
-" 
 
 "======================================================================
 " Mappings 
@@ -355,8 +340,6 @@ nnoremap <space>ps :LAg ""<Left>
 nnoremap <space>pa :Ag ""<Left>
 nnoremap <space>sa :%s//g<Left><Left>
 nnoremap <space>su :%s///g<Left><Left>
-nnoremap <silent> <space>p/ :call SearchWordWithAg()<CR>
-vnoremap <silent> <space>pa :call SearchVisualSelectionWithAg()<CR>
 
 " NERD Tree
 nnoremap <space>pt :NERDTreeToggle<CR>
@@ -425,7 +408,7 @@ iab ipdb import ipdb; ipdb.set_trace()
 "=======================================================================
 " Plugin settings 
 "=======================================================================
- 
+
 "  COC
 "-----------------------------------------------------------------------
 " Give more space for displaying messages.
@@ -449,27 +432,13 @@ endif
 
 let g:coc_global_extensions = ['coc-tsserver']
 
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? "\<C-n>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-" function! s:check_back_space() abort
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
-
 " Use <c-space> to trigger completion.
 if has('nvim')
   inoremap <silent><expr> <c-space> coc#refresh()
 else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+
 " Show documentation in preview window.
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -480,8 +449,11 @@ function! s:show_documentation()
     execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
+nmap K :call   <SID>show_documentation()<CR>
+
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
+
 " Highlight the symbol and its references when holding the cursor.
 " Formatting selected code.
 " Mappings for CoCList
@@ -501,8 +473,6 @@ nnoremap <silent><nowait> <space>ij :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>ik :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>ip :<C-u>CocListResume<CR>
-" Apply AutoFix to problem on the current line.
-nmap K :call   <SID>show_documentation()<CR>
 " Navigation
 " - Use `[d` and `]d` to navigate diagnostics
 " - Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -512,7 +482,7 @@ nmap <space>it <Plug>(coc-type-definition)
 nmap <space>iq <Plug>(coc-codeaction)
 nmap <space>it <Plug>(coc-type-definition)
 nmap <space>ii <Plug>(coc-implementation)
-nmap <space>ir <Plug>(coc-references)
+nmap <space>ie <Plug>(coc-references)
 nmap <C-]>     <Plug>(coc-definition)
 nmap <space>gd <Plug>(coc-definition)
 " Code actions
@@ -524,19 +494,6 @@ nmap <space>if <Plug>(coc-references)
 nmap <space>im <Plug>(coc-implementation)
 nmap <space>id <Plug>(coc-diagnostic-info)
 nmap <space>ir <Plug>(coc-rename)
-
-" augroup typescript_mappings
-    " autocmd!
-    " autocmd FileType typescript,typescript.tsx nnoremap <buffer><silent> <C-]> :call CocActionAsync('jumpDefinition')<CR>
-    " autocmd FileType typescript,typescript.tsx nnoremap <buffer><silent> K :call <SID>show_documentation()<CR>
-    " autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <C-]> <Plug>(coc-definition)
-    " autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>id <Plug>(coc-definition)
-    " autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>if <Plug>(coc-references)
-    " autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>im <Plug>(coc-implementation)
-    " autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>ii <Plug>(coc-diagnostic-info)
-    " autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>ir <Plug>(coc-rename)
-    " autocmd FileType typescript,typescript.tsx nmap <buffer><silent> <space>it <Plug>(coc-type-definition)
-" augroup END
 
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
@@ -588,32 +545,6 @@ let g:slime_python_ipython = 1
 let g:netrw_preview = 1 " p previews file in vertical split
 let g:netrw_altv = 0  " Split to the right
 
-" easytags  "
-"-----------------------------------------------------------------------
-" ctags -R --languages=typescript --exclude=node_modules .
-let g:easytags_async = 1
-let g:easytags_dynamic_files = 1
-
-"  Ctrlp
-"-----------------------------------------------------------------------
-let g:ctrlp_map = '<space>pl'
-let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_show_hidden = 1
-let g:ctrlp_cmdpalette_execute = 1
-" Default is search by full path. Switch with CTRL-d while in CtrlP prompt.
-" let g:ctrlp_by_filename = 0
-let g:ctrlp_root_markers = ['.ctrlp']
-
-let g:ctrlp_custom_ignore = {
-\   'dir':  '\v(\.git|\.hg|\.svn|\.yardoc|public/images|public/system|resources/public/js|target|node_modules|bower_components)$',
-\   'file': '\v\.(o|m4a|pdf|swp|pyc|wav|mp3|ogg|blend|dvi|fls|aux|blg|bbl|log|loa|lof|toc|fdb_latexmk|lot|js.map|min.js|min.css|)$|\~$'
-\   }
-
-" Save cache across sessions => much faster. Refresh with F5.
-let g:ctrlp_clear_cache_on_exit = 0
-let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
-let g:ctrl_user_command = 'ag %s -l --nocolor --hidden -g ""'
-
 "  Airline
 "-----------------------------------------------------------------------
 " : %3p : %4l : %3c
@@ -636,26 +567,6 @@ let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 let g:fzf_layout = { 'down': '~40%' }
 let g:fzf_preview_window = []
 
-"=======================================================================
-" Custom functions and commands 
-"=======================================================================
-" Command line with automatic history
-" (instead of having to press C-f bzw. C-h)
-" BEGIN CL
-" Swap default ':', '/' and '?' with cmdline-window equivalent.
-" nnoremap ; q:
-" xnoremap ; q:
-" nnoremap / q/
-" xnoremap / q/
-" nnoremap ? q?
-" xnoremap ? q?
-" nnoremap q; :
-" xnoremap q; :
-" nnoremap q/ /
-" xnoremap q/ /
-" nnoremap q? ?
-" xnoremap q? ?
-
 " Edit vimrc
 command! Rc e ~/.vimrc
 
@@ -667,40 +578,6 @@ function! SetTabSize(number)
 endfunc
 command! -nargs=1 Tab call SetTabSize(<f-args>)
 
-" vp doesn't replace paste buffer
-function! RestoreRegister()
-  let @" = s:restore_reg
-  return ''
-endfunction
-function! s:Repl()
-  let s:restore_reg = @"
-  return "p@=RestoreRegister()\<cr>"
-endfunction
-
-function! SearchWordWithAg()
-  execute 'Ag' expand('<cword>')
-endfunction
-
-function! SearchVisualSelectionWithAg() range
-  let old_reg = getreg('"')
-  let old_regtype = getregtype('"')
-  let old_clipboard = &clipboard
-  set clipboard&
-  normal! ""gvy
-  let selection = getreg('"')
-  call setreg('"', old_reg, old_regtype)
-  let &clipboard = old_clipboard
-  execute 'Ag' selection
-endfunction
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocActionAsync('doHover')
-  endif
-endfunction
- 
 "=======================================================================
 " Cursor config 
 "=======================================================================

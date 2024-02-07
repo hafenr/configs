@@ -95,9 +95,22 @@ fi
 
 # pnpm
 export PNPM_HOME="/Users/rhafen/Library/pnpm"
-export PATH="$PNPM_HOME:$PATH"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
 # pnpm end
 #
 export SSH_AUTH_SOCK="$(brew --prefix)/var/run/yubikey-agent.sock"
 
 export PATH="/opt/homebrew/opt/sqlite/bin:$PATH"
+
+cd() {
+    if (( $# == 0 )); then
+        builtin cd                # This calls the shell version of cd
+    else
+        builtin cd "$@"           # This calls the shell version of cd
+    fi
+    msg="cd $(pwd)"
+    print -s "$msg"               # This writes to the history 'file'
+}

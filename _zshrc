@@ -68,6 +68,8 @@ export PATH="/opt/homebrew/opt/node@16/bin:$PATH"
 export LDFLAGS="-L/opt/homebrew/opt/node@16/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/node@16/include"
 
+# export SOPS_AGE_KEY="$(age -d ~/dq/shared-pw-store-key.age)" 
+
 # aliases
 alias l='ls -alh'
 alias gch='git checkout'
@@ -114,3 +116,8 @@ cd() {
     msg="cd $(pwd)"
     print -s "$msg"               # This writes to the history 'file'
 }
+
+source <(fzf --zsh)
+
+# Set ignored files in ~/.agignore
+export FZF_DEFAULT_COMMAND='ag -l -g ""'

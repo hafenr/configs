@@ -30,7 +30,6 @@ if has('gui_running')               " gvim options
         set guifont=Ubuntu\ Mono\ derivative\ Powerline
     endif
 else                                " terminal
-    " set term=screen-256color
     set t_Co=256                    " set 256 colors for terminal
     set background=dark
 endif
@@ -55,6 +54,7 @@ endif
 call plug#begin('~/.vim/plugged')
 
 " General
+Plug 'easymotion/vim-easymotion'       " Fast navigation
 Plug 'tpope/vim-commentary'            " Commenting operator gc
 Plug 'Xuyuanp/git-nerdtree'            " Nerd tree with git integration
 Plug 'Raimondi/delimitMate'            " Smart auto-completion of ([' etc.
@@ -65,43 +65,32 @@ Plug 'tpope/vim-surround'              " Surround motions
 Plug 'tpope/vim-abolish'               " Add :S/repl/ace
 Plug 'szw/vim-maximizer'               " Temporarily maximize window
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf.vim'                " List fuzzy matcher
 Plug 'PeterRincker/vim-argumentative'  " i, a, text objects; >, <, movement
 Plug 'andymass/vim-matchup'            " More jumps for % (e.g. <Tag> or if/endif), text objs: a%, i%
 Plug 'ivyl/vim-bling'                  " blink on / n N
 Plug 'rking/ag.vim'                    " Silver searcher: faster vimgrep/grep:
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'honza/vim-snippets'              " Snippets
-Plug 'xolox/vim-misc'
 Plug 'jpalardy/vim-slime'              " REPL interaction
 Plug 'Yggdroot/indentLine'             " Insert vertical lines to show indentation levels
 Plug 'airblade/vim-gitgutter'          " ]c [c
 Plug 'dbakker/vim-projectroot'
-Plug 'ktonga/vim-follow-my-lead'
-Plug 'junegunn/vim-peekaboo'
-Plug 'change-case.vim'
-Plug 'vim-scripts/IndexedSearch'
+Plug 'junegunn/vim-peekaboo'           " Preview register contents
+Plug 'vim-scripts/IndexedSearch'       " Print current match number
 Plug 'junegunn/vim-easy-align'         " :'<,'>EasyAlign [*] DELIM or /regex/
 Plug 'godlygeek/tabular'               " :'<,'>Tabularize /regex"
-
 " Colors
-Plug 'https://github.com/freeo/vim-kalisi'
-Plug 'jonathanfilip/vim-lucius'
 Plug 'croaker/mustang-vim'
-Plug 'noahfrederick/vim-hemisu'
-Plug 'tomasr/molokai'
-Plug 'junegunn/seoul256.vim'
-
 " Additional functionality
-Plug 'vim-scripts/yaifa.vim'
+Plug 'vim-scripts/yaifa.vim'           " Indent finder
 Plug 'kana/vim-textobj-user'           " Needed for textobj-python
-Plug 'bkad/CamelCaseMotion'
-Plug 'sgur/vim-textobj-parameter'
-Plug 'saihoooooooo/vim-textobj-space'
-Plug 'mattn/vim-textobj-url'
+Plug 'sgur/vim-textobj-parameter'      " a, i, for selecting function parameters
+Plug 'saihoooooooo/vim-textobj-space'  " aS iS for selecting between spaces
+Plug 'mattn/vim-textobj-url'           " au iu for selecting urls
 Plug 'kana/vim-textobj-line'           " line text object (w/o trailing ^M): yal, yil etc.
-Plug 'thinca/vim-textobj-between'
-Plug 'hafenr/vim-textobj-underscore'
+Plug 'thinca/vim-textobj-between'      " ab ib for selecting all kinds of quotes/paranthesis
+Plug 'hafenr/vim-textobj-underscore'   " a_ i_
 Plug 'milkypostman/vim-togglelist'     " toggle quickfix and location list
 Plug 'editorconfig/editorconfig-vim'   " read .editorconfig files and set variables
 Plug 'vim-scripts/renamer.vim'         " bulk rename by calling :Renamer
@@ -120,18 +109,15 @@ Plug 'groenewege/vim-less', { 'for': 'less' }
 " Python
 Plug 'michaeljsmith/vim-indent-object', { 'for': 'python' } " Indent-level as text obj.
 Plug 'bps/vim-textobj-python', { 'for': 'python' }          " Provides class: ac, ic; Function: af, if
-" Scala
-Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
 " Nix
-Plug 'LnL7/vim-nix'
+Plug 'LnL7/vim-nix', { 'for': 'nix' }
 
 call plug#end()
-
-colorscheme mustang
 
 "=======================================================================
 " Basic settings 
 "=======================================================================
+colorscheme mustang
 set clipboard^=unnamed
 set nocompatible
 set dictionary+=/usr/share/dict/words " Specify the builtin list of words for C-X C-K completion
@@ -226,18 +212,13 @@ augroup misc
     " Automatically open qfix list
     autocmd QuickFixCmdPost [^l]* nested cwindow
     autocmd QuickFixCmdPost    l* nested lwindow
-    " Automatically delete trailing whitespace
-    " autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
-    autocmd FileType qf
-          \ nnoremap <buffer><silent> q :close<CR> |
-          \ map <buffer><silent> <F4> :close<CR> |
-          \ map <buffer><silent> <F8> :close<CR>
 augroup END
 
 augroup python_settings
     autocmd!
     autocmd FileType python setlocal foldmethod=indent foldnestmax=2
     autocmd FileType python setlocal shiftwidth=4 tabstop=4
+    autocmd FileType python setlocal equalprg=black\ --quiet\ -
 augroup END
 
 " Auto-remove trailing whitespace on save
@@ -248,20 +229,18 @@ autocmd BufWritePre *.py :%s/\s\+$//e
 "=======================================================================
 " Basic  "
 let mapleader='\<space>'
-let maplocalleader = ","
+"let maplocalleader = ","
 nnoremap ; :
 xnoremap ; :
 nnoremap : ;
 xnoremap : ;
+map , <Plug>(easymotion-prefix)
 nnoremap <space>w :w<CR>
 nnoremap <space>. :source ~/.vimrc<CR>
 cnoremap jk <CR>
-nnoremap ,r :%s/<C-r><C-w>//g<Left><Left>
-" nnoremap <silent> <space>e :Neomake!<CR>
-nmap <space>j <Plug>(easymotion-prefix)j
-nmap <space>k <Plug>(easymotion-prefix)k
+"nnoremap ,r :%s/<C-r><C-w>//g<Left><Left>
 " Insert file name
-nnoremap ,f i=expand('%:t:r')<CR><ESC>
+"nnoremap ,f i=expand('%:t:r')<CR><ESC>
 " Select most recently pasted text
 nnoremap gV `[v`]
 " Append a comment
@@ -292,7 +271,6 @@ nnoremap <silent> gm :call cursor(0, virtcol('$')/2)<cr>
 " It allows emacs-like navigation in command mode and insert mode
 " The reason I didn't include the full plugin was that some of
 " its meta-mappings messed with my keyboard layout
-" BEGIN vim-rsi snippet
 inoremap        <C-A> <C-O>^
 cnoremap        <C-A> <Home>
 inoremap <expr> <C-B> getline('.')=~'^\s*$'&&col('.')>strlen(getline('.'))?"0\<Lt>C-D>\<Lt>Esc>kJs":"\<Lt>Left>"
@@ -302,17 +280,14 @@ cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
 inoremap <expr> <C-E> col('.')>strlen(getline('.'))?"\<Lt>C-E>":"\<Lt>End>"
 inoremap <expr> <C-F> col('.')>strlen(getline('.'))?"\<Lt>C-F>":"\<Lt>Right>"
 cnoremap <expr> <C-F> getcmdpos()>strlen(getcmdline())?&cedit:"\<Lt>Right>"
-" END vim-rsi snippet
 " EasyAlign
 vnoremap <silent> <Enter> :EasyAlign<cr>
 nmap ga <Plug>(EasyAlign)
 " Git
-nnoremap <space>gg :Git<CR>
-nnoremap <space>gs :Git<CR>
+nnoremap <space>gi :Git<CR>
 nnoremap <space>gp :Git push<CR>
 nnoremap j gj
 nnoremap k gk
-
 " Quickfix
 nmap <script> <silent> <space>a :call ToggleLocationList()<CR>
 nmap <script> <silent> <space>q :call ToggleQuickfixList()<CR>
@@ -349,6 +324,10 @@ nnoremap <space>pf :NERDTreeFind<CR>
 nnoremap <space>dl :lcd %:p:h<CR>
 nnoremap <space>dc :cd %:p:h<CR>
 nnoremap <space>dd :CtrlPDir<CR>
+
+" EasyMotion
+nmap <space>j <Plug>(easymotion-prefix)j
+nmap <space>k <Plug>(easymotion-prefix)k
 
 " Toggle features
 nnoremap <space>ti :IndentLinesToggle<CR>
@@ -563,7 +542,6 @@ let g:typescript_compiler_use_tsconfig = 1
 
 "  FZF
 "-----------------------------------------------------------------------
-let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 let g:fzf_layout = { 'down': '~40%' }
 let g:fzf_preview_window = []
 

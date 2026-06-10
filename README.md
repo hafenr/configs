@@ -1,4 +1,7 @@
-# dotfiles
+# Install dotfiles
+
+*Make sure to use the same username as on the original machine!*
+
 
 ```sh
 brew bundle --file=Brewfile

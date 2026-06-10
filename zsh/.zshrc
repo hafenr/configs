@@ -149,4 +149,5 @@ export PATH=/Users/rhafen/.opencode/bin:$PATH
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-alias claude-mem='/Users/rhafen/.bun/bin/bun "/Users/rhafen/.claude/plugins/cache/thedotmack/claude-mem/10.4.3/scripts/worker-service.cjs"'
+# rustup (adds ~/.cargo/bin to PATH)
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"

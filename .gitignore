@@ -1,24 +1,19 @@
 *.swp
 *.swo
 
-_vim/bundle/*
-!_vim/bundle/.gitkeep
-
 .DS_Store
-eclim/
-.hg*
 .VimballRecord
 .netrwhist
-_vim/undo/*
-_vim/plugged/*
-hgrc
-gitconfig
 tags
 
-_xmonad/xmonad
-_xmonad/xmonad.hi
-_xmonad/xmonad.hs
-_xmonad/xmonad.o
-_xmonad/xmonad.errors
-_xmonad/xmonad-x86_64-linux
-_xmonad/xmonad.state
+/.claude/
+
+vim/.vim/undo/*
+vim/.vim/plugged/*
+
+xmonad/.xmonad/xmonad
+xmonad/.xmonad/xmonad.hi
+xmonad/.xmonad/xmonad.o
+xmonad/.xmonad/xmonad.errors
+xmonad/.xmonad/xmonad-x86_64-linux
+xmonad/.xmonad/xmonad.state

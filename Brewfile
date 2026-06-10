@@ -1,0 +1,101 @@
+tap "databricks/tap"
+tap "hashicorp/tap"
+tap "homebrew/cask-fonts"
+tap "homebrew/services"
+tap "koekeishiya/formulae"
+tap "minio/stable"
+tap "nikitabobko/tap"
+brew "age"  # Simple, modern, secure file encryption
+brew "avro-tools"  # Avro command-line tools and utilities
+brew "awscli"  # Official Amazon AWS command-line interface
+brew "azcopy"  # Azure Storage data transfer utility
+brew "azure-cli"  # Microsoft Azure CLI 2.0
+brew "black"  # Python code formatter
+brew "cmake"  # Cross-platform make
+brew "coreutils"  # GNU File, Shell, and Text utilities
+brew "cython"  # Compiler for writing C extensions for the Python language
+brew "diffoscope"  # In-depth comparison of files, archives, and directories
+brew "direnv"  # Load/unload environment variables based on $PWD
+brew "docutils"  # Text processing system for reStructuredText
+brew "expect"  # Program that can automate interactive applications
+brew "ffmpeg"  # Play, record, convert, and stream select audio and video codecs
+brew "fzf"  # Command-line fuzzy finder written in Go
+brew "geos"  # Geometry Engine
+brew "gexiv2"  # GObject wrapper around the Exiv2 photo metadata library
+brew "gh"  # GitHub command-line tool
+brew "git"  # Distributed revision control system
+brew "git-crypt"  # Enable transparent encryption/decryption of files in a git repo
+brew "gnu-tar"  # GNU version of the tar archiving utility
+brew "gradle"  # Open-source build automation tool based on the Groovy and Kotlin DSL
+brew "grpcurl"  # Like cURL, but for gRPC
+brew "jq"  # Lightweight and flexible command-line JSON processor
+brew "libgit2"  # C library of Git core methods that is re-entrant and linkable
+brew "libomp"  # LLVM's OpenMP runtime library
+brew "llvm"  # Next-gen compiler infrastructure
+brew "macvim"  # GUI for vim, made for macOS
+brew "maven"  # Java-based project management
+brew "neovim"  # Ambitious Vim-fork focused on extensibility and agility
+brew "ngspice"  # Spice circuit simulator
+brew "node"  # Open-source, cross-platform JavaScript runtime environment
+brew "node@14"  # Platform built on V8 to build network applications
+brew "node@20"  # Open-source, cross-platform JavaScript runtime environment
+brew "p7zip"  # 7-Zip (high compression file archiver) implementation
+brew "pandoc"  # Swiss-army knife of markup format conversion
+brew "plantuml"  # Draw UML diagrams
+brew "pnpm@9"  # Fast, disk space efficient package manager
+brew "poppler"  # PDF rendering library (based on the xpdf-3.0 code base)
+brew "protobuf"  # Protocol buffers (Google's data interchange format)
+brew "pyenv"  # Python version management
+brew "python@3.9"  # Interpreted, interactive, object-oriented programming language
+brew "r"  # Software environment for statistical computing
+brew "ripgrep"  # Search tool like grep and The Silver Searcher
+brew "scala"  # JVM-based programming language
+brew "sevenzip"  # 7-Zip is a file archiver with a high compression ratio
+brew "sops"  # Editor of encrypted files
+brew "stow"  # Organize software neatly under a single directory tree (e.g. /usr/local)
+brew "swig"  # Generate scripting interfaces to C/C++ code
+brew "the_silver_searcher"  # Code-search similar to ack
+brew "tmux"  # Terminal multiplexer
+brew "wasmtime"  # Standalone JIT-style runtime for WebAssembly, using Cranelift
+brew "wget"  # Internet file retriever
+brew "wrk"  # HTTP benchmarking tool
+brew "yarn", link: false # JavaScript package manager
+brew "yubikey-agent", restart_service: :changed # Seamless ssh-agent for YubiKeys and other PIV tokens
+brew "zig"  # Programming language designed for robustness, optimality, and clarity
+brew "databricks/tap/databricks"  # Command-line interface for the Databricks platform
+brew "hashicorp/tap/nomad"  # Nomad
+brew "koekeishiya/formulae/skhd"  # Simple hotkey-daemon for macOS.
+brew "koekeishiya/formulae/yabai"  # A tiling window manager for macOS based on binary space partitioning.
+brew "minio/stable/mc"  # MinIO Client for object storage and filesystems
+cask "1password-cli"  # Command-line interface for 1Password
+cask "nikitabobko/tap/aerospace"  # AeroSpace is an i3-like tiling window manager for macOS
+cask "android-commandlinetools"  # Command-line tools for building and debugging Android apps
+cask "font-hack-nerd-font"
+cask "glide"  # Tiling window manager with tree layouts
+cask "vagrant"  # Development environment
+cargo "cargo-audit"
+cargo "cargo-expand"
+cargo "cargo-witgen"
+cargo "mdbook"
+cargo "mdbook-variables"
+cargo "sea-orm-cli"
+cargo "sqlx-cli"
+cargo "wasm-pack"
+cargo "wasm-tools"
+npm "@anthropic-ai/claude-code"
+npm "@fission-ai/openspec"
+npm "@mermaid-js/mermaid-cli"
+npm "@openai/codex"
+npm "@openapitools/openapi-generator-cli"
+npm "corepack"
+npm "eslint"
+npm "firebase-tools"
+npm "firebase"
+npm "gatsby-cli"
+npm "json-schema-to-typescript"
+npm "json-schema-to-zod"
+npm "nodemon"
+npm "pbjs"
+npm "rollup"
+npm "typedoc"
+npm "yarn"

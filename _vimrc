@@ -83,6 +83,7 @@ Plug 'godlygeek/tabular'               " :'<,'>Tabularize /regex"
 " Colors
 Plug 'croaker/mustang-vim'
 " Additional functionality
+Plug 'bullets-vim/bullets.vim'         " Automatically add new bullet points in lists
 Plug 'vim-scripts/yaifa.vim'           " Indent finder
 Plug 'kana/vim-textobj-user'           " Needed for textobj-python
 Plug 'sgur/vim-textobj-parameter'      " a, i, for selecting function parameters
@@ -144,7 +145,6 @@ set list
 set listchars=tab:·\ ,nbsp:·,trail:•,extends:❯,precedes:❮
 " set showbreak=......\|\             " show linebreaks with: ......| wrapped text
 set textwidth=0                     " don't insert EOLs at linebreak
-set relativenumber                  " view line numbers
 set number                          " show current line number (others will still be relative)
 set noshowmode
 set ruler                           " always show cursor position
@@ -219,10 +219,9 @@ augroup python_settings
     autocmd FileType python setlocal foldmethod=indent foldnestmax=2
     autocmd FileType python setlocal shiftwidth=4 tabstop=4
     autocmd FileType python setlocal equalprg=black\ --quiet\ -
+    autocmd BufWritePre *.py :%s/\s\+$//e
 augroup END
 
-" Auto-remove trailing whitespace on save
-autocmd BufWritePre *.py :%s/\s\+$//e
 
 "======================================================================
 " Mappings 
@@ -234,7 +233,10 @@ nnoremap ; :
 xnoremap ; :
 nnoremap : ;
 xnoremap : ;
-map , <Plug>(easymotion-prefix)
+inoremap jk <ESC>
+nnoremap <C-j> 5j
+nnoremap <C-k> 5k
+noremap , <Plug>(easymotion-prefix)
 nnoremap <space>w :w<CR>
 nnoremap <space>. :source ~/.vimrc<CR>
 cnoremap jk <CR>
@@ -359,10 +361,10 @@ if has('nvim')
     nnoremap <space><F1> :execute 'terminal ranger ' . expand('%:p:h')<CR>
     nnoremap <space><F2> :terminal ranger<CR>
     " Opening splits with terminal in all directions
-    nnoremap <space>th :leftabove  vnew<CR>:terminal<CR>
-    nnoremap <space>tl :rightbelow vnew<CR>:terminal<CR>
-    nnoremap <space>tk :leftabove  new<CR>:terminal<CR>
-    nnoremap <space>tj :rightbelow new<CR>:terminal<CR>
+    nnoremap <space>th :leftabove  vnew<CR>:terminal<CR>i
+    nnoremap <space>tl :rightbelow vnew<CR>:terminal<CR>i
+    nnoremap <space>tk :leftabove  new<CR>:terminal<CR>i
+    nnoremap <space>tj :rightbelow new<CR>:terminal<CR>i
 
     au TermOpen * tnoremap <Esc> <C-\><C-n>
     au FileType fzf tunmap <Esc>

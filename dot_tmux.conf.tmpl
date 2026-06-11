@@ -122,9 +122,14 @@ set -g visual-bell off
 # copying
 unbind [
 bind [ copy-mode
-bind y run "tmux save-buffer - | reattach-to-user-namespace pbcopy"
 unbind p
+{{ if eq .chezmoi.os "darwin" -}}
+bind y run "tmux save-buffer - | reattach-to-user-namespace pbcopy"
 bind-key p run "pbpaste -o | tmux load-buffer - ; tmux paste-buffer"
+{{ else -}}
+bind y run "tmux save-buffer - | xclip -selection clipboard -i"
+bind-key p run "xclip -selection clipboard -o | tmux load-buffer - ; tmux paste-buffer"
+{{ end -}}
 
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-copycat'

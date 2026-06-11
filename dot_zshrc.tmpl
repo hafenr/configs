@@ -69,15 +69,16 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 export DELTA_REPO_PATH=/Users/rhafen/dq/dev/delta
-# export PATH="$PATH:/opt/homebrew/Cellar/node@16/16.14.2/bin"
-export PATH="$PATH:/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin"
 export PATH="$PATH:/opt/flyway-9.1.3"
-
+{{ if eq .chezmoi.os "darwin" -}}
+export PATH="$PATH:/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin"
 export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
-export PATH="$HOME/dq/scripts:$PATH"
-export PATH="$HOME/bin:$PATH"
 export LDFLAGS="-L/opt/homebrew/opt/node@20/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/node@20/include"
+{{ end -}}
+
+export PATH="$HOME/dq/scripts:$PATH"
+export PATH="$HOME/bin:$PATH"
 
 # export SOPS_AGE_KEY="$(age -d ~/dq/shared-pw-store-key.age)" 
 
@@ -88,13 +89,15 @@ alias gs='git status'
 alias gco='git commit'
 alias gpl='git pull'
 alias gps='git pull'
-alias ibrew='/usr/local/bin/brew'
 alias vim=nvim
 alias pb=pnpm
+{{ if eq .chezmoi.os "darwin" -}}
+alias ibrew='/usr/local/bin/brew'
 
 # scala
 ## for intellj integration
 SCALA_HOME=/opt/homebrew/opt/scala/idea
+{{ end -}}
 
 # pyenv
 if command -v pyenv 1>/dev/null 2>&1; then
@@ -114,9 +117,12 @@ fi
 # esac
 # pnpm end
 #
+{{ if eq .chezmoi.os "darwin" -}}
 export SSH_AUTH_SOCK="$(brew --prefix)/var/run/yubikey-agent.sock"
-
 export PATH="/opt/homebrew/opt/sqlite/bin:$PATH"
+{{ else -}}
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-/run/user/$UID}/yubikey-agent/yubikey-agent.sock"
+{{ end -}}
 
 cd() {
     if (( $# == 0 )); then
@@ -133,7 +139,9 @@ cd() {
 # Set ignored files in ~/.agignore
 export FZF_DEFAULT_COMMAND='ag -l -g ""'
 export XDG_CONFIG_HOME="$HOME/.config"
+{{ if eq .chezmoi.os "darwin" -}}
 export PATH="/opt/homebrew/opt/pnpm@9/bin:$PATH"
+{{ end -}}
 
 # test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 

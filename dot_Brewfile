@@ -11,6 +11,7 @@ brew "awscli"  # Official Amazon AWS command-line interface
 brew "azcopy"  # Azure Storage data transfer utility
 brew "azure-cli"  # Microsoft Azure CLI 2.0
 brew "black"  # Python code formatter
+brew "chezmoi"  # Manage your dotfiles across multiple diverse machines, securely
 brew "cmake"  # Cross-platform make
 brew "coreutils"  # GNU File, Shell, and Text utilities
 brew "cython"  # Compiler for writing C extensions for the Python language

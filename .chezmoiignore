@@ -1,0 +1,17 @@
+README.md
+
+.vim/plugged/**
+.vim/undo/**
+
+.DS_Store
+**/.DS_Store
+*.swp
+*.swo
+.VimballRecord
+.netrwhist
+tags
+
+{{ if ne .chezmoi.os "linux" }}
+.xmonad/**
+.emacs
+{{ end }}

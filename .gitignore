@@ -8,12 +8,12 @@ tags
 
 /.claude/
 
-vim/.vim/undo/*
-vim/.vim/plugged/*
+dot_vim/undo/*
+dot_vim/plugged/*
 
-xmonad/.xmonad/xmonad
-xmonad/.xmonad/xmonad.hi
-xmonad/.xmonad/xmonad.o
-xmonad/.xmonad/xmonad.errors
-xmonad/.xmonad/xmonad-x86_64-linux
-xmonad/.xmonad/xmonad.state
+dot_xmonad/xmonad
+dot_xmonad/xmonad.hi
+dot_xmonad/xmonad.o
+dot_xmonad/xmonad.errors
+dot_xmonad/xmonad-x86_64-linux
+dot_xmonad/xmonad.state

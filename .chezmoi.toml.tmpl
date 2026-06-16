@@ -5,14 +5,14 @@ sourceDir = {{ (joinPath .chezmoi.homeDir "configs") | quote }}
 {{ end -}}
 
 # age encryption.
-#   - Encrypting (chezmoi add --encrypt) needs only the recipient (public key).
-#     It is safe to commit, which is why it lives here.
-#   - Decrypting (chezmoi apply) needs the private identity at the path below.
-#     The key is NOT committed; copy it once from 1Password to that path:
-#       op read 'op://Personal/dotfiles age key/notesPlain' \
-#         | sed -n '/AGE-SECRET-KEY/p' > ~/.config/chezmoi/key.txt
-#       chmod 600 ~/.config/chezmoi/key.txt
+#   - Encrypting (chezmoi add --encrypt) needs only the recipient (public key,
+#     below). Safe to commit; encrypting never touches 1Password.
+#   - Decrypting (chezmoi apply/diff/...) goes through our age wrapper
+#     (chezmoi-hooks/age-1password.sh), which fetches the private identity from
+#     1Password into a tmpfile, runs age, and shreds the tmpfile on exit — all
+#     within one process, so the key is never persisted. Requires the 1Password
+#     CLI (`op`) to be signed in.
 encryption = "age"
 [age]
-    identity = "{{ .chezmoi.homeDir }}/.config/chezmoi/key.txt"
+    command = "{{ .chezmoi.sourceDir }}/chezmoi-hooks/age-1password.sh"
     recipient = "age1tfnreee89apdqf3w5rxrxganpxa7clndyytay57uflpxes5ypevq5mdrdq"

@@ -1,4 +1,5 @@
 README.md
+chezmoi-hooks
 
 .vim/plugged/**
 .vim/undo/**

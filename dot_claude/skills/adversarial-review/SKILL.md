@@ -50,14 +50,17 @@ REVIEW_DIR=$(mktemp -d /tmp/adversarial-review.XXXXXX)
 
 Determine which model you are, then spawn reviewers on the opposite:
 
-**If you are Claude** → spawn Codex reviewers via `codex exec`:
+**If you are Claude** → spawn Codex reviewers via `codex exec`. **Pass the prompt on STDIN, not as an argv string** — a large argv prompt makes `codex exec` print `Reading additional input from stdin...` and hang forever waiting on stdin. Piping the prompt makes it print `Reading prompt from stdin...` and proceed:
 
 ```sh
-codex exec --skip-git-repo-check -o "$REVIEW_DIR/skeptic.md" "prompt" 2>/dev/null
+cat "$REVIEW_DIR/skeptic_prompt.txt" | codex exec --skip-git-repo-check --sandbox workspace-write -o "$REVIEW_DIR/skeptic.md" 2>&1 | tail -3
 ```
 
-Use `--profile edit` only if the reviewer needs to run tests. Default to read-only.
-Run with `run_in_background: true`, monitor via `TaskOutput` with `block: true, timeout: 600000`.
+- Write each reviewer prompt to a file first (`$REVIEW_DIR/<lens>_prompt.txt`) and `cat` it in.
+- `-o "$REVIEW_DIR/<lens>.md"` captures the reviewer's final message only (clean); do NOT `> file` redirect the whole transcript.
+- `--sandbox workspace-write` lets reviewers run read-only shell commands to inspect the repo; use `read-only` if they must not touch the workspace. Default reasoning effort (`xhigh`) — do NOT lower it; the review quality depends on it.
+- Keep `2>&1` (stderr visible) so a stall is diagnosable; do NOT `2>/dev/null`.
+- Wrap in `timeout 900` and run with `run_in_background: true` (xhigh + shell exploration can take many minutes); monitor via the task-completion notification.
 
 **If you are Codex** → spawn Claude reviewers via `claude` CLI:
 

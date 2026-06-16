@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "owner": "engineerwithai",
+  "repo": "engineerwith-agents",
+  "path": "plugins/data-engineering/skills/spark-optimization",
+  "branch": "main",
+  "sha": "dc4dd980537b8a7b89b73c1fef1838548fa252d1"
+}

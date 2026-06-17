@@ -15,8 +15,12 @@ set -g history-limit 10000
 set -g escape-time 0
 
 # prefix key
+{{ if eq .chezmoi.os "linux" -}}
+set -g prefix C-b
+{{- else -}}
 unbind C-b
 set -g prefix C-o
+{{- end }}
 
 # set -g utf-8 on
 # set -g status-utf-8 on
@@ -64,8 +68,12 @@ bind c new-window -c "#{pane_current_path}"
 # C-o C-k as alias for C-o C-:
 bind C-k command-prompt
 
-# Press C-o two times to send a C-o to the application
+# Press the prefix twice to send it through to the application (e.g. nested tmux)
+{{ if eq .chezmoi.os "linux" -}}
+bind C-b send-prefix
+{{- else -}}
 bind C-o send-prefix
+{{- end }}
 
 # Alt-[hjkl]
 bind -n M-J resize-pane -D 2

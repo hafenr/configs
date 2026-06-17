@@ -8,12 +8,6 @@ case "${UNAME_OUT}" in
     *)          OS="UNKNOWN:${UNAME_OUT}"
 esac
 
-# Remap CapsLock to be both ESC and CTRL (install xcape first!)
-if [ "$OS" = "Linux" ]; then
-    setxkbmap -option ctrl:nocaps
-    xcape -e 'Control_L=Escape'
-fi
-
 # === general settings ===
 export EDITOR=vim
 # Locale: en_US.UTF-8 on macOS (always present); C.UTF-8 on Linux, which is
@@ -145,4 +139,4 @@ fk() {
 
 }
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.zsh
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

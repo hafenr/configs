@@ -16,7 +16,16 @@ fi
 
 # === general settings ===
 export EDITOR=vim
-export LANG=en_US.UTF-8
+# Locale: en_US.UTF-8 on macOS (always present); C.UTF-8 on Linux, which is
+# always available on glibc without locale generation (avoids "cannot change
+# locale" warnings on minimal/Nix boxes).
+if [ "$OS" = "Mac" ]; then
+    export LC_ALL=en_US.UTF-8
+    export LANG=en_US.UTF-8
+else
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+fi
 stty -ixon
 
 export HISTTIMEFORMAT="%d/%m/%y %T "
@@ -39,9 +48,6 @@ alias gps='git pull'
 
 alias kbuild='kustomize build --enable_alpha_plugins --load_restrictor none'
 alias teramake='make -f /Users/rhafen/dev/base-k8s/make/Makefile'
-
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
 
 # === other settings ===
 # tl-specific settings

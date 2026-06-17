@@ -65,8 +65,15 @@ export DIRSTACKSIZE=8
 bindkey \^U backward-kill-line
 
 export EDITOR=vim
+{{ if eq .chezmoi.os "darwin" -}}
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+{{- else -}}
+# C.UTF-8 is always available on glibc (no locale generation needed), so it
+# avoids "cannot change locale" warnings on minimal/Nix Linux boxes.
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+{{- end }}
 
 export DELTA_REPO_PATH=/Users/rhafen/dq/dev/delta
 export PATH="$PATH:/opt/flyway-9.1.3"

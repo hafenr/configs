@@ -22,4 +22,5 @@ tags
 .skhdrc
 .Brewfile
 .config/ghostty/**
+.config/karabiner/**
 {{ end }}

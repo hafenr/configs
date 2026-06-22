@@ -21,4 +21,5 @@ tags
 .yabairc
 .skhdrc
 .Brewfile
+.config/ghostty/**
 {{ end }}

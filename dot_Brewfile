@@ -1,9 +1,6 @@
 tap "databricks/tap"
 tap "hashicorp/tap"
-tap "homebrew/cask-fonts"
-tap "homebrew/services"
 tap "koekeishiya/formulae"
-tap "minio/stable"
 tap "nikitabobko/tap"
 brew "age"  # Simple, modern, secure file encryption
 brew "avro-tools"  # Avro command-line tools and utilities
@@ -38,7 +35,6 @@ brew "maven"  # Java-based project management
 brew "neovim"  # Ambitious Vim-fork focused on extensibility and agility
 brew "ngspice"  # Spice circuit simulator
 brew "node"  # Open-source, cross-platform JavaScript runtime environment
-brew "node@14"  # Platform built on V8 to build network applications
 brew "node@20"  # Open-source, cross-platform JavaScript runtime environment
 brew "p7zip"  # 7-Zip (high compression file archiver) implementation
 brew "pandoc"  # Swiss-army knife of markup format conversion
@@ -67,7 +63,6 @@ brew "databricks/tap/databricks"  # Command-line interface for the Databricks pl
 brew "hashicorp/tap/nomad"  # Nomad
 brew "koekeishiya/formulae/skhd"  # Simple hotkey-daemon for macOS.
 brew "koekeishiya/formulae/yabai"  # A tiling window manager for macOS based on binary space partitioning.
-brew "minio/stable/mc"  # MinIO Client for object storage and filesystems
 cask "1password-cli"  # Command-line interface for 1Password
 cask "nikitabobko/tap/aerospace"  # AeroSpace is an i3-like tiling window manager for macOS
 cask "android-commandlinetools"  # Command-line tools for building and debugging Android apps

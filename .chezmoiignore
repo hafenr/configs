@@ -18,8 +18,6 @@ tags
 {{ end }}
 
 {{ if ne .chezmoi.os "darwin" }}
-.yabairc
-.skhdrc
 .Brewfile
 .config/ghostty/**
 .config/karabiner/**

@@ -1,7 +1,5 @@
 tap "databricks/tap"
 tap "hashicorp/tap"
-tap "koekeishiya/formulae"
-tap "nikitabobko/tap"
 brew "age"  # Simple, modern, secure file encryption
 brew "avro-tools"  # Avro command-line tools and utilities
 brew "awscli"  # Official Amazon AWS command-line interface
@@ -61,13 +59,9 @@ brew "yubikey-agent", restart_service: :changed # Seamless ssh-agent for YubiKey
 brew "zig"  # Programming language designed for robustness, optimality, and clarity
 brew "databricks/tap/databricks"  # Command-line interface for the Databricks platform
 brew "hashicorp/tap/nomad"  # Nomad
-brew "koekeishiya/formulae/skhd"  # Simple hotkey-daemon for macOS.
-brew "koekeishiya/formulae/yabai"  # A tiling window manager for macOS based on binary space partitioning.
 cask "1password-cli"  # Command-line interface for 1Password
-cask "nikitabobko/tap/aerospace"  # AeroSpace is an i3-like tiling window manager for macOS
 cask "android-commandlinetools"  # Command-line tools for building and debugging Android apps
 cask "font-hack-nerd-font"
-cask "glide"  # Tiling window manager with tree layouts
 cask "vagrant"  # Development environment
 cargo "cargo-audit"
 cargo "cargo-expand"

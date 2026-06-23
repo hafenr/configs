@@ -4,6 +4,8 @@ chezmoi-hooks
 .vim/plugged/**
 .vim/undo/**
 
+.config/karabiner/**
+
 .DS_Store
 **/.DS_Store
 *.swp
@@ -20,5 +22,4 @@ tags
 {{ if ne .chezmoi.os "darwin" }}
 .Brewfile
 .config/ghostty/**
-.config/karabiner/**
 {{ end }}

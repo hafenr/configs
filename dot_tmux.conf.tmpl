@@ -90,11 +90,9 @@ bind -n M-K resize-pane -U 2
 bind -n M-H resize-pane -L 2
 bind -n M-L resize-pane -R 2
 
-# Alt arrow keys
-bind -n M-down resize-pane -D 5
-bind -n M-up resize-pane -U 5
-bind -n M-left resize-pane -L 5
-bind -n M-right resize-pane -R 5
+# Alt arrow keys (resizing lives on M-S-hjkl)
+bind -n M-left previous-window
+bind -n M-right next-window
 
 # Use Alt-vim keys without prefix key to switch panes
 bind -n M-h select-pane -L
@@ -103,7 +101,8 @@ bind -n M-k select-pane -U
 bind -n M-l select-pane -R
 
 # Alt-number to switch windows
-bind -n M-0 last-window
+# M-<n> only reaches single digits; M-0 prompts for any index.
+bind -n M-0 command-prompt -p "window:" "select-window -t :%%"
 bind -n M-1 select-window -t 1
 bind -n M-2 select-window -t 2
 bind -n M-3 select-window -t 3
@@ -134,14 +133,18 @@ bind r source-file ~/.tmux.conf
 
 # THEME
 set -g status-justify centre
-set -g status-bg colour235
-set -g status-fg white
-set -g window-status-format '#[fg=colour148,bold][#I]#[default] #W '
-set -g window-status-current-format '#[fg=colour235,bg=colour148,bold][#I]#[fg=colour255,bg=colour235,bold] #W #[default]'
+set -g status-style bg=colour235,fg=white
+# Defaults to reverse, which paints a light block behind every window that has
+# unseen output - which is all of them.
+set -g window-status-activity-style default
+# Cap window names so all tabs fit on one status line; the trailing space in
+# each format is the separator, so window-status-separator must be empty.
+set -g window-status-separator ''
+set -g window-status-format '#[fg=colour148,bold][#I]#[default] #{=/12/…:window_name} '
+set -g window-status-current-format '#[fg=colour235,bg=colour148,bold][#I]#[fg=colour255,bg=colour238,bold] #{=/12/…:window_name} #[default]'
 set -g status-interval 5
 set -g status-left-length 30
-set -g status-left '#[fg=colour148][#S] #h'
-set -g status-right "CPU #(ps aux  | awk 'BEGIN { sum = 0   }  { sum += $3   }; END { print sum   }')%% #[fg=colour148] : #[default] #[fg=white]%H:%M#[default]"
+set -g status-left '#[fg=colour148][#S]'
 
 # stop annoying beeps
 set -g bell-action none
@@ -168,7 +171,7 @@ set -g @plugin 'tmux-plugins/tmux-continuum'
 # Plugin options
 set -g @continuum-restore 'on'
 
-set -g status-right '#(if [[ "#{pane_current_path}" == *"alt-delta"* ]]; then echo "#[bg=colour196,fg=colour255,bold] ALT-DELTA #[default]"; fi)#[fg=colour255] %Y-%m-%d %H:%M'
+set -g status-right '#(if [[ "#{pane_current_path}" == *"alt-delta"* ]]; then echo "#[bg=colour196,fg=colour255,bold] ALT-DELTA #[default]"; fi)'
 
 # Initializes TMUX plugin manager.
 # Keep this line at the very bottom of tmux.conf.

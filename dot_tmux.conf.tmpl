@@ -4,6 +4,15 @@ set-option -g default-shell $SHELL
 # but it seems to fail anyway.
 set -g default-terminal "screen-256color"
 
+# Claude Code recommended
+set -g allow-passthrough on
+set -g focus-events on
+
+# Required for Shift+Enter and other modified keys
+set -g extended-keys always
+set -g extended-keys-format csi-u
+set -as terminal-features 'ghostty*:extkeys'
+
 # Automatically set window title
 set-window-option -g automatic-rename on
 set -g automatic-rename-format '#{s/^feature-//:#{b:pane_current_path}}'
@@ -109,6 +118,17 @@ bind -n M-9 select-window -t 9
 bind -n S-Left  previous-window
 bind -n S-Right next-window
 
+bind -n C-S-Left  swap-window -t -1 \; select-window -t -1
+bind -n C-S-Right swap-window -t +1 \; select-window -t +1
+
+# Move the current window left/right with ctrl+alt+shift+h/l. tmux treats
+# C-M-S-h and C-M-H as two distinct keys and which one arrives depends on the
+# terminal's extended-key encoding, so bind both spellings.
+bind -n C-M-S-h swap-window -t -1 \; select-window -t -1
+bind -n C-M-H   swap-window -t -1 \; select-window -t -1
+bind -n C-M-S-l swap-window -t +1 \; select-window -t +1
+bind -n C-M-L   swap-window -t +1 \; select-window -t +1
+
 # Reload tmux config
 bind r source-file ~/.tmux.conf
 
@@ -148,8 +168,8 @@ set -g @plugin 'tmux-plugins/tmux-continuum'
 # Plugin options
 set -g @continuum-restore 'on'
 
+set -g status-right '#(if [[ "#{pane_current_path}" == *"alt-delta"* ]]; then echo "#[bg=colour196,fg=colour255,bold] ALT-DELTA #[default]"; fi)#[fg=colour255] %Y-%m-%d %H:%M'
+
 # Initializes TMUX plugin manager.
 # Keep this line at the very bottom of tmux.conf.
 run '~/.tmux/plugins/tpm/tpm'
-
-set -g status-right '#(if [[ "#{pane_current_path}" == *"alt-delta"* ]]; then echo "#[bg=colour196,fg=colour255,bold] ALT-DELTA #[default]"; fi)#[fg=colour255] %Y-%m-%d %H:%M'

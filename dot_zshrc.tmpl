@@ -86,6 +86,9 @@ export CPPFLAGS="-I/opt/homebrew/opt/node@20/include"
 
 export PATH="$HOME/dq/scripts:$PATH"
 export PATH="$HOME/bin:$PATH"
+{{ if eq .chezmoi.os "darwin" -}}
+export PATH="/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH"
+{{- end }}
 
 # export SOPS_AGE_KEY="$(age -d ~/dq/shared-pw-store-key.age)" 
 
@@ -166,3 +169,9 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # rustup (adds ~/.cargo/bin to PATH)
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
+{{ if eq .chezmoi.os "darwin" -}}
+# OpenJDK 17 (Homebrew) for PySpark
+export JAVA_HOME="/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home"
+export PATH="$JAVA_HOME/bin:$PATH"
+{{ end -}}

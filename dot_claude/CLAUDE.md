@@ -2,7 +2,7 @@
 
 ## General instructions
 - Do not format files using e.g. black or cargo fmt without being asked.
-- When being asked to sync dqdmp, run the script ./build-and-push-to-databricks.sh and update the pipeline_job.ipynb worksheet so it references the new wheels.
+- When being asked to sync dqdmp, run `dmp/deploy-dev.sh` (the DAB builds and uploads the dqdmp + native wheels; the old build-and-push-to-databricks.sh was removed).
 - Do not add try/except wrappers in a way that would just silently drop errors, which would make everything harder to debug. Try/except should only be used if we handle the errors in a meaningful way. Similarly in Rust, do not silently ignore branches that match on Err when matching on a Result value.
 - When you talk to the user, always try to be as brief as possible, without
   witholding important information.
@@ -11,7 +11,8 @@
   information.
 - If you come across bugs, missing features, confusing structure, or workflow
   oddities outside the current task, add a concise note to `SESSION.md` — it
-  is not a progress log; do not record accomplishments there.
+  is not a progress log; do not record accomplishments there. Never commit this
+  file to Git.
 
 ## Version control
 - Do not force push!

@@ -22,7 +22,6 @@ following best practises.
   function to behave differently. In such cases, prefer separate functions that
   each have a clear execution path.
 
-
 ### Third-party code
 - Prefer a well-established external dependency over hand-writing non-trivial
   functionality, whenever the language has a package manager: pick the most

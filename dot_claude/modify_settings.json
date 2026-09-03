@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Claude Code owns ~/.claude/settings.json and rewrites it at runtime (model,
+# theme, enabledPlugins, ...). So this is a chezmoi modify_ script rather than a
+# managed copy: it receives the current file on stdin and asserts only the keys
+# we want kept in sync, passing everything else through untouched.
+set -euo pipefail
+
+current=$(cat)
+[ -z "${current//[[:space:]]/}" ] && current='{}'
+
+# refreshInterval is what animates the Fable gradient in statusline.sh; drop it
+# to render the status line only on activity.
+jq '.statusLine = {
+      type: "command",
+      command: "~/.claude/statusline.sh",
+      padding: 0,
+      refreshInterval: 1
+    }' <<<"$current"

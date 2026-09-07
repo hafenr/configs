@@ -67,6 +67,124 @@ following best practises.
 - Prefer to declare any fixture/test data (if small) as part of each test
   function, making each test self-contained. Helper functions for test setup etc. can be shared.
 
+## Architecture
+Guidelines for data-intensive systems. They apply when a change touches storage,
+replication, messaging, or a service boundary. Each one is a trade-off rather
+than a rule: name the trade-off you are making instead of reaching for a default.
+
+### Reliability, scalability, maintainability
+- Design to tolerate faults, not to prevent them: assume hardware dies, the
+  network drops and delays messages, and an operator will run the wrong command.
+- Measure latency in percentiles (p95/p99), never averages — the slowest
+  requests usually belong to the users with the most data. Measure on the client
+  so that queueing delay is included.
+- Before claiming something scales, state the load parameter (requests/s, read/
+  write ratio, fan-out) and what happens when it grows by an order of magnitude.
+
+### Data models and storage
+- Pick the data model from how the application reads the data: relational for
+  many-to-many and joins, document for self-contained one-to-many hierarchies,
+  graph when the relationships are the domain. Joining in application code means
+  the model is wrong.
+- Prefer declarative queries over hand-written imperative traversal; the query
+  planner improves without you rewriting code.
+- Every index speeds up one read pattern and slows down every write. Add an
+  index for a query you have, not one you imagine.
+- Keep transactional and analytical queries apart — long scans on the OLTP store
+  surface as tail latency for users.
+- Choose the storage engine deliberately: LSM-trees for write-heavy workloads,
+  B-trees for read-heavy ones and predictable latency.
+
+### Schemas and evolution
+- Compatibility is a constraint only where an outdated reader or writer can
+  actually exist: several independently deployed consumers, data already
+  persisted in the old shape, or a rolling deploy that runs both versions at
+  once. For a feature that was never rolled out, or a schema whose only consumer
+  ships in the same deploy, change it in place and delete the old shape.
+- Where it does apply, a schema change must be backward compatible (new code
+  reads old data) and forward compatible (old code tolerates new fields),
+  otherwise a rolling deploy is a breaking change. Add fields as optional with a
+  default, and never reuse or renumber a field tag or change a field's type in
+  place.
+
+### Distribution
+- Do not distribute what fits on one machine. A single node with a replica is
+  cheaper and better understood than a cluster.
+- Prefer single-leader replication. Multi-leader and leaderless setups buy
+  availability at the price of conflict resolution you then have to write.
+- Replication is asynchronous by default, so followers serve stale data. Decide
+  explicitly where read-your-writes or monotonic reads are required, and route
+  those reads accordingly.
+- Choose a partition key that spreads load: hash partitioning kills range
+  queries, range partitioning invites hot partitions. Check for skew caused by a
+  few heavy keys.
+- Never order events across machines by wall-clock time; clocks drift. Use
+  sequence numbers, logical clocks, or the database's own ordering.
+- A timeout is the only failure signal you get and it is ambiguous — a request
+  that timed out may still have been applied. That is why retries need
+  idempotence.
+
+### Transactions and messaging
+- Know which isolation level you run under and which anomaly it still permits:
+  read committed allows non-repeatable reads and lost updates, snapshot
+  isolation allows write skew. Never read-modify-write across a round trip
+  without an atomic operation, a lock, or a compare-and-set.
+- Make anything that can be retried idempotent — a client-supplied request id
+  with server-side deduplication, rather than hoping the retry does not happen.
+- There is no exactly-once delivery. There is at-least-once delivery plus an
+  idempotent consumer; build that.
+- Do not write to the database and publish an event as two independent steps.
+  Derive one from the other (outbox, change data capture, or a log the consumer
+  reads) so they cannot disagree.
+
+## Security (OWASP Top 10:2025)
+Apply these whenever code touches untrusted input, authentication, secrets,
+stored data, or the build pipeline. Security is part of the design, not a pass
+afterwards: if the requested design is unsafe, say so before implementing it.
+
+- **A01 Broken access control**: authorize every request server-side against the
+  authenticated principal, never against an identifier the client supplies —
+  this covers both object-level and function-level checks, and SSRF, where the
+  server is the confused deputy. Deny by default.
+- **A02 Security misconfiguration**: no default credentials, no debug output,
+  stack traces or directory listings reachable in production, no wildcard CORS
+  or permissive bucket/file permissions. Environment differences belong in
+  configuration, not in code branches.
+- **A03 Software supply chain failures**: pin dependencies with a lockfile,
+  install only from the ecosystem's official registry, and check that a new
+  dependency is actually maintained before adding it. Never disable signature or
+  certificate verification to make an install succeed. This category absorbed
+  2021's "vulnerable and outdated components": keep what you ship patched and
+  drop dependencies that are no longer maintained.
+- **A04 Cryptographic failures**: identify what data is sensitive, then protect
+  it in transit (TLS, verification never disabled) and at rest. Use the
+  language's vetted crypto library with modern defaults — AEAD ciphers,
+  argon2/bcrypt/scrypt for passwords. Never invent a scheme, reuse a nonce, or
+  put a key, token or password in source or in config committed to Git.
+- **A05 Injection**: keep untrusted data out of interpreters — parameterized
+  queries rather than string-built SQL, argument arrays rather than a shell, the
+  framework's contextual escaping for HTML and templates, and allowlists for
+  anything that becomes a path, an identifier, or a format string.
+- **A06 Insecure design**: before writing a feature, think about who the attacker
+  is, where the trust boundary runs, and what the flow does when abused. Enforce
+  rate limits and business-logic limits server-side.
+- **A07 Authentication failures**: use the framework's or provider's session and
+  credential handling rather than your own. Session tokens must be random,
+  rotated on privilege change, and invalidated on logout; never carry
+  credentials or session ids in URLs; return the same generic failure for an
+  unknown user and a wrong password.
+- **A08 Software or data integrity failures**: never deserialize untrusted input
+  into arbitrary types (pickle, unsafe YAML loaders, Java serialization) —
+  validate against a schema instead. Verify the integrity of anything fetched or
+  auto-updated at runtime.
+- **A09 Security logging and alerting failures**: log authentication decisions,
+  access-control denials and validation failures with enough context to trace an
+  incident, and never log credentials, tokens or personal data.
+- **A10 Mishandling of exceptional conditions**: fail closed. An error path must
+  not leave the caller authorized or a transaction half-applied — roll back
+  rather than patch up partial state. Show the user a generic message and keep
+  the detail in the log.
+
 ## Python
 - Type-annotate public functions; keep them narrow and total.
 - When your type annotations have more than two simple types (such as `str`),

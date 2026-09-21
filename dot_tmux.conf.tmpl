@@ -100,9 +100,10 @@ bind -n M-j select-pane -D
 bind -n M-k select-pane -U
 bind -n M-l select-pane -R
 
-# Alt-number to switch windows
-# M-<n> only reaches single digits; M-0 prompts for any index.
-bind -n M-0 command-prompt -p "window:" "select-window -t :%%"
+# Alt-number to switch windows, continuing on Alt-Shift-number for 11-20.
+# Past window 20 there is no key; prefix-' prompts for an index.
+# A terminal encodes Alt-Shift-<digit> either as the extended key or as the
+# shifted character, and tmux treats those as distinct keys, so bind both.
 bind -n M-1 select-window -t 1
 bind -n M-2 select-window -t 2
 bind -n M-3 select-window -t 3
@@ -112,6 +113,28 @@ bind -n M-6 select-window -t 6
 bind -n M-7 select-window -t 7
 bind -n M-8 select-window -t 8
 bind -n M-9 select-window -t 9
+bind -n M-0 select-window -t 10
+
+bind -n M-S-1 select-window -t 11
+bind -n 'M-!' select-window -t 11
+bind -n M-S-2 select-window -t 12
+bind -n 'M-@' select-window -t 12
+bind -n M-S-3 select-window -t 13
+bind -n 'M-#' select-window -t 13
+bind -n M-S-4 select-window -t 14
+bind -n 'M-$' select-window -t 14
+bind -n M-S-5 select-window -t 15
+bind -n 'M-%' select-window -t 15
+bind -n M-S-6 select-window -t 16
+bind -n 'M-^' select-window -t 16
+bind -n M-S-7 select-window -t 17
+bind -n 'M-&' select-window -t 17
+bind -n M-S-8 select-window -t 18
+bind -n 'M-*' select-window -t 18
+bind -n M-S-9 select-window -t 19
+bind -n 'M-(' select-window -t 19
+bind -n M-S-0 select-window -t 20
+bind -n 'M-)' select-window -t 20
 
 # Shift arrow to switch windows
 bind -n S-Left  previous-window
@@ -137,14 +160,36 @@ set -g status-style bg=colour235,fg=white
 # Defaults to reverse, which paints a light block behind every window that has
 # unseen output - which is all of them.
 set -g window-status-activity-style default
-# Cap window names so all tabs fit on one status line; the trailing space in
+# Cap window names so the tabs fit on a status line; the trailing space in
 # each format is the separator, so window-status-separator must be empty.
 set -g window-status-separator ''
-set -g window-status-format '#[fg=colour148,bold][#I]#[default] #{=/12/…:window_name} '
-set -g window-status-current-format '#[fg=colour235,bg=colour148,bold][#I]#[fg=colour255,bg=colour238,bold] #{=/12/…:window_name} #[default]'
+# Label each tab with the key that selects it instead of the raw index;
+# windows past 20 have no key and fall back to the index.
+{{ if eq .chezmoi.os "linux" -}}
+%hidden MOD="A-"
+%hidden MOD_SHIFT="A-S-"
+{{- else -}}
+%hidden MOD="⌥"
+%hidden MOD_SHIFT="⌥⇧"
+{{- end }}
+%hidden WIN_KEY="#{?#{e|<=:#{window_index},20},#{?#{e|>:#{window_index},10},${MOD_SHIFT},${MOD}}#{e|m:#{window_index},10},#{window_index}}"
+set -g window-status-format "#[fg=colour148,bold][${WIN_KEY}]#[default] #{=/12/…:window_name} "
+set -g window-status-current-format "#[fg=colour235,bg=colour148,bold][${WIN_KEY}]#[fg=colour255,bg=colour238,bold] #{=/12/…:window_name} #[default]"
 set -g status-interval 5
 set -g status-left-length 30
 set -g status-left '#[fg=colour148][#S]'
+
+# Spread the window tabs over two status rows, one per block of keys: the ⌥
+# windows 1-10 on the first, ⌥⇧ windows 11 and up on the second. tmux never
+# wraps the window list, so each row renders the list filtered to its range.
+%hidden ROW0="#{e|<=:#{window_index},10}"
+%hidden ROW1="#{e|>:#{window_index},10}"
+%hidden TAB="#[range=window|#{window_index} #{E:window-status-style}]#[push-default]#{T:window-status-format}#[pop-default]#[norange default]"
+%hidden TAB_CURRENT="#[range=window|#{window_index} list=focus #{E:window-status-current-style}]#[push-default]#{T:window-status-current-format}#[pop-default]#[norange list=on default]"
+%hidden TABS_START="#[list=on align=#{status-justify}]#[list=left-marker]<#[list=right-marker]>#[list=on]"
+set -g status 2
+set -g status-format[0] "#[align=left range=left #{E:status-left-style}]#[push-default]#{T;=/#{status-left-length}:status-left}#[pop-default]#[norange default]${TABS_START}#{W:#{?${ROW0},${TAB},},#{?${ROW0},${TAB_CURRENT},}}#[nolist align=right range=right #{E:status-right-style}]#[push-default]#{T;=/#{status-right-length}:status-right}#[pop-default]#[norange default]"
+set -g status-format[1] "${TABS_START}#{W:#{?${ROW1},${TAB},},#{?${ROW1},${TAB_CURRENT},}}#[nolist]"
 
 # stop annoying beeps
 set -g bell-action none

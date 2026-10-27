@@ -63,7 +63,8 @@ copy-on-select = clipboard
 
 background = #15191F
 
-keybind = global:option+backquote=toggle_quick_terminal
+# Option+` belongs to QuickTodo's console now; a global keybind here would fight it.
+# keybind = global:option+backquote=toggle_quick_terminal
 
 cursor-style = block
 

@@ -13,9 +13,20 @@
   oddities outside the current task, add a concise note to `SESSION.md` — it
   is not a progress log; do not record accomplishments there. Never commit this
   file to Git.
+- When grilling, ask one question at a time.
 
 ## Version control
 - Do not force push!
+
+### Handling PR reviews
+- Whenever you are asked to fetch review comments on a PR, present them to the
+  user one-by-one.
+- Assume that the user is not familiar with the code talked about in the comment.
+- Gather the context of the comment and provide a short description of the issue
+  before explaining what the comment is trying to say.
+- Finally, provide options on how to address this issue (where pushing back on
+  it is one of them).
+- Answer to the Github review comments in a clear, but succint manner.
 
 ## Writing and executing tests
 - When being asked to run python tests, run the tests using `poetry run pytest` instead of calling python directly.

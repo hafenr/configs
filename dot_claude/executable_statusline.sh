@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Claude Code status line: <model> | <effort meter> | <dir> | <branch>
+# Claude Code status line:
+#   <model> | <effort meter> | <context bar> | <5h session usage> | <dir> | <branch>
 #
 # Reads the status JSON payload on stdin. Fields available (v2.1.x): model,
 # workspace, version, output_style, cost, context_window, exceeds_200k_tokens,
@@ -14,8 +15,11 @@ set -uo pipefail
 input=$(cat)
 [ -n "${CC_STATUSLINE_DUMP:-}" ] && printf '%s' "$input" > "$CC_STATUSLINE_DUMP"
 
-IFS=$'\t' read -r model dir effort < <(
-  jq -r '[.model.display_name, .workspace.current_dir, (.effort.level // "")] | @tsv' <<<"$input"
+# Unit separator instead of tab: whitespace IFS would collapse empty fields.
+IFS=$'\x1f' read -r model dir effort ctx session < <(
+  jq -r '[.model.display_name, .workspace.current_dir, .effort.level,
+          .context_window.used_percentage, .rate_limits.five_hour.used_percentage]
+         | map(. // "" | tostring) | join("\u001f")' <<<"$input"
 )
 
 R=$'\033[0m'; DIM=$'\033[2m'
@@ -65,15 +69,41 @@ render_effort() {
   printf '%s%s%s%s%s %s%s%s' "$color" "$filled" "$R" "$DIM" "$empty" "$color" "$level" "$R"
 }
 
+usage_color() {
+  if (( $1 >= 80 )); then printf '\033[31m'
+  elif (( $1 >= 50 )); then printf '\033[33m'
+  else printf '\033[32m'
+  fi
+}
+
+render_context() {
+  local pct color bar="" i
+  printf -v pct '%.0f' "$1"
+  color=$(usage_color "$pct")
+  for ((i = 1; i <= 10; i++)); do
+    if (( i * 10 <= pct )); then bar+="█"; else bar+="░"; fi
+  done
+  printf '%s%s%s %s%%%s' "$color" "$bar" "$R" "$color$pct" "$R"
+}
+
+render_session() {
+  local pct
+  printf -v pct '%.0f' "$1"
+  printf '%s%s%%%s' "$(usage_color "$pct")" "$pct" "$R"
+}
+
 line="$(render_model "$model")"
 
 if e=$(render_effort "$effort"); then
-  line+=" ${DIM}|${R} $e"
+  line+=" ${DIM}|${R} ${DIM}effort:${R} $e"
 fi
 
-line+=" ${DIM}|${R} "$'\033[34m'"$(basename "$dir")$R"
+[ -n "$ctx" ] && line+=" ${DIM}|${R} ${DIM}ctx:${R} $(render_context "$ctx")"
+[ -n "$session" ] && line+=" ${DIM}|${R} ${DIM}usage:${R} $(render_session "$session")"
+
+line+=" ${DIM}|${R} ${DIM}dir:${R} "$'\033[34m'"$(basename "$dir")$R"
 
 branch=$(git -C "$dir" rev-parse --abbrev-ref HEAD 2>/dev/null)
-[ -n "$branch" ] && line+=" ${DIM}|${R} "$'\033[33m'"$branch$R"
+[ -n "$branch" ] && line+=" ${DIM}|${R} ${DIM}git:${R} "$'\033[33m'"$branch$R"
 
 printf '%s' "$line"

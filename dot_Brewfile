@@ -10,6 +10,7 @@ brew "chezmoi"  # Manage your dotfiles across multiple diverse machines, securel
 brew "cmake"  # Cross-platform make
 brew "coreutils"  # GNU File, Shell, and Text utilities
 brew "cython"  # Compiler for writing C extensions for the Python language
+brew "d2"  # Modern diagram scripting language that turns text to diagrams
 brew "diffoscope"  # In-depth comparison of files, archives, and directories
 brew "direnv"  # Load/unload environment variables based on $PWD
 brew "docutils"  # Text processing system for reStructuredText
